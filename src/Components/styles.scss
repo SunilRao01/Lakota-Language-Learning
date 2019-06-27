@@ -1,0 +1,20 @@
+@charset "utf-8";
+
+// Colors
+$beige-lighter: #EFF0EB;
+
+// Global
+$body-background-color: $beige-lighter;
+$info: #2AC8DA;
+
+// Navbar
+$navbar-background-color: #2AC8DA;
+$navbar-item-color: white;
+
+@import "~bulma/bulma.sass";
+@import "~bulma/sass/utilities/_all.sass";
+@import "~bulma/sass/base/_all.sass";
+@import "~bulma/sass/elements/button.sass";
+@import "~bulma/sass/elements/container.sass";
+@import "~bulma/sass/elements/title.sass";
+@import "~bulma/sass/components/navbar.sass";

@@ -1,0 +1,22 @@
+.body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+    margin-top: 40px;
+}
+
+.footer {
+    padding: 40px;
+}
+
+.container {
+    margin: 60px;
+}
+
+.navbar-title {
+    margin-left: 10px;
+}
