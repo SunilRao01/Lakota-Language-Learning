@@ -6,7 +6,7 @@
 
 A web application that will host educational material about the Native American language Lakota.
 
-####Created with:
+<h4>Created with:</h4>
 
 - React
 - Redux
