@@ -11,6 +11,21 @@ $info: #2AC8DA;
 $navbar-background-color: #2AC8DA;
 $navbar-item-color: white;
 
+// Cards
+$card-content-padding: 0.75em;
+$card-footer-padding: 1em;
+
+// Columns
+
+
+//// Global
+//$body-background-color: $beige-lighter;
+//$info: #C93434;
+//
+//// Navbar
+//$navbar-background-color: #C93434;
+//$navbar-item-color: white;
+
 @import "~bulma/bulma.sass";
 @import "~bulma/sass/utilities/_all.sass";
 @import "~bulma/sass/base/_all.sass";

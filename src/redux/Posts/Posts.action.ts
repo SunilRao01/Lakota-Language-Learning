@@ -1,16 +1,26 @@
 import {Post} from "./Posts.reducer";
 
-interface AddPost {
+export interface GetPosts {
+    type: 'GET_POSTS'
+}
+
+export interface AddPost {
     type: 'ADD_POST',
     payload: Post
 }
 
-interface DeletePost {
+export interface DeletePost {
     type: 'DELETE_POST',
     payload: number
 }
 
-export type PostActionTypes = AddPost | DeletePost
+export type PostActionTypes = GetPosts | AddPost | DeletePost
+
+export const getPosts = (): PostActionTypes => {
+    return {
+        type: 'GET_POSTS'
+    }
+}
 
 export const addPost = (newPost: Post): PostActionTypes => {
     return {

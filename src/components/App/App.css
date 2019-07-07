@@ -7,6 +7,7 @@
 .main-content {
     flex: 1;
     margin-top: 40px;
+    padding: 20px;
 }
 
 .footer {
@@ -14,9 +15,10 @@
 }
 
 .container {
-    margin: 60px;
+    margin-top: 60px;
 }
 
 .navbar-title {
     margin-left: 10px;
 }
+

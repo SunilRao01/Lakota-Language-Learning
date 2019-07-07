@@ -1,5 +1,13 @@
 import {combineReducers, createStore} from "redux";
-import {postReducer} from "./Posts.reducer";
+import {initialPostState, postReducer, PostState} from './redux/Posts/Posts.reducer';
+
+export interface RootState {
+    postState: PostState
+}
+
+export const startingRootState: RootState = {
+    postState: initialPostState
+}
 
 const rootReducer = combineReducers({
     postState: postReducer

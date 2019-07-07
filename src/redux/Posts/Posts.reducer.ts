@@ -2,6 +2,7 @@ import {PostActionTypes} from "./Posts.action";
 
 export interface Post {
     id: number,
+    postTitle: string,
     postContent: string,
     creationDate: Date,
     categories: string[],
@@ -12,13 +13,24 @@ export interface PostState {
     posts: Post[]
 }
 
-export interface RootState {
-    postState: PostState
-}
-
-const initialState: PostState = {
+export const initialPostState: PostState = {
     posts: [{
         id: 0,
+        postTitle: 'Lakota Grammar 1',
+        postContent: 'Sample post',
+        creationDate: new Date(2019, 5, 1),
+        categories: ['test category', 'test category 2'],
+        tags: ['test tag', 'test tag 2']
+    }, {
+        id: 1,
+        postTitle: 'Origins of Lakota',
+        postContent: 'Sample post',
+        creationDate: new Date(2019, 5, 1),
+        categories: ['test category', 'test category 2'],
+        tags: ['test tag', 'test tag 2']
+    }, {
+        id: 2,
+        postTitle: 'Regional Dialectics',
         postContent: 'Sample post',
         creationDate: new Date(2019, 5, 1),
         categories: ['test category', 'test category 2'],
@@ -27,10 +39,17 @@ const initialState: PostState = {
 };
 
 export const postReducer = (
-    state = initialState,
+    state = initialPostState,
     action: PostActionTypes
 ): PostState => {
     switch (action.type) {
+        case 'GET_POSTS': {
+            // TODO: Create async call to get posts from backend
+            const backendPosts = state.posts
+            return {
+                posts: [...backendPosts]
+            }
+        }
         case 'ADD_POST': {
             return {
                 posts: [...state.posts, action.payload]
@@ -44,9 +63,11 @@ export const postReducer = (
                 }
             });
 
-            return index > -1 ? {
-                posts: state.posts.splice(index, 1)
-            } : state
+            if (index > -1) {
+                state.posts.splice(index, 1)
+            }
+
+            return state
         }
         default:
             return state
