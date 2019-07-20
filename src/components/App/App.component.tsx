@@ -7,6 +7,7 @@ import {About} from "../About/About.component";
 import {Lessons} from "../Lessons/Lessons.component";
 import {FAQ} from "../FAQ/FAQ.component";
 import './App.css'
+import {Posts} from '../Posts/Posts.component'
 
 export const AppComponent: FC = () => {
     return (
@@ -22,6 +23,7 @@ export const AppComponent: FC = () => {
                             <Route path='/about' exact component={About}/>
                             <Route path='/lessons' exact component={Lessons}/>
                             <Route path='/faq' exact component={FAQ}/>
+                            <Route path='/posts/:postId' exact component={Posts}/>
                         </main>
                     </div>
                 </div>

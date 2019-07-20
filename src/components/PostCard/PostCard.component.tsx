@@ -1,5 +1,6 @@
 import React, {FC, useEffect} from 'react'
 import {Post} from '../../redux/Posts/Posts.reducer'
+import { Link } from 'react-router-dom'
 import './PostCard.css'
 
 interface PostCardProps {
@@ -12,21 +13,29 @@ export const PostCard: FC<PostCardProps> = props => {
     }, [])
 
     return (
-        <div className='column'>
-            <div className='card post-card'>
+        <div className='column post-card swing-in-top-bck'>
+            <div className='card'>
                 <header className='card-header'>
-                    <p className='card-header-title'>{props.post.postTitle}</p>
+                    <Link to={`/posts/${props.post.id}`}><p className='card-header-title'>{props.post.postTitle}</p></Link>
                 </header>
                 <div className='card-content'>
                     <div className='content'>
                         <div>{props.post.postContent}</div>
                         <br/>
-                        <div className='subtitle is-7'>{props.post.creationDate.toDateString()}</div>
+                        <div className='is-size-7'>{props.post.creationDate.toDateString()}</div>
+                        <div className='has-text-weight-bold'>Categories:</div>
+                        <p>
+                            {
+                                props.post.categories.map((c: string, i: number) => `${c}${i < props.post.categories.length - 1 ? ', ' : ''}`)
+                            }
+                        </p>
                     </div>
+
                     <div className='tags'>
-                        <span className="tag is-info">tag 1</span>
-                        <span className="tag is-info">tag 2</span>
-                        <span className="tag is-info">tag 3</span>
+                        {
+                            props.post.tags.map(p => <p className='control'>
+                                <a className="button is-info is-small">{p}</a></p>)
+                        }
                     </div>
                 </div>
             </div>

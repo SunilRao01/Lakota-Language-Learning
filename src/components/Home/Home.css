@@ -47,5 +47,9 @@
     margin-bottom: 40px;
 }
 
+.field.is-grouped > .control:not(:last-child) {
+    margin-bottom: 0;
+    margin-right: .5rem;
+}
 
 

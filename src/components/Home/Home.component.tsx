@@ -41,7 +41,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     </div>
                     <br/>
                     <h3 className='title is-4'>Character Test</h3>
-                    <h3 className='subtitle is-5'>abčdeŋȟhiȟklmnopǧšstuvwžyz</h3>
+                    <h3 className='subtitle is-6'>abčdeŋȟhiȟklmnopǧšstuvwžyz</h3>
                 </div>
                 <div className='column'>
                     <div className='word-of-the-day-section'>
@@ -55,20 +55,16 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
 
                     <div className='categories-section'>
                         <h3 className='title is-3'>Categories:</h3>
-                        <ul>
-                            <li>Category 1</li>
-                            <li>Category 2</li>
-                            <li>Category 3</li>
-                        </ul>
+                        <p><a href='/'>Blah</a>, <a href='/'>Blah</a>, <a href='/'>Blah</a>, <a href='/'>Blah</a></p>
                     </div>
 
                     <div className='tags-section'>
                         <h3 className='title is-3'>Tags:</h3>
-                        <ul>
-                            <li>Tag 1</li>
-                            <li>Tag 2</li>
-                            <li>Tag 3</li>
-                        </ul>
+                        <div className='field is-grouped'>
+                            <p className='control'><a className="button is-info is-small">Tag 1</a></p>
+                            <p className='control'><a className="button is-info is-small">Tag 2</a></p>
+                            <p className='control'><a className="button is-info is-small">Tag 3</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
