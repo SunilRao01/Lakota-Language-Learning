@@ -1,12 +1,21 @@
 import {PostActionTypes} from "./Posts.action";
 
+export interface Quiz {
+    questions: [{
+        question: string,
+        answers: string[],
+        answer: string
+    }]
+}
+
 export interface Post {
     id: number,
     postTitle: string,
     postContent: string,
     creationDate: Date,
     categories: string[],
-    tags: string[]
+    tags: string[],
+    quizzes?: Quiz
 }
 
 export interface PostState {
@@ -19,24 +28,45 @@ export const initialPostState: PostState = {
     posts: [{
         id: 0,
         postTitle: 'Lakota Grammar 1',
-        postContent: 'Sample post',
+        postContent: 'Sample post 1',
         creationDate: new Date(2019, 5, 1),
-        categories: ['test category', 'test category 2'],
-        tags: ['test tag', 'test tag 2']
+        categories: ['Grammar Lesson'],
+        tags: ['grammar', 'unit lesson'],
+        quizzes: {
+            questions: [{
+                question: 'what?',
+                answers: ['same', 'as it', 'ever was?'],
+                answer: 'ever was?'
+            }]
+        }
     }, {
         id: 1,
-        postTitle: 'Origins of Lakota',
-        postContent: 'Sample post',
+        postTitle: 'Origins of Lakota Action Words',
+        postContent: 'Sample post 2',
         creationDate: new Date(2019, 5, 1),
-        categories: ['test category', 'test category 2'],
-        tags: ['test tag', 'test tag 2']
+        categories: ['Vocabulary Lesson'],
+        tags: ['history'],
+        quizzes: {
+            questions: [{
+                question: 'what?',
+                answers: ['same', 'as it', 'ever was?'],
+                answer: 'ever was?'
+            }]
+        }
     }, {
         id: 2,
         postTitle: 'Regional Dialectics',
-        postContent: 'Sample post',
+        postContent: 'Sample post 3',
         creationDate: new Date(2019, 5, 1),
-        categories: ['test category', 'test category 2'],
-        tags: ['test tag', 'test tag 2']
+        categories: ['Grammar Lesson'],
+        tags: ['geography', 'history'],
+        quizzes: {
+            questions: [{
+                question: 'what?',
+                answers: ['same', 'as it', 'ever was?'],
+                answer: 'ever was?'
+            }]
+        }
     }],
     tags: new Set([]),
     categories: new Set([])

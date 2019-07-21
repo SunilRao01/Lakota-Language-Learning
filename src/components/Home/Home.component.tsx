@@ -37,10 +37,10 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
                     {
-                        props.posts.map(p => <>
+                        props.posts.map((p: Post, i: number) => <div key={i}>
                             <PostCard post={p}/>
                             <hr/>
-                        </>)
+                        </div>)
                     }
                     <br/>
                     <h3 className='title is-4'>Character Test</h3>
@@ -58,26 +58,24 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
 
                     <div className='categories-section'>
                         <h3 className='title is-3'>Categories:</h3>
-                        <p>
                             {
                                 Array.from(props.categories).map((c: string, i: number) => {
-                                        return (<>
+                                        return (<p key={i}>
                                                 <a href='/'>{`${c}`}</a>
                                                 {`${i < props.categories.size - 1 ? `, ` : ``}`}
-                                            </>
+                                            </p>
                                         )
                                     }
                                 )
                             }
-                        </p>
                     </div>
 
                     <div className='tags-section'>
                         <h3 className='title is-3'>Tags:</h3>
                         <div className='field is-grouped'>
                             {props.tags &&
-                            Array.from(props.tags).map(t =>
-                                <p className='control'>
+                            Array.from(props.tags).map((t: string, i: number) =>
+                                <p className='control' key={i}>
                                     <a className="button is-info is-small">{t}</a>
                                 </p>
                             )

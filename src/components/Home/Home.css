@@ -1,6 +1,7 @@
 .title-anim {
-    -webkit-animation: swing-in-top-fwd 0.8s cubic-bezier(0.175, 0.885, 0.320, 1.275) ;
-    animation: swing-in-top-fwd 0.8s cubic-bezier(0.175, 0.885, 0.320, 1.275) ;
+    -webkit-animation: swing-in-top-fwd 0.8s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+    animation: swing-in-top-fwd 0.8s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+    margin-bottom: 60px;
 }
 
 hr {
@@ -41,7 +42,6 @@ hr {
 }
 
 
-
 .word-of-the-day-section {
     margin-bottom: 40px;
 }
@@ -51,8 +51,12 @@ hr {
     margin-bottom: 40px;
 }
 
+.field.is-grouped {
+    flex-wrap: wrap;
+}
+
 .field.is-grouped > .control:not(:last-child) {
-    margin-bottom: 0;
+    margin-bottom: 0.5rem;
     margin-right: .5rem;
 }
 

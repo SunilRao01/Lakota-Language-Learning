@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import {RootState} from '../../store'
 import {Post} from '../../redux/Posts/Posts.reducer'
 import {AnyAction, Dispatch} from 'redux'
+import {Quiz} from '../Quiz/Quiz.component'
 
 interface PostsProps {
     match?: any,
@@ -19,6 +20,17 @@ export const PostsComponent: FC<PostsProps> = props => {
                         {props.post.postContent}
                     </p>
                     <br/>
+                    <h3>Quiz:</h3>
+                    {
+                        props.post.quizzes &&
+                        <Quiz
+                            question={props.post.quizzes.questions[0].question}
+                            answers={props.post.quizzes.questions[0].answers}
+                            answer={props.post.quizzes.questions[0].answer}
+                        />
+                    }
+
+                    <br/>
                     <p>{props.post.creationDate.toDateString()}</p>
                     <div className='has-text-weight-bold'>Categories:</div>
                     <p>
@@ -29,10 +41,11 @@ export const PostsComponent: FC<PostsProps> = props => {
 
                     <div className='field is-grouped'>
                         {
-                            props.post.tags.map(p => <p className='control'>
+                            props.post.tags.map((p, i) => <p key={i} className='control'>
                                 <a className="button is-info is-small">{p}</a></p>)
                         }
                     </div>
+
                 </div>
 
             </div>
