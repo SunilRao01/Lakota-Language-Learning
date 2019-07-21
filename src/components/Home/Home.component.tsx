@@ -34,11 +34,12 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             <div className='columns'>
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
-                    <div className='columns'>
-                        {
-                            props.posts.map(p => <PostCard post={p}/>)
-                        }
-                    </div>
+                    {
+                        props.posts.map(p => <>
+                            <PostCard post={p}/>
+                            <hr/>
+                        </>)
+                    }
                     <br/>
                     <h3 className='title is-4'>Character Test</h3>
                     <h3 className='subtitle is-6'>abčdeŋȟhiȟklmnopǧšstuvwžyz</h3>

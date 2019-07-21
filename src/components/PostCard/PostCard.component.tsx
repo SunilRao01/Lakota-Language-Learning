@@ -13,7 +13,7 @@ export const PostCard: FC<PostCardProps> = props => {
     }, [])
 
     return (
-        <div className='column post-card swing-in-top-bck'>
+        <div className='column swing-in-top-bck is-full'>
             <div className='card'>
                 <header className='card-header'>
                     <Link to={`/posts/${props.post.id}`}><p className='card-header-title'>{props.post.postTitle}</p></Link>
