@@ -39,12 +39,10 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     {
                         props.posts.map((p: Post, i: number) => <div key={i}>
                             <PostCard post={p}/>
-                            <hr/>
+                                {i < props.posts.length-1 ? <hr/> : ``}
                         </div>)
                     }
                     <br/>
-                    <h3 className='title is-4'>Character Test</h3>
-                    <h3 className='subtitle is-6'>abčdeŋȟhiȟklmnopǧšstuvwžyz</h3>
                 </div>
                 <div className='column'>
                     <div className='word-of-the-day-section'>
