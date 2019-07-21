@@ -23,8 +23,8 @@ export const PostCard: FC<PostCardProps> = props => {
                         <div>{props.post.postContent}</div>
                         <br/>
                         <div className='is-size-7'>{props.post.creationDate.toDateString()}</div>
-                        <div className='has-text-weight-bold'>Categories:</div>
-                        <p>
+                        <div className='has-text-weight-bold is-size-7'>Categories:</div>
+                        <p className='is-size-7'>
                             {
                                 props.post.categories.map((c: string, i: number) => `${c}${i < props.post.categories.length - 1 ? ', ' : ''}`)
                             }

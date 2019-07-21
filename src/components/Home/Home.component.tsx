@@ -13,7 +13,9 @@ interface HomeActions {
 }
 
 interface HomeProps {
-    posts: Post[]
+    posts: Post[],
+    tags: Set<string>,
+    categories: Set<string>
 }
 
 type HomePropsWithActions = HomeProps & HomeActions
@@ -56,15 +58,30 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
 
                     <div className='categories-section'>
                         <h3 className='title is-3'>Categories:</h3>
-                        <p><a href='/'>Blah</a>, <a href='/'>Blah</a>, <a href='/'>Blah</a>, <a href='/'>Blah</a></p>
+                        <p>
+                            {
+                                Array.from(props.categories).map((c: string, i: number) => {
+                                        return (<>
+                                                <a href='/'>{`${c}`}</a>
+                                                {`${i < props.categories.size - 1 ? `, ` : ``}`}
+                                            </>
+                                        )
+                                    }
+                                )
+                            }
+                        </p>
                     </div>
 
                     <div className='tags-section'>
                         <h3 className='title is-3'>Tags:</h3>
                         <div className='field is-grouped'>
-                            <p className='control'><a className="button is-info is-small">Tag 1</a></p>
-                            <p className='control'><a className="button is-info is-small">Tag 2</a></p>
-                            <p className='control'><a className="button is-info is-small">Tag 3</a></p>
+                            {props.tags &&
+                            Array.from(props.tags).map(t =>
+                                <p className='control'>
+                                    <a className="button is-info is-small">{t}</a>
+                                </p>
+                            )
+                            }
                         </div>
                     </div>
                 </div>
@@ -74,7 +91,9 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
 };
 
 export const mapStateToProps = (state: RootState): HomeProps => ({
-    posts: state.postState.posts
+    posts: state.postState.posts,
+    tags: state.postState.tags,
+    categories: state.postState.categories
 });
 
 export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {

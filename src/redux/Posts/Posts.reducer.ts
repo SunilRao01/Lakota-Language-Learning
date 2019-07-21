@@ -10,7 +10,9 @@ export interface Post {
 }
 
 export interface PostState {
-    posts: Post[]
+    posts: Post[],
+    tags: Set<string>,
+    categories: Set<string>
 }
 
 export const initialPostState: PostState = {
@@ -35,7 +37,9 @@ export const initialPostState: PostState = {
         creationDate: new Date(2019, 5, 1),
         categories: ['test category', 'test category 2'],
         tags: ['test tag', 'test tag 2']
-    }]
+    }],
+    tags: new Set([]),
+    categories: new Set([])
 };
 
 export const postReducer = (
@@ -45,13 +49,27 @@ export const postReducer = (
     switch (action.type) {
         case 'GET_POSTS': {
             // TODO: Create async call to get posts from backend
-            const backendPosts = state.posts
+            const sourcePosts = state.posts
+            let outputPosts: Post[] = []
+            let outputTags: Set<string> = new Set()
+            let outputCategories: Set<string> = new Set()
+
+            sourcePosts.forEach(p => {
+                outputPosts.push(p)
+                p.tags.forEach(t => outputTags.add(t))
+                p.categories.forEach(c => outputCategories.add(c))
+            })
+
             return {
-                posts: [...backendPosts]
+                ...state,
+                posts: outputPosts,
+                tags: outputTags,
+                categories: outputCategories
             }
         }
         case 'ADD_POST': {
             return {
+                ...state,
                 posts: [...state.posts, action.payload]
             }
         }

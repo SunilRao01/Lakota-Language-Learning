@@ -20,18 +20,19 @@ export const PostsComponent: FC<PostsProps> = props => {
                     </p>
                     <br/>
                     <p>{props.post.creationDate.toDateString()}</p>
-                    <div className='field is-grouped'>
-                        {
-                            props.post.tags.map(p => <p className='control'>
-                                <a className="button is-info is-small">{p}</a></p>)
-                        }
-                    </div>
                     <div className='has-text-weight-bold'>Categories:</div>
                     <p>
                         {
                             props.post.categories.map((c: string, i: number) => `${c}${i < props.post.categories.length - 1 ? ', ' : ''}`)
                         }
                     </p>
+
+                    <div className='field is-grouped'>
+                        {
+                            props.post.tags.map(p => <p className='control'>
+                                <a className="button is-info is-small">{p}</a></p>)
+                        }
+                    </div>
                 </div>
 
             </div>
