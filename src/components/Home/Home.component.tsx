@@ -27,6 +27,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
 
     return (
         <div className='container'>
+
             <div className='columns is-centered'>
                 <div className='column is-narrow title-anim'>
                     <p className='title is-2'>Lakota Learning</p>
