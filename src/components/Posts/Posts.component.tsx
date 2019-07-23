@@ -4,11 +4,17 @@ import {RootState} from '../../store'
 import {Post} from '../../redux/Posts/Posts.reducer'
 import {AnyAction, Dispatch} from 'redux'
 import {Quiz} from '../Quiz/Quiz.component'
+import {Tag} from '../Tag/Tag.component'
 
-interface PostsProps {
-    match?: any,
+interface PostsOwnProps {
+    match: any
+}
+
+interface PostReduxProps {
     post: Post
 }
+
+type PostsProps = PostsOwnProps & PostReduxProps
 
 export const PostsComponent: FC<PostsProps> = props => {
     return (
@@ -38,11 +44,10 @@ export const PostsComponent: FC<PostsProps> = props => {
                             props.post.categories.map((c: string, i: number) => `${c}${i < props.post.categories.length - 1 ? ', ' : ''}`)
                         }
                     </p>
-
+                    <div className='has-text-weight-bold tags control'>Tags:</div>
                     <div className='field is-grouped'>
                         {
-                            props.post.tags.map((p, i) => <p key={i} className='control'>
-                                <a className="button is-info is-small">{p}</a></p>)
+                            props.post.tags.map((p, i) => <Tag key={i} text={p}/>)
                         }
                     </div>
 
@@ -53,7 +58,7 @@ export const PostsComponent: FC<PostsProps> = props => {
     )
 }
 
-export const mapStateToProps = (state: RootState, postsProps: PostsProps): PostsProps => ({
+export const mapStateToProps = (state: RootState, postsProps: PostsProps): PostReduxProps => ({
     post: state.postState.posts[postsProps.match.params.postId]
 });
 

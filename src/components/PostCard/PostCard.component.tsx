@@ -2,6 +2,7 @@ import React, {FC} from 'react'
 import {Post} from '../../redux/Posts/Posts.reducer'
 import {Link} from 'react-router-dom'
 import './PostCard.css'
+import {Tag} from '../Tag/Tag.component'
 
 interface PostCardProps {
     post: Post
@@ -31,9 +32,7 @@ export const PostCard: FC<PostCardProps> = props => {
                     <div className='tags'>
                         {
                             props.post.tags.map((p: string, i: number) =>
-                                <p className='control' key={i}>
-                                    <a className="button is-info is-small">{p}</a>
-                                </p>
+                                <Tag key={i} text={p}/>
                             )
                         }
                     </div>

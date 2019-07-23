@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {AnyAction, Dispatch} from 'redux'
 import {RootState} from '../../store'
 import {PostCard} from '../PostCard/PostCard.component'
+import {Tag} from '../Tag/Tag.component'
 
 interface HomeActions {
     getPosts: () => void,
@@ -40,7 +41,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     {
                         props.posts.map((p: Post, i: number) => <div key={i}>
                             <PostCard post={p}/>
-                                {i < props.posts.length-1 ? <hr/> : ``}
+                            {i < props.posts.length - 1 ? <hr/> : ``}
                         </div>)
                     }
                     <br/>
@@ -57,16 +58,14 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
 
                     <div className='categories-section'>
                         <h3 className='title is-3'>Categories:</h3>
-                            {
-                                Array.from(props.categories).map((c: string, i: number) => {
-                                        return (<p key={i}>
-                                                <a href='/'>{`${c}`}</a>
-                                                {`${i < props.categories.size - 1 ? `, ` : ``}`}
-                                            </p>
-                                        )
-                                    }
-                                )
-                            }
+                        {
+                            Array.from(props.categories).map((c: string, i: number) => {
+                                return (<p key={i}>
+                                    <a href='/'>{`${c}`}</a>
+                                    {`${i < props.categories.size - 1 ? `, ` : ``}`}
+                                </p>)
+                            })
+                        }d
                     </div>
 
                     <div className='tags-section'>
@@ -74,10 +73,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                         <div className='field is-grouped'>
                             {props.tags &&
                             Array.from(props.tags).map((t: string, i: number) =>
-                                <p className='control' key={i}>
-                                    <a className="button is-info is-small">{t}</a>
-                                </p>
-                            )
+                                <Tag key={i} text={t}/>)
                             }
                         </div>
                     </div>

@@ -34,7 +34,7 @@ export const initialPostState: PostState = {
         tags: ['grammar', 'unit lesson'],
         quizzes: {
             questions: [{
-                question: 'what?',
+                question: 'What is the answer?',
                 answers: ['same', 'as it', 'ever was?'],
                 answer: 'ever was?'
             }]
@@ -48,7 +48,7 @@ export const initialPostState: PostState = {
         tags: ['history'],
         quizzes: {
             questions: [{
-                question: 'what?',
+                question: 'What is the answer?',
                 answers: ['same', 'as it', 'ever was?'],
                 answer: 'ever was?'
             }]
@@ -62,7 +62,7 @@ export const initialPostState: PostState = {
         tags: ['geography', 'history'],
         quizzes: {
             questions: [{
-                question: 'what?',
+                question: 'What is the answer?',
                 answers: ['same', 'as it', 'ever was?'],
                 answer: 'ever was?'
             }]
