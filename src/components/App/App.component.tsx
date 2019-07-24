@@ -12,7 +12,6 @@ import {FilteredPostsView} from '../TagView/FilteredPostsView.component'
 
 export const AppComponent: FC = () => {
     return (
-        <>
             <Router>
                 <div className="App">
                     <header className="App-header">
@@ -30,8 +29,6 @@ export const AppComponent: FC = () => {
                     </div>
                 </div>
             </Router>
-
-        </>
     );
 };
 

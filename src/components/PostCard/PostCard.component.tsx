@@ -5,7 +5,9 @@ import './PostCard.css'
 import {Tag} from '../Tag/Tag.component'
 
 interface PostCardProps {
-    post: Post
+    post: Post,
+    onClickTag?: (e: any) => void,
+    onClickCategory?: () => void
 }
 
 export const PostCard: FC<PostCardProps> = props => {
@@ -23,7 +25,6 @@ export const PostCard: FC<PostCardProps> = props => {
                         <div className='is-size-7'>{props.post.creationDate.toDateString()}</div>
                         <div className='has-text-weight-bold is-size-7'>Categories:</div>
                             {
-                                // props.post.categories.map((c: string, i: number) => `${c}${i < props.post.categories.length - 1 ? ', ' : ''}`)
                                 Array.from(props.post.categories).map((c: string, i: number) => {
                                     return (<div key={i}>
                                         <Link className='is-size-7' to={`/posts?categories=${c}`}>{`${c}`}</Link>
@@ -36,7 +37,7 @@ export const PostCard: FC<PostCardProps> = props => {
                     <div className='tags'>
                         {
                             props.post.tags.map((p: string, i: number) =>
-                                <Tag key={i} text={p}/>
+                                <Tag key={i} text={p} onClick={props.onClickTag}/>
                             )
                         }
                     </div>

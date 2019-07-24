@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import {Post} from '../../redux/Posts/Posts.reducer'
 import {AnyAction, Dispatch} from 'redux'
 import {setFilterCategories, setFilterTags} from '../../redux/Filter/Filter.action'
-import qs from 'querystring'
+import qs from 'query-string'
 import {Tag} from '../Tag/Tag.component'
 import {PostCard} from '../PostCard/PostCard.component'
 import {Link, RouteComponentProps} from 'react-router-dom'
@@ -20,7 +20,7 @@ interface FilteredPostsViewActions {
     setFilterCategories: (newCategories: string[]) => void
 }
 
-type FilteredPostsViewProps = FilteredPostsViewOwnProps & FilteredPostsViewActions & RouteComponentProps
+type FilteredPostsViewProps = RouteComponentProps & FilteredPostsViewOwnProps & FilteredPostsViewActions & RouteComponentProps
 
 const mapStateToProps = (state: RootState): FilteredPostsViewOwnProps => {
     return {
@@ -40,23 +40,57 @@ export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): FilteredPosts
 export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
     const [filteredPosts, setFilteredPosts] = useState<Post[]>([])
 
+    const filterPostsByField = (posts: Post[], tags: string[] = [], categories: string[] = []): Post[] => {
+        let filteredPostss = posts.filter((p: Post) => {
+            let result = true
+
+            if (tags.length > 0) {
+                console.log('checking tags...')
+                tags.forEach(t => {
+                    if (!p.tags.includes(t)) {
+                        result = false
+                    }
+                })
+            }
+
+            if (categories.length > 0) {
+                categories.forEach(c => {
+                    if (!p.categories.includes(c)) {
+                        result = false
+                    }
+                })
+            }
+
+            return result
+        })
+
+        return filteredPostss
+    }
 
     useEffect(() => {
         // Update filterState in store for tags
-        const tags = qs.parse(props.location.search)['?tags']
-        tags && props.setFilterTags([`${tags.toString()}`])
+        const queryStrings = qs.parse(props.location.search, {arrayFormat: 'comma'})
+        let tags: any = queryStrings['tags'];
+        if (typeof tags === 'string') {
+            tags = [tags]
+        }
+        tags && props.setFilterTags(tags)
 
         // Update filterState in store for categories
-        const categories = qs.parse(props.location.search)['?categories']
-        categories && props.setFilterCategories([`${categories.toString()}`])
+        let categories: any = queryStrings['categories'];
+        if (typeof categories === 'string') {
+            categories = [categories]
+        }
+        categories && props.setFilterCategories(categories)
 
         // Update filtered posts in state
-        const fp = props.posts.filter((p: Post) => tags
-            ? p.tags.includes(tags.toString())
-            : p.categories.includes(categories.toString()))
-
+        const fp = filterPostsByField(props.posts,tags,categories)
         setFilteredPosts(fp)
-    }, [])
+    })
+
+    const addTagFilter = (tag: any) => {
+        props.history.push(`${props.history.location.search},${tag}`)
+    }
 
     return (
         <div className='container'>
@@ -66,13 +100,15 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                     <div className="tags are-large">
                         {
                             props.filterTags.length > 0
-                            ? props.filterTags.map((_, i: number) => <Tag key={i} text={props.filterTags[i]}/>)
-                            : Array.from(props.filterCategories).map((c: string, i: number) => {
-                                    return (<div key={i}>
+                                ? props.filterTags.map((_, i: number) =>
+                                    <Tag key={i} text={props.filterTags[i]}/>
+                                )
+                                : Array.from(props.filterCategories).map((c: string, i: number) =>
+                                    <div key={i}>
                                         <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
                                         {`${i < props.filterCategories.length - 1 ? `, ` : ``}`}
-                                    </div>)
-                                })
+                                    </div>
+                                )
                         }
                     </div>
                 }
@@ -83,7 +119,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
             <div className='is-size-3 title'>Filtered Posts:</div>
             {
                 filteredPosts.map((p: Post, i: number) => <div key={i}>
-                    <PostCard post={p}/>
+                    <PostCard post={p} onClickTag={addTagFilter}/>
                     {i < filteredPosts.length - 1 ? <hr/> : ``}
                 </div>)
             }
