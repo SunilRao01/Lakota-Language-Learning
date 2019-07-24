@@ -7,6 +7,7 @@ import {AnyAction, Dispatch} from 'redux'
 import {RootState} from '../../store'
 import {PostCard} from '../PostCard/PostCard.component'
 import {Tag} from '../Tag/Tag.component'
+import {Link} from 'react-router-dom'
 
 interface HomeActions {
     getPosts: () => void,
@@ -39,10 +40,11 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
                     {
-                        props.posts.map((p: Post, i: number) => <div key={i}>
-                            <PostCard post={p}/>
-                            {i < props.posts.length - 1 ? <hr/> : ``}
-                        </div>)
+                        props.posts.map((p: Post, i: number) =>
+                            <div key={i}>
+                                <PostCard post={p}/>
+                                {i < props.posts.length - 1 ? <hr/> : ``}
+                            </div>)
                     }
                     <br/>
                 </div>
@@ -60,10 +62,10 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                         <h3 className='title is-3'>Categories:</h3>
                         {
                             Array.from(props.categories).map((c: string, i: number) => {
-                                return (<p key={i}>
-                                    <a href='/'>{`${c}`}</a>
+                                return (<div key={i}>
+                                    <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
                                     {`${i < props.categories.size - 1 ? `, ` : ``}`}
-                                </p>)
+                                </div>)
                             })
                         }
                     </div>

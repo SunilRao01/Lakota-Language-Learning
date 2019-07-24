@@ -3,11 +3,23 @@ export interface SetTagFilter {
     payload: string[]
 }
 
-export type FilterActionTypes = SetTagFilter
+export interface SetCategoryFilter {
+    type: 'SET_FILTER_CATEGORY',
+    payload: string[]
+}
+
+export type FilterActionTypes = SetTagFilter | SetCategoryFilter
 
 export const setFilterTags = (tags: string[]): FilterActionTypes => {
     return {
         type: 'SET_FILTER_TAG',
         payload: tags
+    }
+}
+
+export const setFilterCategories = (categories: string[]): FilterActionTypes => {
+    return {
+        type: 'SET_FILTER_CATEGORY',
+        payload: categories
     }
 }

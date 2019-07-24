@@ -8,7 +8,7 @@ import {Lessons} from "../Lessons/Lessons.component";
 import {FAQ} from "../FAQ/FAQ.component";
 import './App.css'
 import {Posts} from '../Posts/Posts.component'
-import {TagView} from '../TagView/TagView.component'
+import {FilteredPostsView} from '../TagView/FilteredPostsView.component'
 
 export const AppComponent: FC = () => {
     return (
@@ -25,7 +25,7 @@ export const AppComponent: FC = () => {
                             <Route path='/lessons' exact component={Lessons}/>
                             <Route path='/faq' exact component={FAQ}/>
                             <Route path='/post/:postId' exact component={Posts}/>
-                            <Route path='/posts' component={TagView}/>
+                            <Route path='/posts' component={FilteredPostsView}/>
                         </main>
                     </div>
                 </div>

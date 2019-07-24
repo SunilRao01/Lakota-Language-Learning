@@ -2,19 +2,15 @@ import React, {FC} from 'react'
 import {connect} from 'react-redux'
 import {RootState} from '../../store'
 import {Post} from '../../redux/Posts/Posts.reducer'
-import {AnyAction, Dispatch} from 'redux'
 import {Quiz} from '../Quiz/Quiz.component'
 import {Tag} from '../Tag/Tag.component'
+import {RouteComponentProps} from 'react-router'
 
 interface PostsOwnProps {
-    match: any
-}
-
-interface PostReduxProps {
     post: Post
 }
 
-type PostsProps = PostsOwnProps & PostReduxProps
+type PostsProps = PostsOwnProps & RouteComponentProps<{postId: string}>
 
 export const PostsComponent: FC<PostsProps> = props => {
     return (
@@ -58,15 +54,8 @@ export const PostsComponent: FC<PostsProps> = props => {
     )
 }
 
-export const mapStateToProps = (state: RootState, postsProps: PostsProps): PostReduxProps => ({
-    post: state.postState.posts[postsProps.match.params.postId]
+export const mapStateToProps = (state: RootState, postsProps: PostsProps): PostsOwnProps => ({
+    post: state.postState.posts[Number.parseInt(postsProps.match.params.postId)]
 });
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
-    return {
-        // getPosts: () => dispatch(getPosts()),
-        // addPost: (newPost: Post) => dispatch(addPost(newPost))
-    }
-};
-
-export const Posts = connect(mapStateToProps, mapDispatchToProps)(PostsComponent)
+export const Posts = connect(mapStateToProps)(PostsComponent)

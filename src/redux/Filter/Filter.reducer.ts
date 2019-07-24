@@ -30,6 +30,13 @@ export const filterReducer = (
                 tags: action.payload
             }}
         }
+        case 'SET_FILTER_CATEGORY': {
+            return {...state,
+                filters: {
+                    ...state.filters,
+                    categories: action.payload
+                }}
+        }
         default:
             return state
     }

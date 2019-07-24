@@ -13,7 +13,7 @@ export const PostCard: FC<PostCardProps> = props => {
         <div className='column swing-in-top-bck is-full'>
             <div className='card'>
                 <header className='card-header'>
-                    <Link to={`/posts/${props.post.id}`}><p className='card-header-title'>{props.post.postTitle}</p>
+                    <Link to={`/post/${props.post.id}`}><p className='card-header-title'>{props.post.postTitle}</p>
                     </Link>
                 </header>
                 <div className='card-content'>
@@ -22,11 +22,15 @@ export const PostCard: FC<PostCardProps> = props => {
                         <br/>
                         <div className='is-size-7'>{props.post.creationDate.toDateString()}</div>
                         <div className='has-text-weight-bold is-size-7'>Categories:</div>
-                        <a className='is-size-7' href='/'>
                             {
-                                props.post.categories.map((c: string, i: number) => `${c}${i < props.post.categories.length - 1 ? ', ' : ''}`)
+                                // props.post.categories.map((c: string, i: number) => `${c}${i < props.post.categories.length - 1 ? ', ' : ''}`)
+                                Array.from(props.post.categories).map((c: string, i: number) => {
+                                    return (<div key={i}>
+                                        <Link className='is-size-7' to={`/posts?categories=${c}`}>{`${c}`}</Link>
+                                        {`${i < props.post.categories.length - 1 ? `, ` : ``}`}
+                                    </div>)
+                                })
                             }
-                        </a>
                     </div>
 
                     <div className='tags'>
