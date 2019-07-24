@@ -41,7 +41,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
     const [filteredPosts, setFilteredPosts] = useState<Post[]>([])
 
     const filterPostsByField = (posts: Post[], tags: string[] = [], categories: string[] = []): Post[] => {
-        let filteredPostss = posts.filter((p: Post) => {
+        return posts.filter((p: Post) => {
             let result = true
 
             if (tags.length > 0) {
@@ -63,8 +63,6 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
 
             return result
         })
-
-        return filteredPostss
     }
 
     useEffect(() => {
@@ -86,7 +84,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
         // Update filtered posts in state
         const fp = filterPostsByField(props.posts,tags,categories)
         setFilteredPosts(fp)
-    })
+    }, [props.filterTags, props.filterCategories])
 
     const addTagFilter = (tag: any) => {
         props.history.push(`${props.history.location.search},${tag}`)
