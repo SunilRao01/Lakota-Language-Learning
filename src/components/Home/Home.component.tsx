@@ -65,7 +65,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                                     {`${i < props.categories.size - 1 ? `, ` : ``}`}
                                 </p>)
                             })
-                        }d
+                        }
                     </div>
 
                     <div className='tags-section'>

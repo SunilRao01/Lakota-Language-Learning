@@ -24,8 +24,8 @@ export const AppComponent: FC = () => {
                             <Route path='/about' exact component={About}/>
                             <Route path='/lessons' exact component={Lessons}/>
                             <Route path='/faq' exact component={FAQ}/>
-                            <Route path='/posts/:postId' exact component={Posts}/>
-                            <Route path='/posts/filter/:tag' exact component={TagView}/>
+                            <Route path='/post/:postId' exact component={Posts}/>
+                            <Route path='/posts' component={TagView}/>
                         </main>
                     </div>
                 </div>
