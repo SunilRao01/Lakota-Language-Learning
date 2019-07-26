@@ -69,22 +69,30 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
     }
 
     useEffect(() => {
-        // Update filterState in store for tags
         const queryStrings = qs.parse(props.location.search, {arrayFormat: 'comma'})
+
+        // Update filterState in store for tags
         let tags: any = queryStrings['tags'];
         if (typeof tags === 'string') {
             tags = [tags]
         }
-        console.log(`tags form url: ${tags}`)
-        tags && props.setFilterTags(tags)
+        if (!tags) {
+            props.setFilterTags([])
+        } else {
+            tags && props.setFilterTags(tags)
+        }
 
         // Update filterState in store for categories
         let categories: any = queryStrings['categories'];
         if (typeof categories === 'string') {
             categories = [categories]
         }
-        console.log(`cats form url: ${categories}`)
-        categories && props.setFilterCategories(categories)
+
+        if (!categories) {
+            props.setFilterCategories([])
+        } else {
+            categories && props.setFilterCategories(categories)
+        }
 
         // Update filtered posts in state
         const fp = filterPostsByField(props.posts, tags, categories)
@@ -97,10 +105,15 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                 let newUrl: string = props.location.pathname
                 newUrl += `&tags=${tag}`
 
-                props.history.push(newUrl)
+                if (qs.parse(props.location.search)['categories']) {
+                    newUrl = `&tags=${tag}`
+
+                    props.history.push(`${props.location.pathname}${props.location.search.toString()}${newUrl}`)
+                } else {
+                    props.history.push(newUrl)
+                }
             } else if (props.filterTags.length === 1) {
                 let querystring: any = qs.parse(props.location.search, {arrayFormat: 'comma'})
-                console.log('current querystring', querystring)
 
                 props.history.push(`${props.location.pathname}?`
                     + qs.stringify({
@@ -118,9 +131,40 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
 
     const addCategoryFilter = (category: any) => {
         if (!props.filterCategories.includes(category)) {
-            props.history.push(`${props.history.location.search},${category}`)
+            if (props.filterCategories.length === 0) {
+                let newUrl: string = props.location.pathname
+                newUrl += `&categories=${category}`
+
+                if (qs.parse(props.location.search)['tags']) {
+                    newUrl = `&categories=${category}`
+
+                    props.history.push(`${props.location.pathname}${props.location.search.toString()}${newUrl}`)
+                } else {
+                    props.history.push(newUrl)
+                }
+            } else if (props.filterCategories.length === 1) {
+                let querystring: any = qs.parse(props.location.search, {arrayFormat: 'comma'})
+
+                props.history.push(`${props.location.pathname}?`
+                    + qs.stringify({
+                        categories: `${querystring['categories']},${category}`
+                    }))
+            } else {
+                let querystring: any = qs.parse(props.location.search, {arrayFormat: 'comma'})
+                querystring['categories'].push(category)
+
+                props.history.push(`${props.location.pathname}?`
+                    + qs.stringify(querystring, {arrayFormat: 'comma'}))
+            }
         }
     }
+
+
+
+
+
+
+
 
     return (
         <div className='container'>
@@ -139,7 +183,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                 {
                     <div className="tags are-large">
                         {
-                            Array.from(props.filterCategories).map((c: string, i: number) =>
+                            props.filterCategories.map((c: string, i: number) =>
                                 <div key={i}>
                                     <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
                                     {`${i < props.filterCategories.length - 1 ? `, ` : ``}`}

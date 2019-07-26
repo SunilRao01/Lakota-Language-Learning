@@ -14,6 +14,8 @@ interface PostCardProps {
 export const PostCard: FC<PostCardProps> = props => {
     const clickFunction = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, t: string) => {
         e.preventDefault()
+
+        props.onClickCategory && props.onClickCategory(t)
     }
 
     return (
