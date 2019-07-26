@@ -67,6 +67,34 @@ export const initialPostState: PostState = {
                 answer: 'ever was?'
             }]
         }
+    }, {
+        id: 3,
+        postTitle: 'Word of the Day: Lemons',
+        postContent: 'Lemons are yummy.',
+        creationDate: new Date(2019, 5, 1),
+        categories: ['Vocabulary Lesson'],
+        tags: ['word of the day', 'food', 'semantics', 'spelling'],
+        quizzes: {
+            questions: [{
+                question: 'What is the answer?',
+                answers: ['same', 'as it', 'ever was?'],
+                answer: 'ever was?'
+            }]
+        }
+    }, {
+        id: 4,
+        postTitle: 'Word of the Day: Lakota',
+        postContent: 'Lakota is a word.',
+        creationDate: new Date(2019, 5, 1),
+        categories: ['Vocabulary Lesson'],
+        tags: ['word of the day', 'history', 'spelling', 'geography'],
+        quizzes: {
+            questions: [{
+                question: 'What is the answer?',
+                answers: ['same', 'as it', 'ever was?'],
+                answer: 'ever was?'
+            }]
+        }
     }],
     tags: new Set([]),
     categories: new Set([])

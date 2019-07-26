@@ -1,4 +1,3 @@
-import {PostActionTypes} from '../Posts/Posts.action'
 import {FilterActionTypes} from './Filter.action'
 
 export interface FilterState {

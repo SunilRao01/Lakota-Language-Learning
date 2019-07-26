@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './Home.css'
 import {Post} from '../../redux/Posts/Posts.reducer';
 import {addPost, getPosts} from '../../redux/Posts/Posts.action';
@@ -23,13 +23,16 @@ interface HomeProps {
 type HomePropsWithActions = HomeProps & HomeActions
 
 const HomeComponent: FC<HomePropsWithActions> = props => {
+    const [wordOfTheDayPosts, setWordOfTheDayPosts] = useState<Post[]>([])
+
     useEffect(() => {
         props.getPosts()
+
+        setWordOfTheDayPosts(props.posts.filter(p => p.tags.includes('word of the day')))
     }, []);
 
     return (
         <div className='container'>
-
             <div className='columns is-centered'>
                 <div className='column is-narrow title-anim'>
                     <p className='title is-2'>Lakota Learning</p>
@@ -51,11 +54,12 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                 <div className='column'>
                     <div className='word-of-the-day-section'>
                         <h3 className='title is-3'>Word of the Day:</h3>
-                        <ul>
-                            <li>Word 1</li>
-                            <li>Word 2</li>
-                            <li>Word 3</li>
-                        </ul>
+                        {
+                            wordOfTheDayPosts.map((p: Post, i: number) =>
+                                <div key={i}>
+                                    <PostCard post={p} showTitleOnly={true}/>
+                                </div>)
+                        }
                     </div>
 
                     <div className='categories-section'>

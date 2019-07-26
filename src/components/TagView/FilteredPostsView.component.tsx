@@ -20,7 +20,11 @@ interface FilteredPostsViewActions {
     setFilterCategories: (newCategories: string[]) => void
 }
 
-type FilteredPostsViewProps = RouteComponentProps & FilteredPostsViewOwnProps & FilteredPostsViewActions & RouteComponentProps
+type FilteredPostsViewProps =
+    RouteComponentProps
+    & FilteredPostsViewOwnProps
+    & FilteredPostsViewActions
+    & RouteComponentProps
 
 const mapStateToProps = (state: RootState): FilteredPostsViewOwnProps => {
     return {
@@ -45,7 +49,6 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
             let result = true
 
             if (tags.length > 0) {
-                console.log('checking tags...')
                 tags.forEach(t => {
                     if (!p.tags.includes(t)) {
                         result = false
@@ -72,6 +75,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
         if (typeof tags === 'string') {
             tags = [tags]
         }
+        console.log(`tags form url: ${tags}`)
         tags && props.setFilterTags(tags)
 
         // Update filterState in store for categories
@@ -79,34 +83,67 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
         if (typeof categories === 'string') {
             categories = [categories]
         }
+        console.log(`cats form url: ${categories}`)
         categories && props.setFilterCategories(categories)
 
         // Update filtered posts in state
-        const fp = filterPostsByField(props.posts,tags,categories)
+        const fp = filterPostsByField(props.posts, tags, categories)
         setFilteredPosts(fp)
-    }, [props.filterTags, props.filterCategories])
+    }, [props.location.search]) // Call hook when any filter url query params change
 
     const addTagFilter = (tag: any) => {
-        props.history.push(`${props.history.location.search},${tag}`)
+        if (!props.filterTags.includes(tag)) {
+            if (props.filterTags.length === 0) {
+                let newUrl: string = props.location.pathname
+                newUrl += `&tags=${tag}`
+
+                props.history.push(newUrl)
+            } else if (props.filterTags.length === 1) {
+                let querystring: any = qs.parse(props.location.search, {arrayFormat: 'comma'})
+                console.log('current querystring', querystring)
+
+                props.history.push(`${props.location.pathname}?`
+                    + qs.stringify({
+                        tags: `${querystring['tags']},${tag}`
+                    }))
+            } else {
+                let querystring: any = qs.parse(props.location.search, {arrayFormat: 'comma'})
+                querystring['tags'].push(tag)
+
+                props.history.push(`${props.location.pathname}?`
+                    + qs.stringify(querystring, {arrayFormat: 'comma'}))
+            }
+        }
+    }
+
+    const addCategoryFilter = (category: any) => {
+        if (!props.filterCategories.includes(category)) {
+            props.history.push(`${props.history.location.search},${category}`)
+        }
     }
 
     return (
         <div className='container'>
             <div>
-                <div className='is-size-3 title'>{props.filterTags.length > 0 ? `Tags` : `Categories`}:</div>
+                <div className='is-size-3 title'>Tags:</div>
                 {
                     <div className="tags are-large">
                         {
-                            props.filterTags.length > 0
-                                ? props.filterTags.map((_, i: number) =>
-                                    <Tag key={i} text={props.filterTags[i]}/>
-                                )
-                                : Array.from(props.filterCategories).map((c: string, i: number) =>
-                                    <div key={i}>
-                                        <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
-                                        {`${i < props.filterCategories.length - 1 ? `, ` : ``}`}
-                                    </div>
-                                )
+                            props.filterTags.map((_, i: number) =>
+                                <Tag key={i} text={props.filterTags[i]}/>)
+                        }
+                    </div>
+                }
+
+                <div className='is-size-3 title'>Categories:</div>
+                {
+                    <div className="tags are-large">
+                        {
+                            Array.from(props.filterCategories).map((c: string, i: number) =>
+                                <div key={i}>
+                                    <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
+                                    {`${i < props.filterCategories.length - 1 ? `, ` : ``}`}
+                                </div>)
                         }
                     </div>
                 }
@@ -117,7 +154,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
             <div className='is-size-3 title'>Filtered Posts:</div>
             {
                 filteredPosts.map((p: Post, i: number) => <div key={i}>
-                    <PostCard post={p} onClickTag={addTagFilter}/>
+                    <PostCard post={p} onClickCategory={addCategoryFilter} onClickTag={addTagFilter}/>
                     {i < filteredPosts.length - 1 ? <hr/> : ``}
                 </div>)
             }
