@@ -160,12 +160,6 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
     }
 
 
-
-
-
-
-
-
     return (
         <div className='container'>
             <div>
@@ -173,8 +167,10 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                 {
                     <div className="tags are-large">
                         {
-                            props.filterTags.map((_, i: number) =>
-                                <Tag key={i} text={props.filterTags[i]}/>)
+                            props.filterTags.length === 0
+                                ? <div>No Tag Filters</div>
+                                : props.filterTags.map((_, i: number) =>
+                                    <Tag key={i} text={props.filterTags[i]}/>)
                         }
                     </div>
                 }
@@ -183,11 +179,13 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                 {
                     <div className="tags are-large">
                         {
-                            props.filterCategories.map((c: string, i: number) =>
-                                <div key={i}>
-                                    <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
-                                    {`${i < props.filterCategories.length - 1 ? `, ` : ``}`}
-                                </div>)
+                            props.filterCategories.length === 0
+                                ? <div>No Category Filters</div>
+                                : props.filterCategories.map((c: string, i: number) =>
+                                    <div key={i}>
+                                        <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
+                                        {`${i < props.filterCategories.length - 1 ? `, ` : ``}`}
+                                    </div>)
                         }
                     </div>
                 }

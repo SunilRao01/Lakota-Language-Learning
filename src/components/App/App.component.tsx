@@ -8,7 +8,7 @@ import {Lessons} from "../Lessons/Lessons.component";
 import {FAQ} from "../FAQ/FAQ.component";
 import './App.css'
 import {Posts} from '../Posts/Posts.component'
-import {FilteredPostsView} from '../TagView/FilteredPostsView.component'
+import {FilteredPostsView} from '../FilteredPostsView/FilteredPostsView.component'
 
 export const AppComponent: FC = () => {
     return (

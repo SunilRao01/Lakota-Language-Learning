@@ -51,6 +51,14 @@ hr {
     margin-bottom: 40px;
 }
 
+.categories-section > div {
+    padding: 0.75rem;
+}
+
+.tags-section {
+    padding: 0.75rem;
+}
+
 .field.is-grouped {
     flex-wrap: wrap;
 }

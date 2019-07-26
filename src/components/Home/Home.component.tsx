@@ -39,7 +39,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     <p className='subtitle is-4'>Lakota lessons and language tools from Hiŋskéhaŋska</p>
                 </div>
             </div>
-            <div className='columns'>
+            <div className='columns is-variable is-4'>
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
                     {
@@ -64,6 +64,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
 
                     <div className='categories-section'>
                         <h3 className='title is-3'>Categories:</h3>
+                        <div>
                         {
                             Array.from(props.categories).map((c: string, i: number) => {
                                 return (<div key={i}>
@@ -72,11 +73,12 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                                 </div>)
                             })
                         }
+                        </div>
                     </div>
 
-                    <div className='tags-section'>
+                    <div>
                         <h3 className='title is-3'>Tags:</h3>
-                        <div className='field is-grouped'>
+                        <div className='field is-grouped tags-section'>
                             {props.tags &&
                             Array.from(props.tags).map((t: string, i: number) =>
                                 <Tag key={i} text={t}/>)
