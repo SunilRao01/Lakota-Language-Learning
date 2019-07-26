@@ -1,0 +1,12 @@
+.twitter-icon {
+    background-color: #1DA1F3;
+}
+
+.facebook-icon {
+    background-color: #3B5998;
+}
+
+.facebook-icon > svg {
+    color: white;
+    fill: white;
+}

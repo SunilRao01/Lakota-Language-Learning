@@ -2,6 +2,7 @@ import React from 'react'
 import {FC} from 'react';
 import TwitterSvg from '../../assets/twitter.svg'
 import FacebookSvg from '../../assets/facebook.svg'
+import './About.css'
 
 export const About: FC = () => {
     return <div className='container'>
