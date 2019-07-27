@@ -11,16 +11,14 @@ export const About: FC = () => {
             <b>Social Media:</b>
             <br/>
             <div className="buttons">
-                <a href='https://twitter.com/andrea_lakota' rel='noopener' className="button is-rounded twitter-icon">
+                <a href='https://twitter.com/andrea_lakota' rel='noopener' className="button is-rounded is-medium twitter-icon">
                     <img src={TwitterSvg} alt=''/>
                 </a>
-                <a href='https://twitter.com/andrea_lakota' rel='noopener' className="button is-rounded facebook-icon">
+                <a href='https://twitter.com/andrea_lakota' rel='noopener' className="button is-rounded is-medium facebook-icon">
                     <img src={FacebookSvg} alt=''/>
                 </a>
             </div>
             <div>
-
-
             </div>
         </div>
     </div>

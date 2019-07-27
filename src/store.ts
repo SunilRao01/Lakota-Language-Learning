@@ -1,15 +1,15 @@
 import {combineReducers, createStore} from 'redux';
 import {initialPostState, postReducer, PostState} from './redux/Posts/Posts.reducer';
-import {filterReducer, FilterState, startingFilterState} from './redux/Filter/Filter.reducer'
+import {filterReducer, FilterState, initialFilterState} from './redux/Filter/Filter.reducer'
 
 export interface RootState {
     postState: PostState,
     filterState: FilterState
 }
 
-export const startingRootState: RootState = {
+export const initialRootState: RootState = {
     postState: initialPostState,
-    filterState: startingFilterState
+    filterState: initialFilterState
 }
 
 const rootReducer = combineReducers({

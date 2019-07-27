@@ -38,7 +38,6 @@
     "@types/react-redux": "^7.1.0",
     "@types/react-router": "^4.4.5",
     "@types/react-router-dom": "^4.3.2",
-    "@types/react-test-renderer": "^16.8.2",
     "@types/styled-components": "^4.1.16",
     "bulma": "^0.7.5",
     "cypress": "^3.3.1",

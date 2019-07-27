@@ -2,6 +2,7 @@ import React from 'react';
 import {Home, mapDispatchToProps, mapStateToProps} from './Home.component'
 import {addPost} from '../../redux/Posts/Posts.action'
 import {RootState} from '../../store'
+import {initialFilterState} from '../../redux/Filter/Filter.reducer'
 
 describe('Home', () => {
     describe('redux', () => {
@@ -31,6 +32,7 @@ describe('Home', () => {
 
         it('should mapStateToProps', () => {
             const initialState: RootState = {
+                filterState: initialFilterState,
                 postState: {
                     posts: [{
                         id: 1,

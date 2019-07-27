@@ -15,20 +15,26 @@ interface HomeActions {
 }
 
 interface HomeProps {
-    posts: Post[],
-    tags: Set<string>,
-    categories: Set<string>
+    posts: Post[]
 }
 
 type HomePropsWithActions = HomeProps & HomeActions
 
 const HomeComponent: FC<HomePropsWithActions> = props => {
     const [wordOfTheDayPosts, setWordOfTheDayPosts] = useState<Post[]>([])
+    const [allCategories, setAllCategories] = useState<Set<string>>(new Set<string>())
+    const [allTags, setAllTags] = useState<Set<string>>(new Set<string>())
 
     useEffect(() => {
         props.getPosts()
 
         setWordOfTheDayPosts(props.posts.filter(p => p.tags.includes('word of the day')))
+
+        // Set categories and tags
+        props.posts.forEach(p => {
+            p.categories.forEach((c: string) => setAllCategories(allCategories.add(c)))
+            p.tags.forEach((t: string) => setAllTags(allTags.add(t)))
+        })
     }, []);
 
     return (
@@ -65,24 +71,25 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     <div className='categories-section'>
                         <h3 className='title is-3'>Categories:</h3>
                         <div>
-                        {
-                            Array.from(props.categories).map((c: string, i: number) => {
-                                return (<div key={i}>
-                                    <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
-                                    {`${i < props.categories.size - 1 ? `, ` : ``}`}
-                                </div>)
-                            })
-                        }
+                            {
+                                allCategories.size > 0 &&
+                                    Array.from(allCategories.values()).map((c: string, i: number) => {
+                                        return <div key={i}>
+                                                <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
+                                                {`${i < allCategories.size - 1 ? `, ` : ``}`}
+                                            </div>
+                                    })
+                            }
                         </div>
                     </div>
 
                     <div>
                         <h3 className='title is-3'>Tags:</h3>
                         <div className='field is-grouped tags-section'>
-                            {props.tags &&
-                            Array.from(props.tags).map((t: string, i: number) =>
-                                <Tag key={i} text={t}/>)
-                            }
+                            {allTags.size > 0 &&
+                            Array.from(allTags).map((t: string, i: number) => {
+                                return (<Tag key={i} text={t}/>)
+                            })}
                         </div>
                     </div>
                 </div>
@@ -92,9 +99,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
 };
 
 export const mapStateToProps = (state: RootState): HomeProps => ({
-    posts: state.postState.posts,
-    tags: state.postState.tags,
-    categories: state.postState.categories
+    posts: state.postState.posts
 });
 
 export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {

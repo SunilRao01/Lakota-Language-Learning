@@ -26,7 +26,7 @@ type FilteredPostsViewProps =
     & FilteredPostsViewActions
     & RouteComponentProps
 
-const mapStateToProps = (state: RootState): FilteredPostsViewOwnProps => {
+export const mapStateToProps = (state: RootState): FilteredPostsViewOwnProps => {
     return {
         posts: state.postState.posts,
         filterTags: state.filterState.filters.tags,

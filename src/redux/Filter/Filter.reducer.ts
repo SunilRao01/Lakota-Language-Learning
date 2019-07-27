@@ -8,7 +8,7 @@ export interface FilterState {
     }
 }
 
-export const startingFilterState: FilterState = {
+export const initialFilterState: FilterState = {
     filters: {
         ids: [],
         tags: [],
@@ -18,7 +18,7 @@ export const startingFilterState: FilterState = {
 
 
 export const filterReducer = (
-    state = startingFilterState,
+    state = initialFilterState,
     action: FilterActionTypes
 ): FilterState => {
     switch (action.type) {

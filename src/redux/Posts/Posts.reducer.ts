@@ -19,9 +19,7 @@ export interface Post {
 }
 
 export interface PostState {
-    posts: Post[],
-    tags: Set<string>,
-    categories: Set<string>
+    posts: Post[]
 }
 
 export const initialPostState: PostState = {
@@ -35,8 +33,8 @@ export const initialPostState: PostState = {
         quizzes: {
             questions: [{
                 question: 'What is the answer?',
-                answers: ['same', 'as it', 'ever was?'],
-                answer: 'ever was?'
+                answers: ['option 1', 'option 2', 'option 3'],
+                answer: 'option 3'
             }]
         }
     }, {
@@ -49,8 +47,8 @@ export const initialPostState: PostState = {
         quizzes: {
             questions: [{
                 question: 'What is the answer?',
-                answers: ['same', 'as it', 'ever was?'],
-                answer: 'ever was?'
+                answers: ['option 1', 'option 2', 'option 3'],
+                answer: 'option 3'
             }]
         }
     }, {
@@ -63,13 +61,13 @@ export const initialPostState: PostState = {
         quizzes: {
             questions: [{
                 question: 'What is the answer?',
-                answers: ['same', 'as it', 'ever was?'],
-                answer: 'ever was?'
+                answers: ['option 1', 'option 2', 'option 3'],
+                answer: 'option 3'
             }]
         }
     }, {
         id: 3,
-        postTitle: 'Word of the Day: Lemons',
+        postTitle: 'Word of the Day: Sampleword',
         postContent: 'Lemons are yummy.',
         creationDate: new Date(2019, 5, 1),
         categories: ['Vocabulary Lesson'],
@@ -77,27 +75,25 @@ export const initialPostState: PostState = {
         quizzes: {
             questions: [{
                 question: 'What is the answer?',
-                answers: ['same', 'as it', 'ever was?'],
-                answer: 'ever was?'
+                answers: ['option 1', 'option 2', 'option 3'],
+                answer: 'option 3'
             }]
         }
     }, {
         id: 4,
-        postTitle: 'Word of the Day: Lakota',
-        postContent: 'Lakota is a word.',
+        postTitle: 'Word of the Day: Sampleword',
+        postContent: 'Sampleword is a word, and this is what it means:',
         creationDate: new Date(2019, 5, 1),
         categories: ['Vocabulary Lesson'],
         tags: ['word of the day', 'history', 'spelling', 'geography'],
         quizzes: {
             questions: [{
                 question: 'What is the answer?',
-                answers: ['same', 'as it', 'ever was?'],
-                answer: 'ever was?'
+                answers: ['option 1', 'option 2', 'option 3'],
+                answer: 'option 3'
             }]
         }
-    }],
-    tags: new Set([]),
-    categories: new Set([])
+    }]
 };
 
 export const postReducer = (
@@ -106,7 +102,9 @@ export const postReducer = (
 ): PostState => {
     switch (action.type) {
         case 'GET_POSTS': {
-            // TODO: Create async call to get posts from backend
+            // TODO: Create async call to get posts
+            //  from backend here when ready
+
             const sourcePosts = state.posts
             let outputPosts: Post[] = []
             let outputTags: Set<string> = new Set()
@@ -120,9 +118,7 @@ export const postReducer = (
 
             return {
                 ...state,
-                posts: outputPosts,
-                tags: outputTags,
-                categories: outputCategories
+                posts: outputPosts
             }
         }
         case 'ADD_POST': {
