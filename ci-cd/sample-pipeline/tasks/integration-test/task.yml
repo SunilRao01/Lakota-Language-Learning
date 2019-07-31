@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: node
+    tag: 8.12-jessie
+
+inputs:
+  - name: dev-lakota-ed
+
+caches:
+  - path: dev-lakota-ed/node_modules
+
+run:
+  path: dev-lakota-ed/ci-cd/sample-pipeline/tasks/unit-test/run.sh

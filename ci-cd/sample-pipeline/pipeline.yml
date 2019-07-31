@@ -1,0 +1,61 @@
+resources:
+  - name: dev-lakota-ed
+    type: git
+    source:
+      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
+      branch: dev
+      private_key: ((github-gpg-key))
+
+  - name: prod-lakota-ed
+    type: git
+    source:
+      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
+      branch: master
+      private_key: ((github-gpg-key))
+
+jobs:
+  - name: Unit Tests
+    plan:
+      - aggregate:
+          - get: dev-ci
+            trigger: true
+      - task: run-unit-tests
+        file: dev-ci/sample-pipeline/tasks/unit-test/task.yml
+
+  - name: Integration Tests
+    plan:
+      - aggregate:
+          - get: dev-ci
+            passed:
+              - Unit Tests
+            trigger: true
+      - task: run-integration-tests
+        file: dev-ci/sample-pipeline/tasks/integration-test/task.yml
+
+  - name: Deploy to Dev
+    plan:
+      - aggregate:
+          - get: dev-ci
+            passed:
+              - Integration Tests
+            trigger: true
+      - task: deploy-to-dev
+        file: dev-ci/sample-pipeline/tasks/deploy-dev/task.yml
+
+  - name: Deploy to Prod
+    plan:
+      - aggregate:
+          - get: prod-ci
+            trigger: false
+      - task: deploy-to-prod
+        file: prod-ci/sample-pipeline/tasks/deploy-prod/task.yml
+
+groups:
+  - name: Development
+    jobs:
+      - Unit Tests
+      - Integration Tests
+      - Deploy to Dev
+  - name: Production
+    jobs:
+      - Deploy to Prod
