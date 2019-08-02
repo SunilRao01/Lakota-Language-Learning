@@ -14,7 +14,7 @@ set -e -u -x
 
 cd prod-lakota-ed
 npm install
-npm build
+npm run build
 
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -rp build/ root@167.71.81.111:/var/www/html
 
