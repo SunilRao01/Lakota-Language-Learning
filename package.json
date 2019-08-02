@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build CI=true",
     "test": "CI=true react-scripts test",
     "eject": "react-scripts eject",
     "integration-test": "cypress run"
