@@ -7,7 +7,7 @@ set -e -u -x
     ssh-keygen -t rsa -N "" -f rsa.key
     echo "$rsa" > ./rsa.key
     mkdir /root/.ssh
-    cp ./rsa.key ~/.ssh/id_ed25519
+    cp ./rsa.key ~/.ssh/id_rsa
     rm rsa.key
     rm rsa.key.pub
 } &> /dev/null
