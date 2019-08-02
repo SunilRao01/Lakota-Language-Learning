@@ -14,7 +14,7 @@ export const Tag: FC<TagProps> = props => {
     }
 
     return (
-        <p className='control'>
+        <p className='swing-in-top-bck control'>
             {props.onClick
                 ? <a onClick={e => clickFunction(e, props.text)} className="button is-info is-small">
                     {props.text}

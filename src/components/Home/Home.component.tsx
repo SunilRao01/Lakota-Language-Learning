@@ -42,7 +42,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             <div className='columns is-centered'>
                 <div className='column is-narrow title-anim'>
                     <p className='title is-2'>Lakota Learning</p>
-                    <p className='subtitle is-4'>Lakota lessons and language tools from Hiŋskéhaŋska</p>
+                    <p className='subtitle is-4 swing-in-top-bck'>Lakota lessons and language tools from Hiŋskéhaŋska</p>
                 </div>
             </div>
             <div className='columns is-variable is-4'>
@@ -74,7 +74,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                             {
                                 allCategories.size > 0 &&
                                     Array.from(allCategories.values()).map((c: string, i: number) => {
-                                        return <div key={i}>
+                                        return <div className='swing-in-top-bck' key={i}>
                                                 <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
                                                 {`${i < allCategories.size - 1 ? `, ` : ``}`}
                                             </div>
