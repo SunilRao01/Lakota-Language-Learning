@@ -10,8 +10,5 @@ image_resource:
 inputs:
   - name: dev-lakota-ed
 
-caches:
-  - path: dev-lakota-ed/node_modules
-
 run:
-  path: dev-lakota-ed/ci-cd/sample-pipeline/tasks/unit-test/run.sh
+  path: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/run.sh

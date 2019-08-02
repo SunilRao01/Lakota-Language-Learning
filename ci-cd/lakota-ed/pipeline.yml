@@ -2,14 +2,14 @@ resources:
   - name: dev-lakota-ed
     type: git
     source:
-      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
+      uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
       branch: dev
       private_key: ((github-gpg-key))
 
   - name: prod-lakota-ed
     type: git
     source:
-      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
+      uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
       branch: master
       private_key: ((github-gpg-key))
 
@@ -17,38 +17,38 @@ jobs:
   - name: Unit Tests
     plan:
       - aggregate:
-          - get: dev-ci
+          - get: dev-lakota-ed
             trigger: true
       - task: run-unit-tests
-        file: dev-ci/sample-pipeline/tasks/unit-test/task.yml
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test/task.yml
 
   - name: Integration Tests
     plan:
       - aggregate:
-          - get: dev-ci
+          - get: dev-lakota-ed
             passed:
               - Unit Tests
             trigger: true
       - task: run-integration-tests
-        file: dev-ci/sample-pipeline/tasks/integration-test/task.yml
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
 
   - name: Deploy to Dev
     plan:
       - aggregate:
-          - get: dev-ci
+          - get: dev-lakota-ed
             passed:
               - Integration Tests
             trigger: true
       - task: deploy-to-dev
-        file: dev-ci/sample-pipeline/tasks/deploy-dev/task.yml
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
 
   - name: Deploy to Prod
     plan:
       - aggregate:
-          - get: prod-ci
+          - get: prod-lakota-ed
             trigger: false
       - task: deploy-to-prod
-        file: prod-ci/sample-pipeline/tasks/deploy-prod/task.yml
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-prod/task.yml
 
 groups:
   - name: Development
