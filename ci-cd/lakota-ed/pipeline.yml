@@ -41,6 +41,8 @@ jobs:
             trigger: true
       - task: deploy-to-dev
         file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
+        params:
+          RSA_KEY: ((deploy-rsa-key))
 
   - name: Deploy to Prod
     plan:
@@ -49,6 +51,8 @@ jobs:
             trigger: false
       - task: deploy-to-prod
         file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-prod/task.yml
+        params:
+          RSA_KEY: ((deploy-rsa-key))
 
 groups:
   - name: Development
