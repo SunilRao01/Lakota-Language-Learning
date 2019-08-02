@@ -10,7 +10,9 @@ set -e -u -x
     cp ./rsa.key ~/.ssh/id_rsa
     rm rsa.key
     rm rsa.key.pub
-} &> /dev/null
+}
+
+
 
 cd dev-lakota-ed
 npm install
