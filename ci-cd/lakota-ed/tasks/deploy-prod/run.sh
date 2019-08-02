@@ -16,6 +16,6 @@ cd prod-lakota-ed
 npm install
 npm build
 
-cp -r ./build  /var/www/html
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -rp build/ root@167.71.81.111:/var/www/html
 
 rm ~/.ssh/id_rsa
