@@ -9,5 +9,6 @@ defmodule LakotaEdApiWeb.Router do
     pipe_through :api
 
     resources "/post", PostController, only: [:show, :update, :delete, :create]
+    post "/login", UserController, :index
   end
 end
