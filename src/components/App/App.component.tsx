@@ -10,7 +10,7 @@ import './App.css'
 import {Posts} from '../Posts/Posts.component'
 import {FilteredPostsView} from '../FilteredPostsView/FilteredPostsView.component'
 
-export const AppComponent: FC = () => {
+export const App: FC = () => {
     return (
             <Router>
                 <div className="App">
@@ -31,5 +31,3 @@ export const AppComponent: FC = () => {
             </Router>
     );
 };
-
-export default AppComponent;

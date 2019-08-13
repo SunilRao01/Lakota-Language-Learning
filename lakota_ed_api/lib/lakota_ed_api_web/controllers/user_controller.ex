@@ -14,3 +14,4 @@ defmodule LakotaEdApiWeb.UserController do
     render(conn, "login_success.json", email: user.email)
   end
 end
+

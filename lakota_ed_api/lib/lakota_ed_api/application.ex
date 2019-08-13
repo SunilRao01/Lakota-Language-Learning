@@ -28,4 +28,8 @@ defmodule LakotaEdApi.Application do
     LakotaEdApiWeb.Endpoint.config_change(changed, removed)
     :ok
   end
+
+  config :lakota_ed_api, LakotaEdApi.Guardian,
+    issuer: "lakota_ed_api",
+    secret_key: "Dhh40RsmwDB93K/Jvhs5vzXUuxRkFPKfQ1NZFoYmFZtdQ+DZ+yWxmKGm17hTzxQn"
 end

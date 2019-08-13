@@ -12,7 +12,7 @@ export const initialRootState: RootState = {
     filterState: initialFilterState
 }
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
     postState: postReducer,
     filterState: filterReducer
 });

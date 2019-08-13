@@ -6,4 +6,5 @@
   <component name="PreferredVcsStorage">
     <preferredVcsName>ApexVCS</preferredVcsName>
   </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_12" default="false" project-jdk-name="Elixir 1.8.1" project-jdk-type="Elixir SDK" />
 </project>

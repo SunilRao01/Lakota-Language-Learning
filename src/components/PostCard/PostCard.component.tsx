@@ -19,7 +19,7 @@ export const PostCard: FC<PostCardProps> = props => {
     }
 
     return (
-        <div className='column swing-in-top-bck is-full'>
+        <div data-testid={props.showTitleOnly ? `postcard-small` : `postcard-large`} className='column swing-in-top-bck is-full'>
             <div className='card'>
                 <header className='card-header'>
                     <Link to={`/post/${props.post.id}`}><p className='card-header-title'>{props.post.postTitle}</p>
