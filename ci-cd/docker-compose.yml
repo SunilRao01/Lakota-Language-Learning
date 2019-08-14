@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  concourse-db:
+    image: postgres
+    ports: ["${POSTGRES_PORTS}"]
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+
+  concourse-web:
+    image: concourse/concourse
+    command: web
+    links: [concourse-db]
+    depends_on: [concourse-db]
+    ports: ["${CONCOURSE_PORTS}"]
+    volumes: ["./keys/web:/concourse-keys"]
+    environment:
+      CONCOURSE_EXTERNAL_URL: "${CONCOURSE_EXTERNAL_URL}"
+      CONCOURSE_POSTGRES_HOST: "${CONCOURSE_POSTGRES_HOST}"
+      CONCOURSE_POSTGRES_USER: "${CONCOURSE_POSTGRES_USER}"
+      CONCOURSE_POSTGRES_PASSWORD: "${CONCOURSE_POSTGRES_PASSWORD}"
+      CONCOURSE_POSTGRES_DATABASE: "${CONCOURSE_POSTGRES_DATABASE}"
+      CONCOURSE_ADD_LOCAL_USER: "${CONCOURSE_ADD_LOCAL_USER}"
+      CONCOURSE_MAIN_TEAM_LOCAL_USER: "${CONCOURSE_MAIN_TEAM_LOCAL_USER}"
+
+  concourse-worker:
+    image: concourse/concourse
+    command: worker
+    privileged: true
+    depends_on: [concourse-web]
+    volumes: ["./keys/worker:/concourse-keys"]
+    links: [concourse-web]
+    stop_signal: SIGUSR2
+    environment:
+      CONCOURSE_TSA_HOST: concourse-web:2222

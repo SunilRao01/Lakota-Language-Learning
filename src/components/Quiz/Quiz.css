@@ -1,0 +1,20 @@
+.quiz-answers {
+    display: flex;
+    flex-direction: column;
+}
+
+.quiz-answers label {
+    line-height: 2.0;
+}
+
+.quiz-answers > label > input {
+    margin-right: 10px;
+}
+
+.quiz-answers > .control {
+    margin-top: 10px;
+}
+
+.radio + .radio {
+    margin: 0px;
+}

@@ -1,0 +1,65 @@
+resources:
+  - name: dev-lakota-ed
+    type: git
+    source:
+      uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
+      branch: dev
+      private_key: ((github-gpg-key))
+
+  - name: prod-lakota-ed
+    type: git
+    source:
+      uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
+      branch: master
+      private_key: ((github-gpg-key))
+
+jobs:
+  - name: Unit Tests
+    plan:
+      - aggregate:
+          - get: dev-lakota-ed
+            trigger: true
+      - task: run-unit-tests
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test/task.yml
+
+  - name: Integration Tests
+    plan:
+      - aggregate:
+          - get: dev-lakota-ed
+            passed:
+              - Unit Tests
+            trigger: true
+      - task: run-integration-tests
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
+
+  - name: Deploy to Dev
+    plan:
+      - aggregate:
+          - get: dev-lakota-ed
+            passed:
+              - Integration Tests
+            trigger: true
+      - task: deploy-to-dev
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
+        params:
+          RSA_KEY: ((deploy-ssh-key))
+
+  - name: Deploy to Prod
+    plan:
+      - aggregate:
+          - get: prod-lakota-ed
+            trigger: false
+      - task: deploy-to-prod
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-prod/task.yml
+        params:
+          RSA_KEY: ((deploy-ssh-key))
+
+groups:
+  - name: Development
+    jobs:
+      - Unit Tests
+      - Integration Tests
+      - Deploy to Dev
+  - name: Production
+    jobs:
+      - Deploy to Prod

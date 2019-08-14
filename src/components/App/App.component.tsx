@@ -7,10 +7,11 @@ import {About} from "../About/About.component";
 import {Lessons} from "../Lessons/Lessons.component";
 import {FAQ} from "../FAQ/FAQ.component";
 import './App.css'
+import {Posts} from '../Posts/Posts.component'
+import {FilteredPostsView} from '../FilteredPostsView/FilteredPostsView.component'
 
-export const AppComponent: FC = () => {
+export const App: FC = () => {
     return (
-        <>
             <Router>
                 <div className="App">
                     <header className="App-header">
@@ -22,13 +23,11 @@ export const AppComponent: FC = () => {
                             <Route path='/about' exact component={About}/>
                             <Route path='/lessons' exact component={Lessons}/>
                             <Route path='/faq' exact component={FAQ}/>
+                            <Route path='/post/:postId' exact component={Posts}/>
+                            <Route path='/posts' component={FilteredPostsView}/>
                         </main>
                     </div>
                 </div>
             </Router>
-
-        </>
     );
 };
-
-export default AppComponent;

@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from "enzyme";
-import AppComponent from "./App.component";
+import {App} from "./App.component";
 import {Route} from "react-router";
 import {Home} from "../Home/Home.component";
 import {About} from '../About/About.component'
@@ -8,7 +8,7 @@ import {Lessons} from '../Lessons/Lessons.component'
 import {FAQ} from '../FAQ/FAQ.component'
 
 describe('contains all Routes', () => {
-    const wrapper = shallow(<AppComponent />);
+    const wrapper = shallow(<App />);
 
     it('should have the Home path', () => {
         expect(wrapper.find(Route).at(0).props().component).toEqual(Home)

@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import './Home.css'
 import {Post} from '../../redux/Posts/Posts.reducer';
 import {addPost, getPosts} from '../../redux/Posts/Posts.action';
@@ -6,6 +6,8 @@ import {connect} from 'react-redux';
 import {AnyAction, Dispatch} from 'redux'
 import {RootState} from '../../store'
 import {PostCard} from '../PostCard/PostCard.component'
+import {Tag} from '../Tag/Tag.component'
+import {Link} from 'react-router-dom'
 
 interface HomeActions {
     getPosts: () => void,
@@ -19,56 +21,76 @@ interface HomeProps {
 type HomePropsWithActions = HomeProps & HomeActions
 
 const HomeComponent: FC<HomePropsWithActions> = props => {
+    const [wordOfTheDayPosts, setWordOfTheDayPosts] = useState<Post[]>([])
+    const [allCategories, setAllCategories] = useState<Set<string>>(new Set<string>())
+    const [allTags, setAllTags] = useState<Set<string>>(new Set<string>())
+
     useEffect(() => {
         props.getPosts()
+
+        setWordOfTheDayPosts(props.posts.filter(p => p.tags.includes('word of the day')))
+
+        // Set categories and tags
+        props.posts.forEach(p => {
+            p.categories.forEach((c: string) => setAllCategories(allCategories.add(c)))
+            p.tags.forEach((t: string) => setAllTags(allTags.add(t)))
+        })
     }, []);
 
     return (
         <div className='container'>
             <div className='columns is-centered'>
                 <div className='column is-narrow title-anim'>
-                    <p className='title is-2'>Lakota Learning</p>
-                    <p className='subtitle is-4'>Lakota lessons and language tools from Hiŋskéhaŋska</p>
+                    <p className='title is-2'>Lakota Language Learning</p>
+                    <p className='subtitle is-4 swing-in-top-bck'>Lakota lessons and language tools from Hiŋskéhaŋska</p>
                 </div>
             </div>
-            <div className='columns'>
+            <div className='columns is-variable is-4'>
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
-                    <div className='columns'>
-                        {
-                            props.posts.map(p => <PostCard post={p}/>)
-                        }
-                    </div>
+                    {
+                        props.posts.map((p: Post, i: number) =>
+                            <div key={i}>
+                                <PostCard post={p}/>
+                                {i < props.posts.length - 1 ? <hr/> : ``}
+                            </div>)
+                    }
                     <br/>
-                    <h3 className='title is-4'>Character Test</h3>
-                    <h3 className='subtitle is-5'>abčdeŋȟhiȟklmnopǧšstuvwžyz</h3>
                 </div>
                 <div className='column'>
                     <div className='word-of-the-day-section'>
                         <h3 className='title is-3'>Word of the Day:</h3>
-                        <ul>
-                            <li>Word 1</li>
-                            <li>Word 2</li>
-                            <li>Word 3</li>
-                        </ul>
+                        {
+                            wordOfTheDayPosts.map((p: Post, i: number) =>
+                                <div key={i}>
+                                    <PostCard post={p} showTitleOnly={true}/>
+                                </div>)
+                        }
                     </div>
 
                     <div className='categories-section'>
                         <h3 className='title is-3'>Categories:</h3>
-                        <ul>
-                            <li>Category 1</li>
-                            <li>Category 2</li>
-                            <li>Category 3</li>
-                        </ul>
+                        <div>
+                            {
+                                allCategories.size > 0 &&
+                                    Array.from(allCategories.values()).map((c: string, i: number) => {
+                                        return <div className='swing-in-top-bck' key={i}>
+                                                <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
+                                                {`${i < allCategories.size - 1 ? `, ` : ``}`}
+                                            </div>
+                                    })
+                            }
+                        </div>
                     </div>
 
-                    <div className='tags-section'>
+                    <div>
                         <h3 className='title is-3'>Tags:</h3>
-                        <ul>
-                            <li>Tag 1</li>
-                            <li>Tag 2</li>
-                            <li>Tag 3</li>
-                        </ul>
+                        <div className='field is-grouped tags-section'>
+                            {allTags.size > 0 &&
+                            Array.from(allTags).map((t: string, i: number) => {
+                                return (<Tag key={i} text={t}/>)
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>

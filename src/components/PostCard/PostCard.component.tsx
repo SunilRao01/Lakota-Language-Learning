@@ -1,34 +1,58 @@
 import React, {FC, useEffect} from 'react'
 import {Post} from '../../redux/Posts/Posts.reducer'
+import {Link} from 'react-router-dom'
 import './PostCard.css'
+import {Tag} from '../Tag/Tag.component'
 
 interface PostCardProps {
-    post: Post
+    post: Post,
+    onClickTag?: (e: any) => void,
+    onClickCategory?: (e: string) => void,
+    showTitleOnly?: boolean
 }
 
 export const PostCard: FC<PostCardProps> = props => {
-    useEffect(() => {
-        console.log('Passed in post: ', props.post)
-    }, [])
+    const clickFunction = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, t: string) => {
+        e.preventDefault()
+
+        props.onClickCategory && props.onClickCategory(t)
+    }
 
     return (
-        <div className='column'>
-            <div className='card post-card'>
+        <div data-testid={props.showTitleOnly ? `postcard-small` : `postcard-large`} className='column swing-in-top-bck is-full'>
+            <div className='card'>
                 <header className='card-header'>
-                    <p className='card-header-title'>{props.post.postTitle}</p>
+                    <Link to={`/post/${props.post.id}`}><p className='card-header-title'>{props.post.postTitle}</p>
+                    </Link>
                 </header>
-                <div className='card-content'>
-                    <div className='content'>
-                        <div>{props.post.postContent}</div>
-                        <br/>
-                        <div className='subtitle is-7'>{props.post.creationDate.toDateString()}</div>
+                { !props.showTitleOnly &&
+                    <div className='card-content'>
+                        <div className='content'>
+                            <div>{props.post.postContent}</div>
+                            <br/>
+                            <div className='is-size-7'>{props.post.creationDate.toDateString()}</div>
+                            <div className='has-text-weight-bold is-size-7'>Categories:</div>
+                            {
+                                props.post.categories.map((c: string, i: number) => {
+                                    return (<div key={i}>
+                                        {props.onClickCategory
+                                            ? <a className='is-size-7' onClick={e => clickFunction(e, c)}>{`${c}`}</a>
+                                            : <Link className='is-size-7' to={`/posts?categories=${c}`}>{`${c}`}</Link>}
+                                        {`${i < props.post.categories.length - 1 ? `, ` : ``}`}
+                                    </div>)
+                                })
+                            }
+                        </div>
+
+                        <div className='tags'>
+                            {
+                                props.post.tags.map((p: string, i: number) =>
+                                    <Tag key={i} text={p} onClick={props.onClickTag}/>
+                                )
+                            }
+                        </div>
                     </div>
-                    <div className='tags'>
-                        <span className="tag is-info">tag 1</span>
-                        <span className="tag is-info">tag 2</span>
-                        <span className="tag is-info">tag 3</span>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     )

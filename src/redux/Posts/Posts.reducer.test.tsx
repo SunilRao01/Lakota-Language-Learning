@@ -7,6 +7,7 @@ describe('postReducer', () => {
         const actualState = postReducer({
             posts: [{
                 id: 3,
+                postTitle: 'test post title',
                 postContent: 'test post',
                 creationDate: new Date(2020, 6, 23),
                 categories: ['test category', 'test category 2'],
@@ -14,9 +15,11 @@ describe('postReducer', () => {
             }]
         }, getPosts())
 
+        // Verify posts
         expect(actualState.posts.length).toEqual(1)
         expect(actualState.posts[0]).toEqual({
             id: 3,
+            postTitle: 'test post title',
             postContent: 'test post',
             creationDate: new Date(2020, 6, 23),
             categories: ['test category', 'test category 2'],
@@ -27,6 +30,7 @@ describe('postReducer', () => {
     it('should add post for ADD_POST action', () => {
         const newPost: Post = {
             id: 3,
+            postTitle: 'test post title',
             postContent: 'test post',
             creationDate: new Date(2020, 6, 23),
             categories: ['test category', 'test category 2'],
@@ -42,6 +46,6 @@ describe('postReducer', () => {
     it('should delete post for DELETE_POST action', () => {
         const actualState = postReducer(initialPostState, deletePost(0))
 
-        expect(actualState.posts.length).toEqual(0)
+        expect(actualState.posts.length).toEqual(4)
     });
 });
