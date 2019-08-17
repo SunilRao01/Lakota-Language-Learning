@@ -13,8 +13,8 @@ defmodule LakotaEdApi.Accounts.User do
   @doc false
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email])
-    |> validate_required([:email])
+    |> cast(attrs, [:email, :encrypted_password])
+    |> validate_required([:email, :encrypted_password])
     |> unique_constraint(:email)
   end
 end

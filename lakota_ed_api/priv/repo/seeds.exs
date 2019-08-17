@@ -12,12 +12,18 @@
 
 alias LakotaEdApi.Repo
 alias LakotaEdApi.Post
+alias LakotaEdApi.Accounts.User
 
 Repo.insert!(%Post{
   postTitle: "post title",
   postContent: "post content",
   categories: ["cat 1", "cat 2"],
   tags: ["tag 1", "tag 2"],
+})
+
+Repo.insert!(%User{
+  email: "email",
+  encrypted_password: Bcrypt.add_hash("password").password_hash
 })
 
 Repo.all
