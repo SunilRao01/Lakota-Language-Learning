@@ -23,12 +23,14 @@ defmodule LakotaEdApiWeb.PostController do
     end
   end
 
-  def create(
-        conn,
-        %{"categories" => cats, "postContent" => postContent, "postTItle" => postTitle, "tags" => tags},
-        _
-      ) do
-    case Repo.insert(%Post{categories: cats, postContent: postContent, postTitle: postTitle, tags: tags}) do
+  def create(conn, _, _) do
+    bodyParams = conn.body_params
+    case Repo.insert(%Post{
+      categories: bodyParams["categories"],
+      postContent: bodyParams["postContent"],
+      postTitle: bodyParams["postTitle"],
+      tags: bodyParams["tags"]
+    }) do
       {:ok, newPost} -> text(conn, "Created post with id #{newPost.id}")
       {:error, _} -> text(conn, "Error creating post")
     end
@@ -39,16 +41,31 @@ defmodule LakotaEdApiWeb.PostController do
     newPost = Repo.get(Post, id)
 
     newPost = Ecto.Changeset.change newPost,
-      postTitle: bodyParams["postTitle"],
-      postContent: bodyParams["postContent"],
-      categories: bodyParams["categories"],
-      tags: bodyParams["tags"]
+                                    postTitle: bodyParams["postTitle"],
+                                    postContent: bodyParams["postContent"],
+                                    categories: bodyParams["categories"],
+                                    tags: bodyParams["tags"]
 
     case Repo.update(newPost) do
       {:ok, postResponse} -> text(conn, "Updated post: #{postResponse.id}")
       {:error, changeset} -> conn
                              |> put_view(LakotaEdApiWeb.PostView)
                              |> render("update_error.json", "Changeset: #{changeset}")
+    end
+  end
+
+  def delete(conn, %{"id" => id}, _) do
+    case Repo.get(Post, id) do
+      nil ->
+        conn
+        |> put_view(LakotaEdApiWeb.PostView)
+        |> render("update_error.json", message: "Error deleting post: Couldn't find post with that id")
+      post ->
+        {:ok, post} = Repo.delete(post)
+
+        conn
+        |> put_view(LakotaEdApiWeb.PostView)
+        |> render("show.json", post: post)
     end
   end
 end
