@@ -4,9 +4,10 @@ defmodule LakotaEdApi.Post do
   alias LakotaEdApi.Post
 
   schema "posts" do
-    field :categories, {:array, :string}
-    field :postContent, :string
+    @primary_key {:id, :id, autogenerate: true}
     field :postTitle, :string
+    field :postContent, :string
+    field :categories, {:array, :string}
     field :tags, {:array, :string}
 
     timestamps()

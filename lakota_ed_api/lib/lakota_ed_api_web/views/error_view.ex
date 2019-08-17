@@ -1,6 +1,14 @@
 defmodule LakotaEdApiWeb.ErrorView do
   use LakotaEdApiWeb, :view
 
+  def render("404.json", _assigns) do
+    %{errors: %{detail: "Page not found"}}
+  end
+
+  def render("500.json", _assigns) do
+    %{errors: %{detail: "Internal server error"}}
+  end
+
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
   # def render("500.json", _assigns) do

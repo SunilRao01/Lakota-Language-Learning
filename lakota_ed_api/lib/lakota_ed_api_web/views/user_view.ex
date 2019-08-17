@@ -1,25 +1,17 @@
 defmodule LakotaEdApiWeb.UserView do
   use LakotaEdApiWeb, :view
-  alias LakotaEdApiWeb.UserView
 
-  def render("login_success.json", %{email: email}) do
+  def render("login_error.json", %{message: message}) do
     %{
-      message: "Login successful",
-      email: email
+      message: message
     }
   end
 
-  def render("login_error.json", %{email: email}) do
-    %{
-      message: "No login for email or password",
-      email: email
-    }
-  end
-
-  def render("sign_in_success.json", %{email: email}) do
+  def render("sign_in_success.json", %{email: email, jwt: jwt}) do
     %{
       message: "Login successful",
-      email: email
+      email: email,
+      jwt: jwt
     }
   end
 end

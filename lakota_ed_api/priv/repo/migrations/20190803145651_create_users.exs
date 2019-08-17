@@ -4,7 +4,7 @@ defmodule LakotaEdApi.Repo.Migrations.CreateUsers do
   def change do
     create table(:users) do
       add :email, :string
-      add :encrypted_password, :string
+      add :password, :string
 
       timestamps()
     end

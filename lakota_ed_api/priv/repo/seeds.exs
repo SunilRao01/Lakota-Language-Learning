@@ -23,7 +23,7 @@ Repo.insert!(%Post{
 
 Repo.insert!(%User{
   email: "email",
-  encrypted_password: Bcrypt.add_hash("password").password_hash
+  password: Bcrypt.add_hash("password").password_hash
 })
 
 Repo.all

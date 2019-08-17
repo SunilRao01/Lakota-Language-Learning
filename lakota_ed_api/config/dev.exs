@@ -1,13 +1,14 @@
 use Mix.Config
 
 # Configure your database
-config :lakota_ed_api, LakotaEdApi.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "lakota_ed_api_dev",
-  hostname: "localhost",
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+config :lakota_ed_api,
+       LakotaEdApi.Repo,
+       username: "postgres",
+       password: "postgres",
+       database: "lakota_ed_api_dev",
+       hostname: "localhost",
+       show_sensitive_data_on_connection_error: true,
+       pool_size: 10
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -15,12 +16,27 @@ config :lakota_ed_api, LakotaEdApi.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :lakota_ed_api, LakotaEdApiWeb.Endpoint,
-  http: [port: 4000],
-  debug_errors: true,
-  code_reloader: true,
-  check_origin: false,
-  watchers: []
+config :lakota_ed_api,
+       LakotaEdApiWeb.Endpoint,
+       http: [
+         port: 4000
+       ],
+       url: [
+         host: "localhost"
+       ],
+       secret_key: "ycq6yRqAjb95Ce2svBPNa5Bpj9wmPnt8+4gfRTPEP6xSlitP2+i3Raevh4dubtgE",
+       debug_errors: true,
+       code_reloader: true,
+       check_origin: false,
+       watchers: []
+
+config :lakota_ed_api,
+       LakotaEdApiWeb.Guardian,
+       issuer: "LakotaEdApi",
+       secret_key: "14wmV7ZHGKik5xs4zL34QORvwjEKFUFxyQhn0UsP9t03sG5VlLi2tZkLkL198O6P",
+       ttl: {30, :days},
+       allowed_drift: 2000,
+       verify_issuer: true
 
 # ## SSL Support
 #
@@ -47,7 +63,9 @@ config :lakota_ed_api, LakotaEdApiWeb.Endpoint,
 # different ports.
 
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+config :logger, :console,
+       format: "$time $metadata[$level] $message\n",
+       metadata: [:request_id]
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
@@ -55,3 +73,6 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Configure bcrypt for passwords
+config :comeonin, :bcrypt_log_rounds, 4

@@ -11,4 +11,10 @@ defmodule LakotaEdApiWeb.PostView do
       creationDate: post.inserted_at
     }
   end
+
+  def render("update_error.json", %{message: message}) do
+    %{
+      message: message
+    }
+  end
 end

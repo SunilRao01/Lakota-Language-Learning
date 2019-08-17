@@ -5,7 +5,7 @@ defmodule LakotaEdApi.Accounts.User do
 
   schema "users" do
     field :email, :string
-    field :encrypted_password, :string
+    field :password, :string
 
     timestamps()
   end
@@ -13,8 +13,8 @@ defmodule LakotaEdApi.Accounts.User do
   @doc false
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:email, :encrypted_password])
-    |> validate_required([:email, :encrypted_password])
+    |> cast(attrs, [:email, :password])
+    |> validate_required([:email, :password])
     |> unique_constraint(:email)
   end
 end
