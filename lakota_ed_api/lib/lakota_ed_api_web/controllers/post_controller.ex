@@ -9,7 +9,7 @@ defmodule LakotaEdApiWeb.PostController do
 
   action_fallback(LakotaEdApiWeb.FallbackController)
 
-  plug(Guardian.Plug.EnsureAuthenticated when action in [:create, :show])
+  plug(Guardian.Plug.EnsureAuthenticated when action in [:create, :delete, :update])
 
   def show(conn, %{"id" => id}, _) do
     case Repo.get(Post, id) do
