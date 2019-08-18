@@ -1,15 +1,33 @@
+import Ecto.Query, only: [from: 2]
+
 defmodule LakotaEdApiWeb.PostController do
   require Logger
 
   use LakotaEdApiWeb, :controller
   use LakotaEdApiWeb.GuardedController
-
   alias LakotaEdApi.Repo
   alias LakotaEdApi.Post
 
   action_fallback(LakotaEdApiWeb.FallbackController)
 
   plug(Guardian.Plug.EnsureAuthenticated when action in [:create, :delete, :update])
+
+
+  def posts(conn, _, _) do
+    {page, _} = Integer.parse(conn.query_params["page"])
+    offset = 5 * (page - 1)
+
+
+    query = from Post, limit: 5, offset: ^offset
+    posts = Repo.all(query)
+
+    case posts do
+      posts ->
+        conn
+        |> put_view(LakotaEdApiWeb.PostView)
+        |> render("multiple_posts.json", %{posts: posts})
+    end
+  end
 
   def show(conn, %{"id" => id}, _) do
     case Repo.get(Post, id) do
@@ -19,18 +37,20 @@ defmodule LakotaEdApiWeb.PostController do
       post ->
         conn
         |> put_view(LakotaEdApiWeb.PostView)
-        |> render("show.json", post: post)
+        |> render("single_post.json", post: post)
     end
   end
 
   def create(conn, _, _) do
     bodyParams = conn.body_params
-    case Repo.insert(%Post{
-      categories: bodyParams["categories"],
-      postContent: bodyParams["postContent"],
-      postTitle: bodyParams["postTitle"],
-      tags: bodyParams["tags"]
-    }) do
+    case Repo.insert(
+           %Post{
+             categories: bodyParams["categories"],
+             postContent: bodyParams["postContent"],
+             postTitle: bodyParams["postTitle"],
+             tags: bodyParams["tags"]
+           }
+         ) do
       {:ok, newPost} -> text(conn, "Created post with id #{newPost.id}")
       {:error, _} -> text(conn, "Error creating post")
     end
@@ -65,7 +85,7 @@ defmodule LakotaEdApiWeb.PostController do
 
         conn
         |> put_view(LakotaEdApiWeb.PostView)
-        |> render("show.json", post: post)
+        |> render("single_post.json", post: post)
     end
   end
 end
