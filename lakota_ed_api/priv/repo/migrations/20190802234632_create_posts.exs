@@ -7,9 +7,9 @@ defmodule LakotaEdApi.Repo.Migrations.CreatePosts do
       add :postContent, :string
       add :categories, {:array, :string}
       add :tags, {:array, :string}
+      add :quizzes, :map
 
       timestamps()
     end
-
   end
 end

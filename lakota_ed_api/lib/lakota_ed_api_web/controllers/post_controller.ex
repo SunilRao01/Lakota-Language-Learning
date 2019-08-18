@@ -12,20 +12,41 @@ defmodule LakotaEdApiWeb.PostController do
 
   plug(Guardian.Plug.EnsureAuthenticated when action in [:create, :delete, :update])
 
-
   def posts(conn, _, _) do
-    {page, _} = Integer.parse(conn.query_params["page"])
-    offset = 5 * (page - 1)
-
-
-    query = from Post, limit: 5, offset: ^offset
-    posts = Repo.all(query)
-
-    case posts do
-      posts ->
+    # Conditionally serves content based on query strings; currently mutually exclusive
+    case hd(Map.keys(conn.query_params)) do
+      "page" ->
+        {page, _} = Integer.parse(conn.query_params["page"])
+        offset = 5 * (page - 1)
+        query = from Post, limit: 5, offset: ^offset
+        case Repo.all(query) do
+          posts ->
+            conn
+            |> put_view(LakotaEdApiWeb.PostView)
+            |> render("multiple_posts.json", %{posts: posts})
+        end
+      "category" ->
+        category = conn.query_params["category"]
+        query = from p in Post, where: fragment("exists (select * from unnest(?) tag where tag like ?)", p.categories, ^category)
+        case Repo.all(query) do
+          posts ->
+            conn
+            |> put_view(LakotaEdApiWeb.PostView)
+            |> render("multiple_posts.json", %{posts: posts})
+        end
+      "tag" ->
+        tag = conn.query_params["tag"]
+        query = from p in Post, where: fragment("exists (select * from unnest(?) tag where tag like ?)", p.tags, ^tag)
+        case Repo.all(query) do
+          posts ->
+            conn
+            |> put_view(LakotaEdApiWeb.PostView)
+            |> render("multiple_posts.json", %{posts: posts})
+        end
+      true ->
         conn
-        |> put_view(LakotaEdApiWeb.PostView)
-        |> render("multiple_posts.json", %{posts: posts})
+        |> put_view(LakotaEdApiWeb.ErrorView)
+        |> render("query_error.json", "Couldn't find any relevant query strings!")
     end
   end
 
@@ -48,7 +69,8 @@ defmodule LakotaEdApiWeb.PostController do
              categories: bodyParams["categories"],
              postContent: bodyParams["postContent"],
              postTitle: bodyParams["postTitle"],
-             tags: bodyParams["tags"]
+             tags: bodyParams["tags"],
+             quizzes: bodyParams["quizzes"]
            }
          ) do
       {:ok, newPost} -> text(conn, "Created post with id #{newPost.id}")
@@ -64,7 +86,8 @@ defmodule LakotaEdApiWeb.PostController do
                                     postTitle: bodyParams["postTitle"],
                                     postContent: bodyParams["postContent"],
                                     categories: bodyParams["categories"],
-                                    tags: bodyParams["tags"]
+                                    tags: bodyParams["tags"],
+                                    quizzes: bodyParams["quizzes"]
 
     case Repo.update(newPost) do
       {:ok, postResponse} -> text(conn, "Updated post: #{postResponse.id}")

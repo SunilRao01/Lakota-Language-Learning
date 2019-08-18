@@ -7,6 +7,7 @@ defmodule LakotaEdApiWeb.PostView do
       title: post.postTitle,
       content: post.postContent,
       tags: post.tags,
+      quizzes: post.quizzes,
       categories: post.categories,
       creationDate: post.inserted_at
     }
@@ -20,6 +21,7 @@ defmodule LakotaEdApiWeb.PostView do
           title: p.postTitle,
           content: p.postContent,
           tags: p.tags,
+          quizzes: p.quizzes,
           categories: p.categories,
           creationDate: p.inserted_at
         }
