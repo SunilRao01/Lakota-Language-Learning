@@ -1,23 +1,21 @@
 import React, {FC, useEffect} from 'react';
 import {backendGetPosts, Post} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
-import {AnyAction, Dispatch} from 'redux'
 import {RootState} from '../../store'
-import {getPosts} from '../../redux/Posts/Posts.action'
 import {PostCard} from '../PostCard/PostCard.component'
 import {ThunkDispatch} from 'redux-thunk'
 
-interface PostsViewActions {
+interface PostEditComponentActions {
     getPosts: (pageNum: number) => void,
 }
 
-interface PostsViewProps {
+interface PostEditComponentProps {
     posts: Post[]
 }
 
-type PostsViewPropsWithActions = PostsViewProps & PostsViewActions
+type PostEditComponentPropsWithActions = PostEditComponentProps & PostEditComponentActions
 
-const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
+const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props => {
     useEffect(() => {
         if (props.posts.length == 0) {
             props.getPosts(1)
@@ -38,11 +36,11 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
     );
 };
 
-export const mapStateToProps = (state: RootState): PostsViewProps => ({
+export const mapStateToProps = (state: RootState): PostEditComponentProps => ({
     posts: state.postState.posts
 });
 
-export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): PostsViewActions => {
+export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): PostEditComponentActions => {
     return {
         getPosts: async (pageNumber: number) => {
             await dispatch(backendGetPosts(pageNumber))
@@ -51,4 +49,4 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): PostsV
     }
 };
 
-export const PostsView = connect(mapStateToProps, mapDispatchToProps)(PostsViewComponent);
+export const PostEditComponent = connect(mapStateToProps, mapDispatchToProps)(PostEditComponentComponent);

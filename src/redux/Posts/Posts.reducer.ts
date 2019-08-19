@@ -39,6 +39,16 @@ export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {
     }
 }
 
+export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        return axios.get(`http://localhost:4000/post/${postId}`)
+        .then((res: any) => {
+            console.log('backend finished: ', res.data)
+            dispatch(setPosts(res.data))
+        })
+    }
+}
+
 export const postReducer = (
     state = initialPostState,
     action: PostActionTypes

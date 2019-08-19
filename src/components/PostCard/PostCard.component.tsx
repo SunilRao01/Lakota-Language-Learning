@@ -9,6 +9,7 @@ interface PostCardProps {
     onClickTag?: (e: any) => void,
     onClickCategory?: (e: string) => void,
     showTitleOnly?: boolean
+    adminView?: boolean
 }
 
 export const PostCard: FC<PostCardProps> = props => {
@@ -19,39 +20,50 @@ export const PostCard: FC<PostCardProps> = props => {
     }
 
     return (
-        <div data-testid={props.showTitleOnly ? `postcard-small` : `postcard-large`} className='column swing-in-top-bck is-full'>
+        <div data-testid={props.showTitleOnly ? `postcard-small` : `postcard-large`}
+             className='column swing-in-top-bck is-full'>
+            {props.adminView === true &&
+            <>
+                <Link to={`/admin/post/${props.post.id}`}>
+                    <button className="button is-primary admin-edit-post">Edit</button>
+                </Link>
+                <Link to={`/admin/post/${props.post.id}`}>
+                    <button disabled={true} className="button is-danger admin-edit-post">Delete</button>
+                </Link>
+            </>
+            }
             <div className='card'>
                 <header className='card-header'>
                     <Link to={`/post/${props.post.id}`}><p className='card-header-title'>{props.post.title}</p>
                     </Link>
                 </header>
-                { !props.showTitleOnly &&
-                    <div className='card-content'>
-                        <div className='content'>
-                            <div>{props.post.content}</div>
-                            <br/>
-                            <div className='is-size-7'>{props.post.creationDate}</div>
-                            <div className='has-text-weight-bold is-size-7'>Categories:</div>
-                            {
-                                props.post.categories.map((c: string, i: number) => {
-                                    return (<div key={i}>
-                                        {props.onClickCategory
-                                            ? <a className='is-size-7' onClick={e => clickFunction(e, c)}>{`${c}`}</a>
-                                            : <Link className='is-size-7' to={`/posts?categories=${c}`}>{`${c}`}</Link>}
-                                        {`${i < props.post.categories.length - 1 ? `, ` : ``}`}
-                                    </div>)
-                                })
-                            }
-                        </div>
-
-                        <div className='tags'>
-                            {
-                                props.post.tags.map((p: string, i: number) =>
-                                    <Tag key={i} text={p} onClick={props.onClickTag}/>
-                                )
-                            }
-                        </div>
+                {!props.showTitleOnly &&
+                <div className='card-content'>
+                    <div className='content'>
+                        <div>{props.post.content}</div>
+                        <br/>
+                        <div className='is-size-7'>{props.post.creationDate}</div>
+                        <div className='has-text-weight-bold is-size-7'>Categories:</div>
+                        {
+                            props.post.categories.map((c: string, i: number) => {
+                                return (<div key={i}>
+                                    {props.onClickCategory
+                                        ? <a className='is-size-7' onClick={e => clickFunction(e, c)}>{`${c}`}</a>
+                                        : <Link className='is-size-7' to={`/posts?categories=${c}`}>{`${c}`}</Link>}
+                                    {`${i < props.post.categories.length - 1 ? `, ` : ``}`}
+                                </div>)
+                            })
+                        }
                     </div>
+
+                    <div className='tags'>
+                        {
+                            props.post.tags.map((p: string, i: number) =>
+                                <Tag key={i} text={p} onClick={props.onClickTag}/>
+                            )
+                        }
+                    </div>
+                </div>
                 }
             </div>
         </div>
