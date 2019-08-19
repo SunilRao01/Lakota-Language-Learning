@@ -52,20 +52,20 @@ describe('Home', () => {
 
             actual.addPost({
                 id: 1,
-                postTitle: 'post title',
+                title: 'post title',
                 creationDate: new Date(5, 1),
                 categories: [],
                 tags: [],
-                postContent: 'new sample post'
+                content: 'new sample post'
             })
 
             expect(mockDispatch).toHaveBeenCalledWith(addPost({
                 id: 1,
-                postTitle: 'post title',
+                title: 'post title',
                 creationDate: new Date(5, 1),
                 categories: [],
                 tags: [],
-                postContent: 'new sample post'
+                content: 'new sample post'
             }))
         });
 
@@ -75,11 +75,11 @@ describe('Home', () => {
                 postState: {
                     posts: [{
                         id: 1,
-                        postTitle: 'post title',
+                        title: 'post title',
                         creationDate: new Date(5, 1),
                         categories: [],
                         tags: [],
-                        postContent: 'new sample post'
+                        content: 'new sample post'
                     }]
                 }
             }

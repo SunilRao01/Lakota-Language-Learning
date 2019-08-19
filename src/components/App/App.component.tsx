@@ -9,6 +9,7 @@ import {FAQ} from "../FAQ/FAQ.component";
 import './App.css'
 import {Posts} from '../Posts/Posts.component'
 import {FilteredPostsView} from '../FilteredPostsView/FilteredPostsView.component'
+import {PostsView} from '../Admin/PostsView.component'
 
 export const App: FC = () => {
     return (
@@ -25,6 +26,7 @@ export const App: FC = () => {
                             <Route path='/faq' exact component={FAQ}/>
                             <Route path='/post/:postId' exact component={Posts}/>
                             <Route path='/posts' component={FilteredPostsView}/>
+                            <Route path='/admin/posts' component={PostsView} />
                         </main>
                     </div>
                 </div>

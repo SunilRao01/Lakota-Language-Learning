@@ -22,15 +22,15 @@ export const PostCard: FC<PostCardProps> = props => {
         <div data-testid={props.showTitleOnly ? `postcard-small` : `postcard-large`} className='column swing-in-top-bck is-full'>
             <div className='card'>
                 <header className='card-header'>
-                    <Link to={`/post/${props.post.id}`}><p className='card-header-title'>{props.post.postTitle}</p>
+                    <Link to={`/post/${props.post.id}`}><p className='card-header-title'>{props.post.title}</p>
                     </Link>
                 </header>
                 { !props.showTitleOnly &&
                     <div className='card-content'>
                         <div className='content'>
-                            <div>{props.post.postContent}</div>
+                            <div>{props.post.content}</div>
                             <br/>
-                            <div className='is-size-7'>{props.post.creationDate.toDateString()}</div>
+                            <div className='is-size-7'>{props.post.creationDate}</div>
                             <div className='has-text-weight-bold is-size-7'>Categories:</div>
                             {
                                 props.post.categories.map((c: string, i: number) => {

@@ -16,10 +16,10 @@ export const PostsComponent: FC<PostsProps> = props => {
     return (
         <section className="section">
             <div className="container">
-                <h1 className="title">{props.post.postTitle}</h1>
+                <h1 className="title">{props.post.title}</h1>
                 <div className='content'>
                     <p>
-                        {props.post.postContent}
+                        {props.post.content}
                     </p>
                     <br/>
                     <iframe width="100%" height="300" scrolling="no" frameBorder="no" allow="autoplay"
@@ -29,14 +29,14 @@ export const PostsComponent: FC<PostsProps> = props => {
                     {
                         props.post.quizzes &&
                         <Quiz
-                            question={props.post.quizzes.questions[0].question}
-                            answers={props.post.quizzes.questions[0].answers}
-                            answer={props.post.quizzes.questions[0].answer}
+                            question={props.post.quizzes[0].question}
+                            answers={props.post.quizzes[0].possibleAnswers}
+                            answer={props.post.quizzes[0].answer}
                         />
                     }
 
                     <br/>
-                    <p>{props.post.creationDate.toDateString()}</p>
+                    <p>{props.post.creationDate}</p>
                     <div className='has-text-weight-bold'>Categories:</div>
                     <p>
                         {

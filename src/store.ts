@@ -1,6 +1,7 @@
-import {combineReducers, createStore} from 'redux';
+import {applyMiddleware, combineReducers, createStore} from 'redux';
 import {initialPostState, postReducer, PostState} from './redux/Posts/Posts.reducer';
 import {filterReducer, FilterState, initialFilterState} from './redux/Filter/Filter.reducer'
+import thunk from 'redux-thunk'
 
 export interface RootState {
     postState: PostState,
@@ -19,6 +20,5 @@ export const rootReducer = combineReducers({
 
 export const store = createStore(
     rootReducer,
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+    applyMiddleware(thunk)
 );

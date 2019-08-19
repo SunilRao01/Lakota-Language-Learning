@@ -3,6 +3,7 @@ defmodule LakotaEdApiWeb.Router do
 
   pipeline :unsecure_api do
     plug :accepts, ["json"]
+    plug CORSPlug, origin: "*"
   end
 
   pipeline :secure_api do

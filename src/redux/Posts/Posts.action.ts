@@ -1,7 +1,13 @@
 import {Post} from "./Posts.reducer";
 
 export interface GetPosts {
-    type: 'GET_POSTS'
+    type: 'GET_POSTS',
+    payload: number
+}
+
+export interface SetPosts {
+    type: 'SET_POSTS',
+    payload: Post[]
 }
 
 export interface AddPost {
@@ -15,11 +21,12 @@ export interface DeletePost {
     payload: number
 }
 
-export type PostActionTypes = GetPosts | AddPost | DeletePost
+export type PostActionTypes = GetPosts | SetPosts | AddPost | DeletePost
 
-export const getPosts = (): PostActionTypes => {
+export const getPosts = (pageNumber: number): PostActionTypes => {
     return {
-        type: 'GET_POSTS'
+        type: 'GET_POSTS',
+        payload: pageNumber
     }
 }
 
@@ -36,3 +43,10 @@ export const deletePost = (postId: number): PostActionTypes => {
         payload: postId
     }
 };
+
+export const setPosts = (posts: Post[]): PostActionTypes => {
+    return {
+        type: 'SET_POSTS',
+        payload: posts
+    }
+}

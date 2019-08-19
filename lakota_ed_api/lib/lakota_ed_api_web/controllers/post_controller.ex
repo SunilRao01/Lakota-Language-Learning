@@ -18,22 +18,25 @@ defmodule LakotaEdApiWeb.PostController do
       "page" ->
         {page, _} = Integer.parse(conn.query_params["page"])
         offset = 5 * (page - 1)
-        query = from Post, limit: 5, offset: ^offset
+        query = from Post, limit: 5, offset: ^offset, order_by: [:id]
         case Repo.all(query) do
           posts ->
             conn
             |> put_view(LakotaEdApiWeb.PostView)
             |> render("multiple_posts.json", %{posts: posts})
         end
+
       "category" ->
         category = conn.query_params["category"]
-        query = from p in Post, where: fragment("exists (select * from unnest(?) tag where tag like ?)", p.categories, ^category)
+        query = from p in Post,
+                     where: fragment("exists (select * from unnest(?) tag where tag like ?)", p.categories, ^category)
         case Repo.all(query) do
           posts ->
             conn
             |> put_view(LakotaEdApiWeb.PostView)
             |> render("multiple_posts.json", %{posts: posts})
         end
+
       "tag" ->
         tag = conn.query_params["tag"]
         query = from p in Post, where: fragment("exists (select * from unnest(?) tag where tag like ?)", p.tags, ^tag)
@@ -43,6 +46,7 @@ defmodule LakotaEdApiWeb.PostController do
             |> put_view(LakotaEdApiWeb.PostView)
             |> render("multiple_posts.json", %{posts: posts})
         end
+
       true ->
         conn
         |> put_view(LakotaEdApiWeb.ErrorView)

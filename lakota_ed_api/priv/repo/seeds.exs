@@ -161,7 +161,7 @@ Repo.insert!(%Post{
   postTitle: "post title",
   postContent: "post content",
   categories: ["cat 1", "cat 2"],
-  tags: ["tag 1", "tag 2"],
+  tags: ["tag 1", "tag 2", "word of the day"],
   quizzes: [%{
     "question" => "What is the question?",
     "possibleAnswers" => ["option 1", "option 2", "option 3"],
@@ -174,7 +174,7 @@ Repo.insert!(%Post{
   postTitle: "post title",
   postContent: "post content",
   categories: ["cat 1", "cat 2"],
-  tags: ["tag 1", "tag 2"],
+  tags: ["tag 1", "tag 2", "word of the day"],
   quizzes: [%{
     "question" => "What is the question?",
     "possibleAnswers" => ["option 1", "option 2", "option 3"],
@@ -187,7 +187,7 @@ Repo.insert!(%Post{
   postTitle: "post title",
   postContent: "post content",
   categories: ["cat 1", "cat 2"],
-  tags: ["tag 1", "tag 2"],
+  tags: ["tag 1", "tag 2", "word of the day"],
   quizzes: [%{
     "question" => "What is the question?",
     "possibleAnswers" => ["option 1", "option 2", "option 3"],
@@ -200,7 +200,7 @@ Repo.insert!(%Post{
   postTitle: "post title",
   postContent: "post content",
   categories: ["cat 1", "cat 2"],
-  tags: ["tag 1", "tag 2"],
+  tags: ["tag 1", "tag 2", "word of the day"],
   quizzes: [%{
     "question" => "What is the question?",
     "possibleAnswers" => ["option 1", "option 2", "option 3"],

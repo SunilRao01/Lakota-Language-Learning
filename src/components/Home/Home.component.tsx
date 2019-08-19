@@ -1,16 +1,16 @@
 import React, {FC, useEffect, useState} from 'react';
 import './Home.css'
-import {Post} from '../../redux/Posts/Posts.reducer';
-import {addPost, getPosts} from '../../redux/Posts/Posts.action';
+import {backendGetPosts, Post} from '../../redux/Posts/Posts.reducer';
+import {addPost} from '../../redux/Posts/Posts.action';
 import {connect} from 'react-redux';
-import {AnyAction, Dispatch} from 'redux'
 import {RootState} from '../../store'
 import {PostCard} from '../PostCard/PostCard.component'
 import {Tag} from '../Tag/Tag.component'
 import {Link} from 'react-router-dom'
+import {ThunkDispatch} from 'redux-thunk'
 
 interface HomeActions {
-    getPosts: () => void,
+    getPosts: (pageNumber: number) => void,
     addPost: (newPost: Post) => void
 }
 
@@ -26,8 +26,11 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
     const [allTags, setAllTags] = useState<Set<string>>(new Set<string>())
 
     useEffect(() => {
-        props.getPosts()
+        props.getPosts(1)
 
+
+    }, []);
+    useEffect(() => {
         setWordOfTheDayPosts(props.posts.filter(p => p.tags.includes('word of the day')))
 
         // Set categories and tags
@@ -35,7 +38,11 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             p.categories.forEach((c: string) => setAllCategories(allCategories.add(c)))
             p.tags.forEach((t: string) => setAllTags(allTags.add(t)))
         })
-    }, []);
+
+        console.log('Categories: ', allCategories)
+        console.log('Tags: ', allTags)
+
+    }, [props.posts]);
 
     return (
         <div className='container'>
@@ -49,7 +56,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
                     {
-                        props.posts.map((p: Post, i: number) =>
+                        props.posts.length > 0 && props.posts.map((p: Post, i: number) =>
                             <div key={i}>
                                 <PostCard post={p}/>
                                 {i < props.posts.length - 1 ? <hr/> : ``}
@@ -102,9 +109,12 @@ export const mapStateToProps = (state: RootState): HomeProps => ({
     posts: state.postState.posts
 });
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeActions => {
     return {
-        getPosts: () => dispatch(getPosts()),
+        getPosts: async (pageNumber: number) => {
+            await dispatch(backendGetPosts(pageNumber))
+            console.log('finished getting posts from backend')
+        },
         addPost: (newPost: Post) => dispatch(addPost(newPost))
     }
 };
