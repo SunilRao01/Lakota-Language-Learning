@@ -1,4 +1,4 @@
-import {Post} from "./Posts.reducer";
+import {Post} from './Posts.reducer';
 
 export interface GetPosts {
     type: 'GET_POSTS',
@@ -21,7 +21,18 @@ export interface DeletePost {
     payload: number
 }
 
-export type PostActionTypes = GetPosts | SetPosts | AddPost | DeletePost
+export interface SetCurrentPost {
+    type: 'SET_CURRENT_POST',
+    payload: Post
+}
+
+export interface SetUpdatingPostLoading {
+    type: 'SET_UPDATING_POST_LOADING',
+    payload: boolean
+}
+
+export type PostActionTypes = GetPosts | SetPosts | AddPost
+    | DeletePost | SetCurrentPost | SetUpdatingPostLoading
 
 export const getPosts = (pageNumber: number): PostActionTypes => {
     return {
@@ -48,5 +59,19 @@ export const setPosts = (posts: Post[]): PostActionTypes => {
     return {
         type: 'SET_POSTS',
         payload: posts
+    }
+}
+
+export const setCurrentPost = (post: Post): PostActionTypes => {
+    return {
+        type: 'SET_CURRENT_POST',
+        payload: post
+    }
+}
+
+export const setUpdatingPostLoading = (status: boolean): PostActionTypes => {
+    return {
+        type: 'SET_UPDATING_POST_LOADING',
+        payload: status
     }
 }

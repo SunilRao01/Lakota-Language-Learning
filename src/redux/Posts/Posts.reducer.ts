@@ -1,4 +1,4 @@
-import {PostActionTypes, setPosts} from './Posts.action';
+import {PostActionTypes, setCurrentPost, setPosts, setUpdatingPostLoading} from './Posts.action';
 import axios from 'axios'
 import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
@@ -22,29 +22,50 @@ export interface Post {
 }
 
 export interface PostState {
-    posts: Post[]
+    posts: Post[],
+    updatingPostLoading: boolean,
+    currentPost: Post
 }
 
 export const initialPostState: PostState = {
-    posts: []
+    posts: [],
+    updatingPostLoading: false,
+    currentPost: {
+        id: 0,
+        creationDate: '',
+        content: '',
+        title: '',
+        categories: [],
+        tags: []
+    }
 };
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://localhost:4000/posts?page=${pageNumber}`)
-            .then((res: any) => {
-                console.log('backend finished: ', res.data.posts)
-                dispatch(setPosts(res.data.posts))
+        return axios.get(`http://localhost:4000/posts?page=${pageNumber}`).then((res: any) => {
+            dispatch(setPosts(res.data.posts))
+        })
+    }
+}
+
+export const backendUpdatePost = (updatedPost: Post, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setUpdatingPostLoading(true))
+
+        axios.put(`http://localhost:4000/post/${updatedPost.id}`, updatedPost, {
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            }
+        }).then((res: any) => {
+            dispatch(setUpdatingPostLoading(false))
         })
     }
 }
 
 export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://localhost:4000/post/${postId}`)
-        .then((res: any) => {
-            console.log('backend finished: ', res.data)
-            dispatch(setPosts(res.data))
+        return axios.get(`http://localhost:4000/post/${postId}`).then((res: any) => {
+            dispatch(setCurrentPost(res.data))
         })
     }
 }
@@ -58,8 +79,6 @@ export const postReducer = (
             return state
         }
         case 'SET_POSTS': {
-            console.log('@reducer, setting posts to: ', action.payload)
-
             return {
                 ...state,
                 posts: action.payload as Post[]
@@ -84,6 +103,18 @@ export const postReducer = (
             }
 
             return state
+        }
+        case 'SET_CURRENT_POST': {
+            return {
+                ...state,
+                currentPost: action.payload
+            }
+        }
+        case 'SET_UPDATING_POST_LOADING': {
+            return {
+                ...state,
+                updatingPostLoading: action.payload
+            }
         }
         default:
             return state

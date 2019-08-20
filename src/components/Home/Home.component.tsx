@@ -38,10 +38,6 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             p.categories.forEach((c: string) => setAllCategories(allCategories.add(c)))
             p.tags.forEach((t: string) => setAllTags(allTags.add(t)))
         })
-
-        console.log('Categories: ', allCategories)
-        console.log('Tags: ', allTags)
-
     }, [props.posts]);
 
     return (
@@ -113,7 +109,6 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeAc
     return {
         getPosts: async (pageNumber: number) => {
             await dispatch(backendGetPosts(pageNumber))
-            console.log('finished getting posts from backend')
         },
         addPost: (newPost: Post) => dispatch(addPost(newPost))
     }

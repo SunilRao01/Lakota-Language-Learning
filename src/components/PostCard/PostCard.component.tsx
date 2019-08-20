@@ -22,16 +22,6 @@ export const PostCard: FC<PostCardProps> = props => {
     return (
         <div data-testid={props.showTitleOnly ? `postcard-small` : `postcard-large`}
              className='column swing-in-top-bck is-full'>
-            {props.adminView === true &&
-            <>
-                <Link to={`/admin/post/${props.post.id}`}>
-                    <button className="button is-primary admin-edit-post">Edit</button>
-                </Link>
-                <Link to={`/admin/post/${props.post.id}`}>
-                    <button disabled={true} className="button is-danger admin-edit-post">Delete</button>
-                </Link>
-            </>
-            }
             <div className='card'>
                 <header className='card-header'>
                     <Link to={`/post/${props.post.id}`}><p className='card-header-title'>{props.post.title}</p>
@@ -66,6 +56,14 @@ export const PostCard: FC<PostCardProps> = props => {
                 </div>
                 }
             </div>
+            {props.adminView === true &&
+            <>
+                <Link className="button is-primary admin-button" to={`/admin/post/${props.post.id}`}>Edit</Link>
+                <button disabled={true} className="button is-danger admin-button">
+                    Delete
+                </button>
+            </>
+            }
         </div>
     )
 }
