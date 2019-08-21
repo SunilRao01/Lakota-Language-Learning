@@ -42,7 +42,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
     }, [])
 
     useEffect(() => {
-        console.log('Current post: ', props.currentPost)
+        setUpdatedPost(props.currentPost)
     }, [props.currentPost])
 
     return (

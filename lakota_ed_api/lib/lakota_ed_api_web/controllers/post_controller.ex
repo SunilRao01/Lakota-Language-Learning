@@ -87,8 +87,8 @@ defmodule LakotaEdApiWeb.PostController do
     newPost = Repo.get(Post, id)
 
     newPost = Ecto.Changeset.change newPost,
-                                    postTitle: bodyParams["postTitle"],
-                                    postContent: bodyParams["postContent"],
+                                    postTitle: bodyParams["title"],
+                                    postContent: bodyParams["content"],
                                     categories: bodyParams["categories"],
                                     tags: bodyParams["tags"],
                                     quizzes: bodyParams["quizzes"]
