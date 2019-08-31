@@ -16,8 +16,8 @@ interface AdminLoginActions {
 type AdminLoginPropsAndActions = AdminLoginProps & AdminLoginActions
 
 export const AdminLoginComponent: FC<AdminLoginPropsAndActions> = props => {
-    const [inputUsername, setInputUsername] = useState('')
-    const [inputPassword, setInputPassword] = useState('')
+    const [inputUsername, setInputUsername] = useState('email')
+    const [inputPassword, setInputPassword] = useState('password')
 
     if (props.jwt) {
         return <Redirect to={'/admin/posts'}/>
@@ -63,7 +63,6 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): AdminL
     return {
         login: async (username: string, password: string) => {
             await dispatch(backendLogin(username, password))
-
         }
     }
 }

@@ -111,8 +111,7 @@ defmodule LakotaEdApiWeb.PostController do
         {:ok, post} = Repo.delete(post)
 
         conn
-        |> put_view(LakotaEdApiWeb.PostView)
-        |> render("single_post.json", post: post)
+        |> text("Deleted post with id: #{post.id}")
     end
   end
 end

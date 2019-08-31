@@ -12,6 +12,7 @@ import {FilteredPostsView} from '../FilteredPostsView/FilteredPostsView.componen
 import {PostsView} from '../Admin/PostsView.component'
 import {PostEdit} from '../Admin/PostEdit.component'
 import {AdminLogin} from '../Admin/AdminLogin.component'
+import {PostCreate} from '../Admin/PostCreate.component'
 
 export const App: FC = () => {
     return (
@@ -32,6 +33,7 @@ export const App: FC = () => {
                         <Route path='/admin/posts' component={PostsView}/>
                         <Route path='/admin/login' component={AdminLogin}/>
                         <Route path='/admin/post/:postId' component={PostEdit}/>
+                        <Route path='/admin/postss/new' component={PostCreate}/>
                     </main>
                 </div>
             </div>

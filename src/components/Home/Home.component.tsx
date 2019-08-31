@@ -37,6 +37,10 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
         props.posts.forEach(p => {
             p.categories.forEach((c: string) => setAllCategories(allCategories.add(c)))
             p.tags.forEach((t: string) => setAllTags(allTags.add(t)))
+
+        if (props.posts.length > 0) {
+            console.log('props.posts', props.posts)
+        }
         })
     }, [props.posts]);
 

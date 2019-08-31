@@ -1,18 +1,22 @@
 import React, {ChangeEvent, FC, useEffect, useState} from 'react';
-import {backendGetPost, backendUpdatePost, Post} from '../../redux/Posts/Posts.reducer';
+import {backendGetPost, backendUpdatePost, Post, PostPayload} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {ThunkDispatch} from 'redux-thunk'
 import {RootState} from '../../store'
 import {Redirect, RouterProps} from 'react-router'
+import {Editor, EditorState} from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import './PostEdit.css'
+import {convertToRaw} from 'draft-js'
 
 interface PostEditProps {
     jwt: string,
     updatePostLoading: boolean,
-    currentPost: Post
+    currentPost?: any
 }
 
 interface PostEditActions {
-    updatePost: (updatedPost: Post, jwt: string) => void,
+    updatePost: (updatedPost: PostPayload, jwt: string) => void,
     getPost: (postId: number) => void
 }
 
@@ -20,119 +24,128 @@ type PostEditComponentPropsWithActions = PostEditActions & PostEditProps & Route
 
 const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props => {
     if (props.jwt.length == 0) {
-        return <Redirect to={'/admin/login'} />
+        return <Redirect to={'/admin/login'}/>
     }
 
-    const [updatedPost, setUpdatedPost] = useState<Post>({
-        categories: [],
-        content: '',
-        creationDate: '',
-        id: 0,
-        quizzes: [],
-        tags: [],
-        title: ''
-    })
+    const [updatedPost, setUpdatedPost] = useState<Post>()
 
     const [showUpdateStatus, setShowUpdateStatus] = useState(false)
+    const [editorState, setEditorState] = useState()
 
     useEffect(() => {
         const urlParams = props.history.location.pathname.split('/')
-        const postId = parseInt(urlParams[urlParams.length-1])
+        const postId = parseInt(urlParams[urlParams.length - 1])
         props.getPost(postId)
     }, [])
 
     useEffect(() => {
-        setUpdatedPost(props.currentPost)
+        if (props.currentPost) {
+            setUpdatedPost(props.currentPost)
+        }
     }, [props.currentPost])
 
-    return (
-        <div className='container'>
-            <div className='field'>
-                <label className='label'>Title</label>
-                <div className='control'>
-                    <input
-                        onChange={(e:ChangeEvent<HTMLInputElement>) => setUpdatedPost({
-                            ...updatedPost,
-                            title: e.target.value
-                        })}
-                        className='input' type='text' placeholder='Post Title'
-                    defaultValue={props.currentPost.title}/>
+    if (updatedPost && props.currentPost) {
+        return (
+            <div className='container'>
+                <div className='field'>
+                    <label className='label'>Title</label>
+                    <div className='control'>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
+                                ...updatedPost,
+                                title: e.target.value
+                            })}
+                            className='input' type='text' placeholder='Post Title'
+                            defaultValue={props.currentPost.title}/>
+                    </div>
                 </div>
-            </div>
 
-            <div className='field'>
-                <label className='label'>Content</label>
-                <div className='control'>
-                    {props.currentPost.content.length > 0 && <textarea
-                        onChange={(e:ChangeEvent<HTMLTextAreaElement>) => setUpdatedPost({
-                            ...updatedPost,
-                            content: e.target.value
-                        })}
-                        className='textarea' defaultValue={props.currentPost.content}/>}
+                <div className='field'>
+                    <label className='label'>Content</label>
+                    <div className='control'>
+                        {props.currentPost.content &&
+                        <Editor
+                            toolbarClassName="toolbarClassName"
+                            wrapperClassName="wrapperClassName"
+                            editorClassName="editorClassName"
+                            initialContentState={props.currentPost.content}
+                            onEditorStateChange={(e: EditorState) => {
+                                setEditorState(e)
+                            }}
+                        />}
+                    </div>
                 </div>
-            </div>
 
-            <div className='field'>
-                <label className='label'>Tags (Comma seperated)</label>
-                <div className='control'>
-                    <input
-                        onChange={(e:ChangeEvent<HTMLInputElement>) => setUpdatedPost({
-                            ...updatedPost,
-                            tags: e.target.value.split(',')
-                        })}
-                        className='input' placeholder='Post Tags'
-                        defaultValue={props.currentPost.tags.join()}/>
+                <div className='field'>
+                    <label className='label'>Tags (Comma seperated)</label>
+                    <div className='control'>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
+                                ...updatedPost,
+                                tags: e.target.value.split(',')
+                            })}
+                            className='input' placeholder='Post Tags'
+                            defaultValue={props.currentPost.tags.join()}/>
+                    </div>
                 </div>
-            </div>
 
-            <div className='field'>
-                <label className='label'>Categories (Comma seperated)</label>
-                <div className='control'>
-                    <input
-                        onChange={(e:ChangeEvent<HTMLInputElement>) => setUpdatedPost({
-                            ...updatedPost,
-                            categories: e.target.value.split(',')
-                        })}
-                        className='input' placeholder='Post Categories'
-                        defaultValue={props.currentPost.categories.join()}/>
+                <div className='field'>
+                    <label className='label'>Categories (Comma separated)</label>
+                    <div className='control'>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
+                                ...updatedPost,
+                                categories: e.target.value.split(',')
+                            })}
+                            className='input' placeholder='Post Categories'
+                            defaultValue={props.currentPost.categories.join()}/>
+                    </div>
                 </div>
-            </div>
 
-            <button onClick={async () => {
-                setShowUpdateStatus(false)
-                await props.updatePost(updatedPost, props.jwt)
-                setShowUpdateStatus(true)
-            }} className='button is-primary'>Edit Post
-            </button>
+                <button onClick={async () => {
+                    setShowUpdateStatus(false)
+                    let newUpdatedPost: PostPayload = {...updatedPost, content: JSON.stringify(convertToRaw(editorState.getCurrentContent()))}
 
-            {props.updatePostLoading &&
-            <div className='notification is-warning'>
-                <button className='delete' />
-                Updating post...
-            </div>
-            }
+                    console.log('updated post:', newUpdatedPost)
+                    await props.updatePost(newUpdatedPost, props.jwt)
+                    setShowUpdateStatus(true)
+                }} className='button is-primary'>Edit Post
+                </button>
 
-            {!props.updatePostLoading && showUpdateStatus &&
-            <div className='notification is-success admin-button'>
-                <button className='delete' />
-                Post Updated Successfully!
+                {props.updatePostLoading &&
+                <div className='notification is-warning'>
+                    <button className='delete'/>
+                    Updating post...
+                </div>
+                }
+
+                {!props.updatePostLoading && showUpdateStatus &&
+                <div className='notification is-success admin-button'>
+                    <button className='delete'/>
+                    Post Updated Successfully!
+                </div>
+                }
             </div>
-            }
-        </div>
-    )
+        )
+    } else {
+        return (<div>Getting updatedPost...</div>)
+    }
 };
 
 export const mapStateToProps = (state: RootState): PostEditProps => {
-    return {
+    let newProps: PostEditProps = {
         jwt: state.adminState.jwt,
-        updatePostLoading: state.postState.updatingPostLoading,
-        currentPost: state.postState.currentPost
+        updatePostLoading: state.postState.updatingPostLoading
     }
+    if (state.postState.currentPost) {
+        newProps.currentPost = state.postState.currentPost
+    }
+    return newProps
 }
 
 export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): PostEditActions => {
     return {
-        updatePost: async (post: Post, jwt: string) => {
+        updatePost: async (post: PostPayload, jwt: string) => {
             await dispatch(backendUpdatePost(post, jwt))
         },
         getPost: async (postId: number) => {

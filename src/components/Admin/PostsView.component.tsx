@@ -1,13 +1,17 @@
 import React, {FC, useEffect} from 'react';
-import {backendGetPosts, Post} from '../../redux/Posts/Posts.reducer';
+import {backendDeletePost, backendGetPosts, Post} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {RootState} from '../../store'
 import {PostCard} from '../PostCard/PostCard.component'
 import {ThunkDispatch} from 'redux-thunk'
 import {Redirect} from 'react-router'
+import {Link} from 'react-router-dom'
+import './PostView.css'
+import {getPosts} from '../../redux/Posts/Posts.action'
 
 interface PostsViewActions {
     getPosts: (pageNum: number) => void,
+    deletePost: (postId: number, jwt: string) => void
 }
 
 interface PostsViewProps {
@@ -23,18 +27,29 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
     }
 
     useEffect(() => {
-        if (props.posts.length == 0) {
-            props.getPosts(1)
-        }
+        props.getPosts(1)
     }, [])
+
+    useEffect(() => {
+        console.log('props.posts changed: ', props.posts)
+    }, [props.posts])
 
     return (
         <div className='container'>
             <h1 className='title'>Admin: Posts View</h1>
+            <Link to={'/admin/postss/new'} className='button is-primary'>Create New Post</Link>
+            <hr/>
             {
                 props.posts.map((p: Post, i: number) =>
                     <div key={i}>
-                        <PostCard post={p} showTitleOnly={true} adminView={true}/>
+                        <PostCard post={p} showTitleOnly={true}/>
+                        <Link className="button is-primary admin-button" to={`/admin/post/${p.id}`}>Edit</Link>
+                        <button className="button is-danger admin-button"
+                                onClick={async () => {
+                                    await props.deletePost(p.id, props.jwt)
+                                }}>
+                            Delete
+                        </button>
                         {i < props.posts.length - 1 ? <hr/> : ``}
                     </div>)
             }
@@ -51,7 +66,9 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): PostsV
     return {
         getPosts: async (pageNumber: number) => {
             await dispatch(backendGetPosts(pageNumber))
-            console.log('finished getting posts from backend')
+        },
+        deletePost: async (postId: number, jwt: string) => {
+            await dispatch(backendDeletePost(postId, jwt))
         }
     }
 };

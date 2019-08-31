@@ -1,7 +1,8 @@
-import {PostActionTypes, setCurrentPost, setPosts, setUpdatingPostLoading} from './Posts.action';
+import {deletePost, PostActionTypes, setCurrentPost, setPosts, setUpdatingPostLoading} from './Posts.action';
 import axios from 'axios'
 import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
+import {RawDraftContentState} from 'react-draft-wysiwyg'
 
 export interface Quiz {
     question: string,
@@ -14,6 +15,16 @@ export interface Quiz {
 export interface Post {
     id: number,
     title: string,
+    content: RawDraftContentState,
+    creationDate: string,
+    categories: string[],
+    tags: string[],
+    quizzes?: Quiz[]
+}
+
+export interface PostPayload {
+    id: number,
+    title: string,
     content: string,
     creationDate: string,
     categories: string[],
@@ -24,21 +35,14 @@ export interface Post {
 export interface PostState {
     posts: Post[],
     updatingPostLoading: boolean,
-    currentPost: Post
+    currentPost?: Post
 }
 
 export const initialPostState: PostState = {
     posts: [],
-    updatingPostLoading: false,
-    currentPost: {
-        id: 0,
-        creationDate: '',
-        content: '',
-        title: '',
-        categories: [],
-        tags: []
-    }
+    updatingPostLoading: false
 };
+
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
@@ -48,7 +52,21 @@ export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {
     }
 }
 
-export const backendUpdatePost = (updatedPost: Post, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const backendCreatePost = (newPost: Post, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setUpdatingPostLoading(true))
+
+        axios.post(`http://localhost:4000/post`, newPost, {
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            }
+        }).then(() => {
+            dispatch(setUpdatingPostLoading(false))
+        })
+    }
+}
+
+export const backendUpdatePost = (updatedPost: PostPayload, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
         dispatch(setUpdatingPostLoading(true))
 
@@ -56,7 +74,7 @@ export const backendUpdatePost = (updatedPost: Post, jwt: string): ThunkAction<P
             headers: {
                 Authorization: `Bearer ${jwt}`
             }
-        }).then((res: any) => {
+        }).then(() => {
             dispatch(setUpdatingPostLoading(false))
         })
     }
@@ -70,12 +88,26 @@ export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}
     }
 }
 
+export const backendDeletePost = (inputPostId: number, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        return axios.delete(`http://localhost:4000/post/${inputPostId}`, {
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            }
+        }).then((res: any) => {
+            console.log('dispatching delete post...')
+            dispatch(deletePost(inputPostId))
+        })
+    }
+}
+
 export const postReducer = (
     state = initialPostState,
     action: PostActionTypes
 ): PostState => {
     switch (action.type) {
         case 'GET_POSTS': {
+            console.log('getting posts: ', state)
             return state
         }
         case 'SET_POSTS': {
@@ -99,7 +131,13 @@ export const postReducer = (
             });
 
             if (index > -1) {
-                state.posts.splice(index, 1)
+                let newPosts = state.posts;
+                newPosts.splice(index, 1)
+                console.log('newPosts: ', newPosts)
+                return {
+                    ...state,
+                    posts: newPosts
+                }
             }
 
             return state
@@ -107,7 +145,10 @@ export const postReducer = (
         case 'SET_CURRENT_POST': {
             return {
                 ...state,
-                currentPost: action.payload
+                currentPost:  {
+                    ...action.payload,
+                    content: JSON.parse(action.payload.content)
+                }
             }
         }
         case 'SET_UPDATING_POST_LOADING': {

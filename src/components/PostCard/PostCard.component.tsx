@@ -3,13 +3,13 @@ import {Post} from '../../redux/Posts/Posts.reducer'
 import {Link} from 'react-router-dom'
 import './PostCard.css'
 import {Tag} from '../Tag/Tag.component'
+import {Editor} from 'react-draft-wysiwyg'
 
 interface PostCardProps {
     post: Post,
     onClickTag?: (e: any) => void,
     onClickCategory?: (e: string) => void,
     showTitleOnly?: boolean
-    adminView?: boolean
 }
 
 export const PostCard: FC<PostCardProps> = props => {
@@ -30,7 +30,13 @@ export const PostCard: FC<PostCardProps> = props => {
                 {!props.showTitleOnly &&
                 <div className='card-content'>
                     <div className='content'>
-                        <div>{props.post.content}</div>
+                        <div>{props.post.content &&
+                        <Editor
+                            readOnly={true}
+                            toolbarHidden={true}
+                            initialContentState={JSON.parse(props.post.content.toString())}
+                        />
+                        }</div>
                         <br/>
                         <div className='is-size-7'>{props.post.creationDate}</div>
                         <div className='has-text-weight-bold is-size-7'>Categories:</div>
@@ -56,14 +62,6 @@ export const PostCard: FC<PostCardProps> = props => {
                 </div>
                 }
             </div>
-            {props.adminView === true &&
-            <>
-                <Link className="button is-primary admin-button" to={`/admin/post/${props.post.id}`}>Edit</Link>
-                <button disabled={true} className="button is-danger admin-button">
-                    Delete
-                </button>
-            </>
-            }
         </div>
     )
 }
