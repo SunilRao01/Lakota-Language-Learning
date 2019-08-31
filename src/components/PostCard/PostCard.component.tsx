@@ -34,7 +34,7 @@ export const PostCard: FC<PostCardProps> = props => {
                         <Editor
                             readOnly={true}
                             toolbarHidden={true}
-                            initialContentState={JSON.parse(props.post.content.toString())}
+                            contentState={JSON.parse(props.post.content.toString())}
                         />
                         }</div>
                         <br/>

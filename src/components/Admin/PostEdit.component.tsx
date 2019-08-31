@@ -82,7 +82,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                         <input
                             onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
                                 ...updatedPost,
-                                tags: e.target.value.split(',')
+                                tags: e.target.value.split(',').map(s => s.trim())
                             })}
                             className='input' placeholder='Post Tags'
                             defaultValue={props.currentPost.tags.join()}/>
@@ -95,7 +95,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                         <input
                             onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
                                 ...updatedPost,
-                                categories: e.target.value.split(',')
+                                categories: e.target.value.split(',').map(s => s.trim())
                             })}
                             className='input' placeholder='Post Categories'
                             defaultValue={props.currentPost.categories.join()}/>

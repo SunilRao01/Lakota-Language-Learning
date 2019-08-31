@@ -66,7 +66,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                     <input
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
                             ...updatedPost,
-                            tags: e.target.value.split(',')
+                            tags: e.target.value.split(',').map(s => s.trim())
                         })}
                         className='input' placeholder='Post Tags'
                     />
@@ -79,7 +79,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                     <input
                         onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
                             ...updatedPost,
-                            categories: e.target.value.split(',')
+                            categories: e.target.value.split(',').map(s => s.trim())
                         })}
                         className='input' placeholder='Post Categories'
                     />
