@@ -9,9 +9,6 @@ import Editor from 'tui-editor'
 import 'tui-editor/dist/tui-editor-contents.css'
 import 'tui-editor/dist/tui-editor.css'
 
-// TODO: For some reason updating updatedPost.postTitle doesn't work...
-//  for now, I'm utilizing a seperate piece of component state 'postTitle'
-
 interface PostCreateProps {
     jwt: string,
     updatePostLoading: boolean,
@@ -35,7 +32,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
         return <Redirect to={'/admin/login'}/>
     }
 
-    const [postTitle, setPostTitle] = useState('')
+    const [editorState, setEditorState] = useState()
     const [updatedPost, setUpdatedPost] = useState<PostCreatePayload>({
         postTitle: '',
         postContent: '',
@@ -54,10 +51,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
         })
 
         editor.on('change', () => {
-            setUpdatedPost({
-                ...updatedPost,
-                postContent: editor.getValue()
-            })
+            setEditorState(editor.getValue())
         })
     }, [])
 
@@ -67,7 +61,10 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                 <label className='label'>Title</label>
                 <div className='control'>
                     <input
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setPostTitle(e.target.value)}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
+                            ...updatedPost,
+                            postTitle: e.target.value
+                        })}
                         className='input' placeholder='Post Title'
                     />
                 </div>
@@ -109,8 +106,8 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
             <button onClick={async () => {
                 setShowUpdateStatus(false)
                 let newPost = updatedPost
-                newPost.postTitle = postTitle
-                await props.createPost(updatedPost, props.jwt)
+                newPost.postContent = editorState
+                await props.createPost(newPost, props.jwt)
                 setShowUpdateStatus(true)
             }} className='button is-primary'>Create Post
             </button>

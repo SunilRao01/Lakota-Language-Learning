@@ -23,7 +23,7 @@ export const PostCard: FC<PostCardProps> = props => {
     useEffect(() => {
         if (!props.showTitleOnly) {
             let contentView = new Viewer({
-                el: document.querySelector('#post-content')!,
+                el: document.querySelector(`#post-content-${props.post.id}`)!,
                 initialValue: props.post.content
             })
         }
@@ -41,7 +41,7 @@ export const PostCard: FC<PostCardProps> = props => {
                 <div className='card-content'>
                     <div className='content'>
                         {props.post.content &&
-                        <div id='post-content'/>
+                        <div id={`post-content-${props.post.id}`}/>
                         }
                         <br/>
                         <div className='is-size-7'>{props.post.creationDate}</div>

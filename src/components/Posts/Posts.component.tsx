@@ -1,13 +1,12 @@
 import React, {FC, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {RootState} from '../../store'
-import {backendGetPost, backendUpdatePost, Post, PostPayload} from '../../redux/Posts/Posts.reducer'
+import {backendGetPost} from '../../redux/Posts/Posts.reducer'
 import {Quiz} from '../Quiz/Quiz.component'
 import {Tag} from '../Tag/Tag.component'
 import {RouteComponentProps} from 'react-router'
 import {ThunkDispatch} from 'redux-thunk'
-import {Editor} from 'react-draft-wysiwyg'
-import Viewer from "tui-editor/dist/tui-editor-Viewer"
+import Viewer from 'tui-editor/dist/tui-editor-Viewer'
 
 interface PostsOwnProps {
     post: any
@@ -30,7 +29,7 @@ export const PostsComponent: FC<PostsProps> = props => {
 
     useEffect(() => {
         if (props.post && props.post.content) {
-            let contentView = new Viewer({
+            let _ = new Viewer({
                 el: document.querySelector('#post-content')!,
                 initialValue: props.post.content
             })
@@ -85,7 +84,7 @@ export const PostsComponent: FC<PostsProps> = props => {
     }
 }
 
-export const mapStateToProps = (state: RootState, postsProps: PostsProps): PostsOwnProps => ({
+export const mapStateToProps = (state: RootState): PostsOwnProps => ({
     post: state.postState.currentPost
 });
 

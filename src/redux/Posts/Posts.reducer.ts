@@ -2,7 +2,6 @@ import {deletePost, PostActionTypes, setCurrentPost, setPosts, setUpdatingPostLo
 import axios from 'axios'
 import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
-import {RawDraftContentState} from 'react-draft-wysiwyg'
 
 const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '167.71.81.111'
 
@@ -68,11 +67,11 @@ export const backendCreatePost = (newPost: Post, jwt: string): ThunkAction<Promi
     }
 }
 
-export const backendUpdatePost = (updatedPost: PostPayload, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const backendUpdatePost = (postId: number, updatedPost: PostPayload, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
         dispatch(setUpdatingPostLoading(true))
 
-        axios.put(`http://${apiUrl}:4000/post/${updatedPost.id}`, updatedPost, {
+        axios.put(`http://${apiUrl}:4000/post/${postId}`, updatedPost, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }

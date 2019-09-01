@@ -1,13 +1,13 @@
 import React, {ChangeEvent, FC, useEffect, useState} from 'react';
-import {backendGetPost, backendUpdatePost, Post, PostPayload} from '../../redux/Posts/Posts.reducer';
+import {backendGetPost, backendUpdatePost, PostPayload} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {ThunkDispatch} from 'redux-thunk'
 import {RootState} from '../../store'
 import {Redirect, RouterProps} from 'react-router'
-import {Editor, EditorState} from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './PostEdit.css'
-import {convertToRaw} from 'draft-js'
+import Editor from 'tui-editor'
+
+// TODO: Fix all payload types, remove all `anys`
 
 interface PostEditProps {
     jwt: string,
@@ -16,18 +16,32 @@ interface PostEditProps {
 }
 
 interface PostEditActions {
-    updatePost: (updatedPost: PostPayload, jwt: string) => void,
+    updatePost: (postId: number, updatedPost: any, jwt: string) => void,
     getPost: (postId: number) => void
 }
 
 type PostEditComponentPropsWithActions = PostEditActions & PostEditProps & RouterProps
+
+interface PostUpdatePayload {
+    id: number,
+    postTitle: string,
+    postContent: string,
+    tags: string[],
+    categories: string[]
+}
 
 const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props => {
     if (props.jwt.length == 0) {
         return <Redirect to={'/admin/login'}/>
     }
 
-    const [updatedPost, setUpdatedPost] = useState<Post>()
+    const [updatedPost, setUpdatedPost] = useState<PostUpdatePayload>({
+        id: -1,
+        postTitle: '',
+        postContent: '',
+        tags: [],
+        categories: []
+    })
 
     const [showUpdateStatus, setShowUpdateStatus] = useState(false)
     const [editorState, setEditorState] = useState()
@@ -35,12 +49,37 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
     useEffect(() => {
         const urlParams = props.history.location.pathname.split('/')
         const postId = parseInt(urlParams[urlParams.length - 1])
+
         props.getPost(postId)
+        setUpdatedPost({
+            ...updatedPost,
+            id: postId
+        })
     }, [])
 
     useEffect(() => {
-        if (props.currentPost) {
-            setUpdatedPost(props.currentPost)
+        if (props.currentPost && props.currentPost.title) {
+            console.log('current post: ', props.currentPost)
+            setUpdatedPost({
+                ...updatedPost,
+                postTitle: props.currentPost.title,
+                postContent: props.currentPost.content,
+                categories: props.currentPost.categories,
+                tags: props.currentPost.tags
+            })
+
+            const editor = new Editor({
+                el: document.querySelector('#wysiwyg-editor')!,
+                initialEditType: 'wysiwyg',
+                previewStyle: 'vertical',
+                height: '300px',
+                hideModeSwitch: true,
+                initialValue: props.currentPost.content
+            })
+
+            editor.on('change', () => {
+                setEditorState(editor.getValue())
+            })
         }
     }, [props.currentPost])
 
@@ -53,7 +92,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                         <input
                             onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
                                 ...updatedPost,
-                                title: e.target.value
+                                postTitle: e.target.value
                             })}
                             className='input' type='text' placeholder='Post Title'
                             defaultValue={props.currentPost.title}/>
@@ -64,15 +103,9 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                     <label className='label'>Content</label>
                     <div className='control'>
                         {props.currentPost.content &&
-                        <Editor
-                            toolbarClassName="toolbarClassName"
-                            wrapperClassName="wrapperClassName"
-                            editorClassName="editorClassName"
-                            initialContentState={props.currentPost.content}
-                            onEditorStateChange={(e: EditorState) => {
-                                setEditorState(e)
-                            }}
-                        />}
+                        <div id='wysiwyg-editor'>
+
+                        </div>}
                     </div>
                 </div>
 
@@ -104,10 +137,13 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
 
                 <button onClick={async () => {
                     setShowUpdateStatus(false)
-                    let newUpdatedPost: PostPayload = {...updatedPost, content: JSON.stringify(convertToRaw(editorState.getCurrentContent()))}
-
-                    console.log('updated post:', newUpdatedPost)
-                    await props.updatePost(newUpdatedPost, props.jwt)
+                    let newPost = {
+                        title: updatedPost.postTitle,
+                        content: editorState,
+                        categories: updatedPost.categories,
+                        tags: updatedPost.tags
+                    }
+                    await props.updatePost(updatedPost.id, newPost, props.jwt)
                     setShowUpdateStatus(true)
                 }} className='button is-primary'>Edit Post
                 </button>
@@ -145,8 +181,8 @@ export const mapStateToProps = (state: RootState): PostEditProps => {
 
 export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): PostEditActions => {
     return {
-        updatePost: async (post: PostPayload, jwt: string) => {
-            await dispatch(backendUpdatePost(post, jwt))
+        updatePost: async (postId: number, post: PostPayload, jwt: string) => {
+            await dispatch(backendUpdatePost(postId, post, jwt))
         },
         getPost: async (postId: number) => {
             return await dispatch(backendGetPost(postId))
