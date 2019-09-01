@@ -15,17 +15,29 @@ interface PostCreateProps {
 }
 
 interface PostCreateActions {
-    createPost: (newPost: Post, jwt: string) => void,
+    createPost: (newPost: any, jwt: string) => void,
 }
 
 type PostCreateComponentPropsWithActions = PostCreateActions & PostCreateProps & RouterProps
+
+interface PostCreatePayload {
+    postTitle: string,
+    postContent: string,
+    tags: string[],
+    categories: string[]
+}
 
 const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = props => {
     if (props.jwt.length == 0) {
         return <Redirect to={'/admin/login'}/>
     }
 
-    const [updatedPost, setUpdatedPost] = useState()
+    const [updatedPost, setUpdatedPost] = useState<PostCreatePayload>({
+        postTitle: '',
+        postContent: '',
+        tags: [],
+        categories: []
+    })
     const [showUpdateStatus, setShowUpdateStatus] = useState(false)
 
     return (
