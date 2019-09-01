@@ -4,6 +4,8 @@ import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
 import {RawDraftContentState} from 'react-draft-wysiwyg'
 
+const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '167.71.81.111'
+
 export interface Quiz {
     question: string,
     possibleAnswers: string[],
@@ -46,7 +48,7 @@ export const initialPostState: PostState = {
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://localhost:4000/posts?page=${pageNumber}`).then((res: any) => {
+        return axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
             dispatch(setPosts(res.data.posts))
         })
     }
@@ -56,7 +58,7 @@ export const backendCreatePost = (newPost: Post, jwt: string): ThunkAction<Promi
     return async (dispatch: Dispatch) => {
         dispatch(setUpdatingPostLoading(true))
 
-        axios.post(`http://localhost:4000/post`, newPost, {
+        axios.post(`http://${apiUrl}:4000/post`, newPost, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }
@@ -70,7 +72,7 @@ export const backendUpdatePost = (updatedPost: PostPayload, jwt: string): ThunkA
     return async (dispatch: Dispatch) => {
         dispatch(setUpdatingPostLoading(true))
 
-        axios.put(`http://localhost:4000/post/${updatedPost.id}`, updatedPost, {
+        axios.put(`http://${apiUrl}:4000/post/${updatedPost.id}`, updatedPost, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }
@@ -82,7 +84,7 @@ export const backendUpdatePost = (updatedPost: PostPayload, jwt: string): ThunkA
 
 export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://localhost:4000/post/${postId}`).then((res: any) => {
+        return axios.get(`http://${apiUrl}:4000/post/${postId}`).then((res: any) => {
             dispatch(setCurrentPost(res.data))
         })
     }
@@ -90,11 +92,11 @@ export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}
 
 export const backendDeletePost = (inputPostId: number, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.delete(`http://localhost:4000/post/${inputPostId}`, {
+        return axios.delete(`http://${apiUrl}:4000/post/${inputPostId}`, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }
-        }).then((res: any) => {
+        }).then(() => {
             console.log('dispatching delete post...')
             dispatch(deletePost(inputPostId))
         })

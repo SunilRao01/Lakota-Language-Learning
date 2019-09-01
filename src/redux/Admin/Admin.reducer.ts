@@ -11,9 +11,11 @@ export const initialAdminState: AdminState = {
     jwt: ''
 };
 
+const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '167.71.81.111'
+
 export const backendLogin = (username: string, password: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.post('http://localhost:4000/login', {
+        return axios.post(`http://${apiUrl}:4000/login`, {
             email: username,
             password: password
         }).then((res: any) => {
