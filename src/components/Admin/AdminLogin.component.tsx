@@ -16,8 +16,8 @@ interface AdminLoginActions {
 type AdminLoginPropsAndActions = AdminLoginProps & AdminLoginActions
 
 export const AdminLoginComponent: FC<AdminLoginPropsAndActions> = props => {
-    const [inputUsername, setInputUsername] = useState('')
-    const [inputPassword, setInputPassword] = useState('')
+    const [inputUsername, setInputUsername] = useState('email')
+    const [inputPassword, setInputPassword] = useState('password')
 
     if (props.jwt) {
         return <Redirect to={'/admin/posts'}/>

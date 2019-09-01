@@ -1,13 +1,16 @@
-import React, {ChangeEvent, FC, useState} from 'react';
+import React, {ChangeEvent, FC, useEffect, useState} from 'react';
 import {backendCreatePost, Post} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {ThunkDispatch} from 'redux-thunk'
 import {RootState} from '../../store'
 import {Redirect, RouterProps} from 'react-router'
-import {Editor, EditorState} from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './PostEdit.css'
-import {convertToRaw} from 'draft-js'
+import Editor from 'tui-editor'
+import 'tui-editor/dist/tui-editor-contents.css'
+import 'tui-editor/dist/tui-editor.css'
+
+// TODO: For some reason updating updatedPost.postTitle doesn't work...
+//  for now, I'm utilizing a seperate piece of component state 'postTitle'
 
 interface PostCreateProps {
     jwt: string,
@@ -32,6 +35,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
         return <Redirect to={'/admin/login'}/>
     }
 
+    const [postTitle, setPostTitle] = useState('')
     const [updatedPost, setUpdatedPost] = useState<PostCreatePayload>({
         postTitle: '',
         postContent: '',
@@ -40,35 +44,39 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
     })
     const [showUpdateStatus, setShowUpdateStatus] = useState(false)
 
+    useEffect(() => {
+        const editor = new Editor({
+            el: document.querySelector('#wysiwyg-editor')!,
+            initialEditType: 'wysiwyg',
+            previewStyle: 'vertical',
+            height: '300px',
+            hideModeSwitch: true
+        })
+
+        editor.on('change', () => {
+            setUpdatedPost({
+                ...updatedPost,
+                postContent: editor.getValue()
+            })
+        })
+    }, [])
+
     return (
         <div className='container'>
             <div className='field'>
                 <label className='label'>Title</label>
                 <div className='control'>
                     <input
-                        onChange={(e: ChangeEvent<HTMLInputElement>) => setUpdatedPost({
-                            ...updatedPost,
-                            postTitle: e.target.value
-                        })}
-                        className='input' type='text' placeholder='Post Title'
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => setPostTitle(e.target.value)}
+                        className='input' placeholder='Post Title'
                     />
                 </div>
             </div>
 
             <div className='field'>
                 <label className='label'>Content</label>
-                <div className='control'>
-                    <Editor
-                        toolbarClassName="toolbarClassName"
-                        wrapperClassName="wrapperClassName"
-                        editorClassName="editorClassName"
-                        onEditorStateChange={(e: EditorState) => {
-                            setUpdatedPost({
-                                ...updatedPost,
-                                postContent: JSON.stringify(convertToRaw(e.getCurrentContent()))
-                            })
-                        }}
-                    />
+                <div id='wysiwyg-editor' className='control'>
+
                 </div>
             </div>
 
@@ -100,6 +108,8 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
 
             <button onClick={async () => {
                 setShowUpdateStatus(false)
+                let newPost = updatedPost
+                newPost.postTitle = postTitle
                 await props.createPost(updatedPost, props.jwt)
                 setShowUpdateStatus(true)
             }} className='button is-primary'>Create Post

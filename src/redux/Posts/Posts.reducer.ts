@@ -17,7 +17,7 @@ export interface Quiz {
 export interface Post {
     id: number,
     title: string,
-    content: RawDraftContentState,
+    content: string,
     creationDate: string,
     categories: string[],
     tags: string[],
@@ -149,7 +149,7 @@ export const postReducer = (
                 ...state,
                 currentPost:  {
                     ...action.payload,
-                    content: JSON.parse(action.payload.content)
+                    content: action.payload.content
                 }
             }
         }

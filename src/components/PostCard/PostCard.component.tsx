@@ -3,7 +3,8 @@ import {Post} from '../../redux/Posts/Posts.reducer'
 import {Link} from 'react-router-dom'
 import './PostCard.css'
 import {Tag} from '../Tag/Tag.component'
-import {Editor} from 'react-draft-wysiwyg'
+import Viewer from 'tui-editor/dist/tui-editor-Viewer'
+import 'tui-editor/dist/tui-editor-contents.css'
 
 interface PostCardProps {
     post: Post,
@@ -19,6 +20,15 @@ export const PostCard: FC<PostCardProps> = props => {
         props.onClickCategory && props.onClickCategory(t)
     }
 
+    useEffect(() => {
+        if (!props.showTitleOnly) {
+            let contentView = new Viewer({
+                el: document.querySelector('#post-content')!,
+                initialValue: props.post.content
+            })
+        }
+    }, [])
+
     return (
         <div data-testid={props.showTitleOnly ? `postcard-small` : `postcard-large`}
              className='column swing-in-top-bck is-full'>
@@ -30,13 +40,9 @@ export const PostCard: FC<PostCardProps> = props => {
                 {!props.showTitleOnly &&
                 <div className='card-content'>
                     <div className='content'>
-                        <div>{props.post.content &&
-                        <Editor
-                            readOnly={true}
-                            toolbarHidden={true}
-                            contentState={JSON.parse(props.post.content.toString())}
-                        />
-                        }</div>
+                        {props.post.content &&
+                        <div id='post-content'/>
+                        }
                         <br/>
                         <div className='is-size-7'>{props.post.creationDate}</div>
                         <div className='has-text-weight-bold is-size-7'>Categories:</div>

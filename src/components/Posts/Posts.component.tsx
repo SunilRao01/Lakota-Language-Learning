@@ -7,6 +7,7 @@ import {Tag} from '../Tag/Tag.component'
 import {RouteComponentProps} from 'react-router'
 import {ThunkDispatch} from 'redux-thunk'
 import {Editor} from 'react-draft-wysiwyg'
+import Viewer from "tui-editor/dist/tui-editor-Viewer"
 
 interface PostsOwnProps {
     post: any
@@ -27,7 +28,14 @@ export const PostsComponent: FC<PostsProps> = props => {
         props.getPost(postId)
     }, [])
 
-
+    useEffect(() => {
+        if (props.post && props.post.content) {
+            let contentView = new Viewer({
+                el: document.querySelector('#post-content')!,
+                initialValue: props.post.content
+            })
+        }
+    }, [props.post])
 
     if (props.post) {
         return (
@@ -36,11 +44,8 @@ export const PostsComponent: FC<PostsProps> = props => {
                     <h1 className="title">{props.post.title}</h1>
                     <div className='content'>
                         {props.post.content &&
-                        <Editor
-                            readOnly={true}
-                            toolbarHidden={true}
-                            contentState={props.post.content}
-                        />}
+                        <div id='post-content'/>
+                        }
                         <br/>
                         <iframe width="100%" height="300" scrolling="no" frameBorder="no" allow="autoplay"
                                 src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/255945886&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
