@@ -24,12 +24,30 @@ export const backendLogin = (username: string, password: string): ThunkAction<Pr
     }
 }
 
+export const backendVerifySession = (jwt: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
+    return async () => {
+        return axios.post(`http://${apiUrl}:4000/verify-session`, {
+            token: jwt
+        }).then(() => {
+            return true
+        }).catch((err: any) => {
+            if (err && err.response && err.response.status == 401) {
+                return false
+            }
+        }).finally(() => {
+            return false
+        })
+    }
+}
+
 export const adminReducer = (
     state = initialAdminState,
     action: AdminActionTypes
 ): AdminState => {
     switch (action.type) {
         case 'SET_JWT': {
+            localStorage.setItem('lakota_jwt', action.payload)
+
             return {
                 ...state,
                 jwt: action.payload

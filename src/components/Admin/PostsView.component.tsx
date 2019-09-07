@@ -7,7 +7,6 @@ import {ThunkDispatch} from 'redux-thunk'
 import {Redirect} from 'react-router'
 import {Link} from 'react-router-dom'
 import './PostView.css'
-import {getPosts} from '../../redux/Posts/Posts.action'
 
 interface PostsViewActions {
     getPosts: (pageNum: number) => void,
@@ -22,17 +21,13 @@ interface PostsViewProps {
 type PostsViewPropsWithActions = PostsViewProps & PostsViewActions
 
 const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
-    if (props.jwt.length == 0) {
-        return <Redirect to={'login'} />
+    if (!props.jwt || props.jwt.length == 0) {
+        return <Redirect to={'/admin/login'} />
     }
 
     useEffect(() => {
         props.getPosts(1)
     }, [])
-
-    useEffect(() => {
-        console.log('props.posts changed: ', props.posts)
-    }, [props.posts])
 
     return (
         <div className='container'>

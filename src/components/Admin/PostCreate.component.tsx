@@ -28,8 +28,8 @@ interface PostCreatePayload {
 }
 
 const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = props => {
-    if (props.jwt.length == 0) {
-        return <Redirect to={'/admin/login'}/>
+    if (!props.jwt || props.jwt.length == 0) {
+        return <Redirect to={'/admin/login'} />
     }
 
     const [editorState, setEditorState] = useState()

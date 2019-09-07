@@ -30,10 +30,10 @@ export const App: FC = () => {
                         <Route path='/post/:postId' exact component={Posts}/>
                         <Route path='/posts' component={FilteredPostsView}/>
 
-                        <Route path='/admin/posts' component={PostsView}/>
+                        <Route path={'/admin/posts'} component={PostsView}/>
                         <Route path='/admin/login' component={AdminLogin}/>
-                        <Route path='/admin/post/:postId' component={PostEdit}/>
-                        <Route path='/admin/postss/new' component={PostCreate}/>
+                        <Route path='/admin/post/:postId/' component={PostEdit}/>
+                        <Route path='/admin/posts/new' component={PostCreate}/>
                     </main>
                 </div>
             </div>

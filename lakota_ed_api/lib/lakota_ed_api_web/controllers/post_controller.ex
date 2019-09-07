@@ -10,7 +10,9 @@ defmodule LakotaEdApiWeb.PostController do
 
   action_fallback(LakotaEdApiWeb.FallbackController)
 
-  plug(Guardian.Plug.EnsureAuthenticated when action in [:create, :delete, :update])
+   plug Guardian.Plug.EnsureAuthenticated when action in [:create, :delete, :update]
+   plug Guardian.Plug.VerifySession when action in [:create, :delete, :update]
+   plug Guardian.Plug.VerifyHeader when action in [:create, :delete, :update]
 
   def posts(conn, _, _) do
     # Conditionally serves content based on query strings; currently mutually exclusive

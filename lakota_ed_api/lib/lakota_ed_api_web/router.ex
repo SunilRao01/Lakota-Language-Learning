@@ -24,6 +24,7 @@ defmodule LakotaEdApiWeb.Router do
     post "/login", SessionController, :create
     get "/post/:id", PostController, :show
     get "/posts", PostController, :posts
+    post "/verify-session", SessionController, :verify_session
 
     pipe_through :secure_api
     resources "/post", PostController, only: [:create, :update, :delete]

@@ -31,8 +31,8 @@ interface PostUpdatePayload {
 }
 
 const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props => {
-    if (props.jwt.length == 0) {
-        return <Redirect to={'/admin/login'}/>
+    if (!props.jwt || props.jwt.length == 0) {
+        return <Redirect to={'/admin/login'} />
     }
 
     const [updatedPost, setUpdatedPost] = useState<PostUpdatePayload>({
@@ -59,7 +59,6 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
 
     useEffect(() => {
         if (props.currentPost && props.currentPost.title) {
-            console.log('current post: ', props.currentPost)
             setUpdatedPost({
                 ...updatedPost,
                 postTitle: props.currentPost.title,

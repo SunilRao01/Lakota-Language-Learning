@@ -96,7 +96,6 @@ export const backendDeletePost = (inputPostId: number, jwt: string): ThunkAction
                 Authorization: `Bearer ${jwt}`
             }
         }).then(() => {
-            console.log('dispatching delete post...')
             dispatch(deletePost(inputPostId))
         })
     }
@@ -108,7 +107,6 @@ export const postReducer = (
 ): PostState => {
     switch (action.type) {
         case 'GET_POSTS': {
-            console.log('getting posts: ', state)
             return state
         }
         case 'SET_POSTS': {
@@ -134,7 +132,6 @@ export const postReducer = (
             if (index > -1) {
                 let newPosts = state.posts;
                 newPosts.splice(index, 1)
-                console.log('newPosts: ', newPosts)
                 return {
                     ...state,
                     posts: newPosts

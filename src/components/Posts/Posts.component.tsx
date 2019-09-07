@@ -23,13 +23,12 @@ export const PostsComponent: FC<PostsProps> = props => {
         const urlParams = props.history.location.pathname.split('/')
         const postId = parseInt(urlParams[urlParams.length - 1])
 
-        console.log('getting post with id: ', postId)
         props.getPost(postId)
     }, [])
 
     useEffect(() => {
         if (props.post && props.post.content) {
-            let _ = new Viewer({
+            new Viewer({
                 el: document.querySelector('#post-content')!,
                 initialValue: props.post.content
             })
@@ -47,7 +46,7 @@ export const PostsComponent: FC<PostsProps> = props => {
                         }
                         <br/>
                         <iframe width="100%" height="300" scrolling="no" frameBorder="no" allow="autoplay"
-                                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/255945886&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"></iframe>
+    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/255945886&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"/>
                         <br/>
                         <h3>Quiz:</h3>
                         {

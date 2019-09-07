@@ -1,16 +1,19 @@
-import React, {ChangeEvent, createContext, FC, SyntheticEvent, useState} from 'react'
+import React, {ChangeEvent, FC, SyntheticEvent, useEffect, useState} from 'react'
 import {ThunkDispatch} from 'redux-thunk'
-import {backendLogin} from '../../redux/Admin/Admin.reducer'
+import {backendLogin, backendVerifySession} from '../../redux/Admin/Admin.reducer'
 import {connect} from 'react-redux'
 import {RootState} from '../../store'
 import {Redirect} from 'react-router'
+import {setJwt} from '../../redux/Admin/Admin.action'
 
 interface AdminLoginProps {
     jwt: string
 }
 
 interface AdminLoginActions {
-    login: (username: string, password: string) => void
+    login: (username: string, password: string) => void,
+    setJwt: (inputJwt: string) => void,
+    verifyAndSetJwt: (inputJwt: string) => void
 }
 
 type AdminLoginPropsAndActions = AdminLoginProps & AdminLoginActions
@@ -18,6 +21,14 @@ type AdminLoginPropsAndActions = AdminLoginProps & AdminLoginActions
 export const AdminLoginComponent: FC<AdminLoginPropsAndActions> = props => {
     const [inputUsername, setInputUsername] = useState('email')
     const [inputPassword, setInputPassword] = useState('password')
+
+    useEffect(() => {
+        let jwt: (string | null) = localStorage.getItem('lakota_jwt')
+
+        if (jwt) {
+            props.verifyAndSetJwt(jwt)
+        }
+    }, [])
 
     if (props.jwt) {
         return <Redirect to={'/admin/posts'}/>
@@ -63,6 +74,15 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): AdminL
     return {
         login: async (username: string, password: string) => {
             await dispatch(backendLogin(username, password))
+        },
+        setJwt: (inputJwt: string) => {
+            dispatch(setJwt(inputJwt))
+        },
+        verifyAndSetJwt: async (inputJwt: string) => {
+            const verified: any = await dispatch(backendVerifySession(inputJwt))
+            if (verified) {
+                dispatch(setJwt(inputJwt))
+            }
         }
     }
 }
