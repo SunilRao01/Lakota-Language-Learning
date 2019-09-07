@@ -50,7 +50,7 @@ export const AdminLoginComponent: FC<AdminLoginPropsAndActions> = props => {
                     </div>
                     <label className="label">Password</label>
                     <div className="control">
-                        <input className="input" type="text" placeholder="Enter Password"
+                        <input className="input" type="password" placeholder="Enter Password"
                                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                                    setInputPassword(e.target.value)
                                }}/>
