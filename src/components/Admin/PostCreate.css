@@ -1,7 +1,3 @@
-.container .field:not(:last-child) {
-    margin-bottom: 60px;
-}
-
 .possible-answer {
     display: flex;
 }
@@ -23,6 +19,14 @@
 .possible-answers {
     margin-bottom: 15px;
 }
+
+.created-quizzes-container {
+    display: flex;
+}
+
+
+
+
 
 /* Animations */
 .slide-in-left {

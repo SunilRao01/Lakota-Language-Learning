@@ -1,0 +1,23 @@
+.quiz-card {
+    max-width: 240px;
+}
+
+.quiz-card-cross {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+}
+
+.card-content > .content > .field > .control {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content > .content > .field > .control > .radio {
+    margin-bottom: 5px;
+}
+
+.card-content > .content > .field > .control > .radio > input {
+    margin-right: 5px;
+}

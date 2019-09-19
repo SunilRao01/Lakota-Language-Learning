@@ -11,6 +11,7 @@ import 'tui-editor/dist/tui-editor.css'
 import './PostCreate.css'
 import PlusSvg from '../../assets/plus.svg'
 import CrossSvg from '../../assets/x.svg'
+import {QuizCard} from '../QuizCard/QuizCard.component'
 
 interface PostCreateProps {
     jwt: string,
@@ -68,6 +69,10 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
         })
     }, [])
 
+    useEffect(() => {
+        console.log('Updated post: ', updatedPost)
+    }, [updatedPost])
+
     return (
         <div className='container'>
             <div className='field'>
@@ -118,6 +123,24 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
 
             <div className='field'>
                 <h3 className='title'>Quizzes</h3>
+                <div className='created-quizzes-container'>
+                    {
+                        updatedPost.quizzes &&
+                        updatedPost.quizzes.map((q: Quiz, index: number) => {
+                            return <QuizCard key={index} quiz={q} onCross={() => {
+                                let newQuizzes = updatedPost.quizzes;
+                                newQuizzes.splice(index, 1)
+
+                                console.log('new quizzes', newQuizzes)
+
+                                setUpdatedPost({
+                                    ...updatedPost,
+                                    quizzes: newQuizzes
+                                })
+                            }} />
+                        })
+                    }
+                </div>
                 <div className='control'>
                     <label className='label'>Question</label>
                     <input
@@ -154,7 +177,8 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                     <label className='label'>Possible Answers</label>
                     {
                         quiz.possibleAnswers &&
-                        quiz.possibleAnswers.map((a: string, index: number) => <div className='possible-answer-row slide-in-left' key={index}>
+                        quiz.possibleAnswers.map((a: string, index: number) => <div
+                            className='possible-answer-row slide-in-left' key={index}>
                             <button onClick={() => {
                                 let newPossibleAnswers: string[] = quiz.possibleAnswers
                                 newPossibleAnswers.splice(quiz.possibleAnswers.indexOf(a), 1)
@@ -207,7 +231,8 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                                 quiz
                             ]
                         })
-                    }}>Add Quiz</button>
+                    }}>Add Quiz
+                    </button>
                 </div>
             </div>
 
