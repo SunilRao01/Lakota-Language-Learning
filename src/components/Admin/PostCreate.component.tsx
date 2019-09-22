@@ -1,5 +1,5 @@
 import React, {ChangeEvent, FC, useEffect, useState} from 'react';
-import {backendCreatePost, Post, Quiz} from '../../redux/Posts/Posts.reducer';
+import {backendCreatePost, Post, IQuiz} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {ThunkDispatch} from 'redux-thunk'
 import {RootState} from '../../store'
@@ -29,7 +29,7 @@ interface PostCreatePayload {
     postContent: string,
     tags: string[],
     categories: string[],
-    quizzes: Quiz[]
+    quizzes: IQuiz[]
 }
 
 const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = props => {
@@ -47,7 +47,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
     })
     const [showUpdateStatus, setShowUpdateStatus] = useState(false)
     const [possibleAnswer, setPossibleAnswer] = useState<string>('')
-    const [quiz, setQuiz] = useState<Quiz>({
+    const [quiz, setQuiz] = useState<IQuiz>({
         answer: '',
         errorMessage: '',
         possibleAnswers: [],
@@ -68,10 +68,6 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
             setEditorState(editor.getValue())
         })
     }, [])
-
-    useEffect(() => {
-        console.log('Updated post: ', updatedPost)
-    }, [updatedPost])
 
     return (
         <div className='container'>
@@ -126,7 +122,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                 <div className='created-quizzes-container'>
                     {
                         updatedPost.quizzes &&
-                        updatedPost.quizzes.map((q: Quiz, index: number) => {
+                        updatedPost.quizzes.map((q: IQuiz, index: number) => {
                             return <QuizCard key={index} quiz={q} onCross={() => {
                                 let newQuizzes = updatedPost.quizzes;
                                 newQuizzes.splice(index, 1)
@@ -246,7 +242,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
 
                 console.log('Going to create this new post: ', newPost)
 
-                // await props.createPost(newPost, props.jwt)
+                await props.createPost(newPost, props.jwt)
                 setShowUpdateStatus(true)
             }} className='button is-primary'>Create Post
             </button>

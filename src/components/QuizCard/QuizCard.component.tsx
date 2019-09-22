@@ -1,11 +1,11 @@
 import React, {ChangeEvent, FC, FormEvent, useState} from 'react'
-import {Quiz} from '../../redux/Posts/Posts.reducer'
+import {IQuiz} from '../../redux/Posts/Posts.reducer'
 import './QuizCard.css'
 import CrossSvg from '../../assets/x.svg'
 
 interface QuizCardProps {
     onCross?: () => void,
-    quiz: Quiz
+    quiz: IQuiz
 }
 
 export const QuizCard: FC<QuizCardProps> = props => {
@@ -15,9 +15,9 @@ export const QuizCard: FC<QuizCardProps> = props => {
     const getQuizStatus = () => {
         switch (quizState) {
             case 0:
-                return <div>{props.quiz.errorMessage}</div>
+                return <div className='error-message'>{props.quiz.errorMessage}</div>
             case 1:
-                return <div>{props.quiz.successMessage}</div>
+                return <div className='success-message'>{props.quiz.successMessage}</div>
             default:
                 break
         }

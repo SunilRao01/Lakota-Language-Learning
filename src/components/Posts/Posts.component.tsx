@@ -1,12 +1,12 @@
 import React, {FC, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {RootState} from '../../store'
-import {backendGetPost} from '../../redux/Posts/Posts.reducer'
-import {Quiz} from '../Quiz/Quiz.component'
+import {backendGetPost, IQuiz} from '../../redux/Posts/Posts.reducer'
 import {Tag} from '../Tag/Tag.component'
 import {RouteComponentProps} from 'react-router'
 import {ThunkDispatch} from 'redux-thunk'
 import Viewer from 'tui-editor/dist/tui-editor-Viewer'
+import {QuizCard} from '../QuizCard/QuizCard.component'
 
 interface PostsOwnProps {
     post: any
@@ -46,18 +46,17 @@ export const PostsComponent: FC<PostsProps> = props => {
                         }
                         <br/>
                         <iframe width="100%" height="300" scrolling="no" frameBorder="no" allow="autoplay"
-    src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/255945886&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"/>
+                                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/255945886&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"/>
                         <br/>
                         <h3>Quiz:</h3>
-                        {
-                            props.post.quizzes &&
-                            <Quiz
-                                question={props.post.quizzes[0].question}
-                                answers={props.post.quizzes[0].possibleAnswers}
-                                answer={props.post.quizzes[0].answer}
-                            />
-                        }
-
+                        <div style={{
+                            display: 'flex'
+                        }}>
+                            {
+                                props.post.quizzes &&
+                                props.post.quizzes.map((q: IQuiz, i: number) => <QuizCard key={i} quiz={q}/>)
+                            }
+                        </div>
                         <br/>
                         <p>{props.post.creationDate}</p>
                         <div className='has-text-weight-bold'>Categories:</div>

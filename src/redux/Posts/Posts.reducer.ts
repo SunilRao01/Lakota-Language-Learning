@@ -5,7 +5,7 @@ import {ThunkAction} from 'redux-thunk'
 
 const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '167.71.81.111'
 
-export interface Quiz {
+export interface IQuiz {
     question: string,
     possibleAnswers: string[],
     answer: string,
@@ -20,7 +20,7 @@ export interface Post {
     creationDate: string,
     categories: string[],
     tags: string[],
-    quizzes?: Quiz[]
+    quizzes?: IQuiz[]
 }
 
 export interface PostPayload {
@@ -30,7 +30,7 @@ export interface PostPayload {
     creationDate: string,
     categories: string[],
     tags: string[],
-    quizzes?: Quiz[]
+    quizzes?: IQuiz[]
 }
 
 export interface PostState {

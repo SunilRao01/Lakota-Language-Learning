@@ -12,12 +12,21 @@
 .card-content > .content > .field > .control {
     display: flex;
     flex-direction: column;
+    margin: 0;
 }
 
 .card-content > .content > .field > .control > .radio {
-    margin-bottom: 5px;
+    margin: 0 0 5px;
 }
 
 .card-content > .content > .field > .control > .radio > input {
     margin-right: 5px;
+}
+
+.success-message {
+    color: darkgreen;
+}
+
+.error-message {
+    color: darkred;
 }
