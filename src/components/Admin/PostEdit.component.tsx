@@ -1,13 +1,16 @@
 import React, {ChangeEvent, FC, useEffect, useState} from 'react';
-import {backendGetPost, backendUpdatePost, PostPayload} from '../../redux/Posts/Posts.reducer';
+import {backendGetPost, backendUpdatePost, IQuiz, PostPayload} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {ThunkDispatch} from 'redux-thunk'
 import {RootState} from '../../store'
 import {Redirect, RouterProps} from 'react-router'
 import './PostEdit.css'
 import Editor from 'tui-editor'
+import {QuizCard} from '../QuizCard/QuizCard.component'
+import CrossSvg from '../../assets/x.svg'
+import PlusSvg from '../../assets/plus.svg'
 
-// TODO: Fix all payload types, remove all `anys`
+// TODO: Add typing for api payloads
 
 interface PostEditProps {
     jwt: string,
@@ -27,7 +30,8 @@ interface PostUpdatePayload {
     postTitle: string,
     postContent: string,
     tags: string[],
-    categories: string[]
+    categories: string[],
+    quizzes: IQuiz[]
 }
 
 const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props => {
@@ -40,10 +44,20 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
         postTitle: '',
         postContent: '',
         tags: [],
-        categories: []
+        categories: [],
+        quizzes: []
     })
 
     const [showUpdateStatus, setShowUpdateStatus] = useState(false)
+    const [possibleAnswer, setPossibleAnswer] = useState<string>('')
+    const [quiz, setQuiz] = useState<IQuiz>({
+        answer: '',
+        errorMessage: '',
+        possibleAnswers: [],
+        question: '',
+        successMessage: ''
+    })
+
     const [editorState, setEditorState] = useState()
 
     useEffect(() => {
@@ -64,7 +78,8 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                 postTitle: props.currentPost.title,
                 postContent: props.currentPost.content,
                 categories: props.currentPost.categories,
-                tags: props.currentPost.tags
+                tags: props.currentPost.tags,
+                quizzes: props.currentPost.quizzes
             })
 
             const editor = new Editor({
@@ -134,15 +149,132 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                     </div>
                 </div>
 
+                <div className='field'>
+                    <h3 className='title'>Quizzes</h3>
+                    <div className='created-quizzes-container'>
+                        {
+                            updatedPost.quizzes &&
+                            updatedPost.quizzes.map((q: IQuiz, index: number) => {
+                                return <QuizCard key={index} quiz={q} onCross={() => {
+                                    let newQuizzes = updatedPost.quizzes;
+                                    newQuizzes.splice(index, 1)
+
+                                    console.log('new quizzes', newQuizzes)
+
+                                    setUpdatedPost({
+                                        ...updatedPost,
+                                        quizzes: newQuizzes
+                                    })
+                                }} />
+                            })
+                        }
+                    </div>
+                    <div className='control'>
+                        <label className='label'>Question</label>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setQuiz({
+                                ...quiz,
+                                question: e.target.value
+                            })}
+                            className='input' placeholder='Question'
+                        />
+                        <label className='label'>Answer</label>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setQuiz({
+                                ...quiz,
+                                answer: e.target.value
+                            })}
+                            className='input' placeholder='Answer'
+                        />
+                        <label className='label'>Success Message</label>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setQuiz({
+                                ...quiz,
+                                successMessage: e.target.value
+                            })}
+                            className='input' placeholder='Wow! Good job!'
+                        />
+                        <label className='label'>Failure Message</label>
+                        <input
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setQuiz({
+                                ...quiz,
+                                errorMessage: e.target.value
+                            })}
+                            className='input' placeholder='Oh no! Try again.'
+                        />
+                        <label className='label'>Possible Answers</label>
+                        {
+                            quiz.possibleAnswers &&
+                            quiz.possibleAnswers.map((a: string, index: number) => <div
+                                className='possible-answer-row slide-in-left' key={index}>
+                                <button onClick={() => {
+                                    let newPossibleAnswers: string[] = quiz.possibleAnswers
+                                    newPossibleAnswers.splice(quiz.possibleAnswers.indexOf(a), 1)
+                                    setQuiz({
+                                        ...quiz,
+                                        possibleAnswers: newPossibleAnswers
+                                    })
+                                }} className='button is-danger'>
+                                    <img src={CrossSvg} alt='X'/>
+                                </button>
+                                {a}
+                            </div>)
+                        }
+                        <div className='possible-answers'>
+                            <div className='possible-answer'>
+                                <input
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setPossibleAnswer(e.target.value)}
+                                    className='input' placeholder='possible-answer' value={possibleAnswer}
+                                />
+                                <button onClick={() => {
+                                    if (quiz.possibleAnswers) {
+                                        setQuiz({
+                                            ...quiz,
+                                            possibleAnswers: [
+                                                ...quiz.possibleAnswers,
+                                                possibleAnswer
+                                            ]
+                                        })
+                                    } else {
+                                        setQuiz({
+                                            ...quiz,
+                                            possibleAnswers: [
+                                                possibleAnswer
+                                            ]
+                                        })
+                                    }
+
+                                    setPossibleAnswer('')
+                                }} className='button is-primary'>
+                                    <img src={PlusSvg} alt='+'/>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button className='button is-primary' onClick={() => {
+                            setUpdatedPost({
+                                ...updatedPost,
+                                quizzes: [
+                                    ...updatedPost.quizzes,
+                                    quiz
+                                ]
+                            })
+                        }}>Add Quiz
+                        </button>
+                    </div>
+                </div>
+
+                <hr/>
+
                 <button onClick={async () => {
                     setShowUpdateStatus(false)
-                    let newPost = {
-                        title: updatedPost.postTitle,
-                        content: editorState,
-                        categories: updatedPost.categories,
-                        tags: updatedPost.tags
+
+                    const updatePostPayload = {
+                        ...updatedPost,
+                        postContent: editorState
                     }
-                    await props.updatePost(updatedPost.id, newPost, props.jwt)
+
+                    await props.updatePost(updatedPost.id, updatePostPayload, props.jwt)
                     setShowUpdateStatus(true)
                 }} className='button is-primary'>Edit Post
                 </button>
