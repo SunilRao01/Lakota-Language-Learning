@@ -50,7 +50,8 @@ export const PostsComponent: FC<PostsProps> = props => {
                         <br/>
                         <h3>Quiz:</h3>
                         <div style={{
-                            display: 'flex'
+                            display: 'flex',
+                            flexWrap: 'wrap'
                         }}>
                             {
                                 props.post.quizzes &&

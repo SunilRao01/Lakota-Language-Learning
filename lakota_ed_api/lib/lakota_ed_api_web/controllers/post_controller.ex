@@ -20,7 +20,7 @@ defmodule LakotaEdApiWeb.PostController do
       "page" ->
         {page, _} = Integer.parse(conn.query_params["page"])
         offset = 5 * (page - 1)
-        query = from Post, limit: 5, offset: ^offset, order_by: [:id]
+        query = from Post, limit: 5, offset: ^offset, order_by: [desc: :inserted_at]
         case Repo.all(query) do
           posts ->
             conn

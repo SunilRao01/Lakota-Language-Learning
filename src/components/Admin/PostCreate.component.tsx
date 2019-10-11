@@ -255,7 +255,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
             }
 
             {!props.updatePostLoading && showUpdateStatus &&
-            <div className='notification is-success admin-button'>
+            <div className='notification is-success'>
                 <button className='delete'/>
                 Created post Successfully!
             </div>

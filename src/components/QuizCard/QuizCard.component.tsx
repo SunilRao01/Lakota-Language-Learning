@@ -71,7 +71,7 @@ export const QuizCard: FC<QuizCardProps> = props => {
                             {
                                 getQuizStatus()
                             }
-                            <button className="button is-info admin-button"
+                            <button className="button is-info"
                                     type='submit'>Submit
                             </button>
                         </div>
