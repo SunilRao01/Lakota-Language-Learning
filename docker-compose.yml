@@ -3,7 +3,7 @@ version: '3'
 services:
   phoenix:
     build:
-      context: lakota-ed-api
+      context: lakota_ed_api
     environment:
       - BUILD_COMMIT_SHA=localdev
       - CHAMBER_ENABLED=false
