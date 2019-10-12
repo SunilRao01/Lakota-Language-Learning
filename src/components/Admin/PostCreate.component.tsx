@@ -29,7 +29,8 @@ interface PostCreatePayload {
     postContent: string,
     tags: string[],
     categories: string[],
-    quizzes: IQuiz[]
+    quizzes: IQuiz[],
+    podcastLink: string
 }
 
 const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = props => {
@@ -43,7 +44,8 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
         postContent: '',
         tags: [],
         categories: [],
-        quizzes: []
+        quizzes: [],
+        podcastLink: ''
     })
     const [showUpdateStatus, setShowUpdateStatus] = useState(false)
     const [possibleAnswer, setPossibleAnswer] = useState<string>('')
@@ -230,8 +232,21 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                     }}>Add Quiz
                     </button>
                 </div>
-            </div>
 
+
+            </div>
+            <div className='field'>
+                <h3 className="title is-3">Podcast Embed Code</h3>
+                <div className='control'>
+                    <textarea
+                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setUpdatedPost({
+                            ...updatedPost,
+                            podcastLink: e.target.value
+                        })}
+                        className='textarea' placeholder='Podcast Embed Link'
+                    />
+                </div>
+            </div>
             <hr/>
 
             <button onClick={async () => {

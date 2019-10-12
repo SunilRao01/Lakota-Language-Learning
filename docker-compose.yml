@@ -1,0 +1,39 @@
+
+version: '3'
+
+services:
+  phoenix:
+    build:
+      context: lakota-ed-api
+    environment:
+      - BUILD_COMMIT_SHA=localdev
+      - CHAMBER_ENABLED=false
+      - POSTGRES_DB=lakota_ed_api
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PASS=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - PHXPORT=4000
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    volumes:
+      - './lakota-ed-api/lib:/app/lib'
+      - './lakota-ed-api/priv:/app/priv'
+      - './lakota-ed-api/config:/app/config'
+    restart: always
+
+  postgres:
+    image: postgres:11.4
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=lakota_ed_api
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

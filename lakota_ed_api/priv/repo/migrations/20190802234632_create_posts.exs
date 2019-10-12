@@ -8,8 +8,14 @@ defmodule LakotaEdApi.Repo.Migrations.CreatePosts do
       add :categories, {:array, :string}
       add :tags, {:array, :string}
       add :quizzes, :map
+      add :podcastLink, :string
 
       timestamps()
+    end
+
+    alter table(:posts) do
+      modify :postContent, :text
+      modify :podcastLink, :text
     end
   end
 end

@@ -45,8 +45,7 @@ export const PostsComponent: FC<PostsProps> = props => {
                         <div id='post-content'/>
                         }
                         <br/>
-                        <iframe width="100%" height="300" scrolling="no" frameBorder="no" allow="autoplay"
-                                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/255945886&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"/>
+                        {props.post.podcastLink.length > 0 ? <div dangerouslySetInnerHTML={{__html: props.post.podcastLink}}></div> : ``}
                         <br/>
                         <h3>Quiz:</h3>
                         <div style={{

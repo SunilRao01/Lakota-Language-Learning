@@ -31,7 +31,8 @@ interface PostUpdatePayload {
     postContent: string,
     tags: string[],
     categories: string[],
-    quizzes: IQuiz[]
+    quizzes: IQuiz[],
+    podcastLink: string
 }
 
 const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props => {
@@ -45,7 +46,8 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
         postContent: '',
         tags: [],
         categories: [],
-        quizzes: []
+        quizzes: [],
+        podcastLink: ''
     })
 
     const [showUpdateStatus, setShowUpdateStatus] = useState(false)
@@ -79,7 +81,8 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                 postContent: props.currentPost.content,
                 categories: props.currentPost.categories,
                 tags: props.currentPost.tags,
-                quizzes: props.currentPost.quizzes
+                quizzes: props.currentPost.quizzes,
+                podcastLink: props.currentPost.pod
             })
 
             const editor = new Editor({
@@ -261,6 +264,19 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                             })
                         }}>Add Quiz
                         </button>
+                    </div>
+
+                    <div className='field'>
+                        <h3 className="title is-3">Podcast Embed Link</h3>
+                        <div className='control'>
+                            <textarea
+                                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setUpdatedPost({
+                                    ...updatedPost,
+                                    podcastLink: e.target.value
+                                })}
+                                className='textarea' placeholder='Podcast Embed Link'
+                            />
+                        </div>
                     </div>
                 </div>
 

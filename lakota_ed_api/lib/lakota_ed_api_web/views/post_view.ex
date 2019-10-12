@@ -9,7 +9,8 @@ defmodule LakotaEdApiWeb.PostView do
       tags: post.tags,
       quizzes: post.quizzes,
       categories: post.categories,
-      creationDate: post.inserted_at
+      creationDate: post.inserted_at,
+      podcastLink: post.podcastLink
     }
   end
 
@@ -23,7 +24,8 @@ defmodule LakotaEdApiWeb.PostView do
           tags: p.tags,
           quizzes: p.quizzes,
           categories: p.categories,
-          creationDate: p.inserted_at
+          creationDate: p.inserted_at,
+          podcastLink: p.podcastLink
         }
       end
     }

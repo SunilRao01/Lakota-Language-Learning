@@ -76,7 +76,8 @@ defmodule LakotaEdApiWeb.PostController do
              postContent: bodyParams["postContent"],
              postTitle: bodyParams["postTitle"],
              tags: bodyParams["tags"],
-             quizzes: bodyParams["quizzes"]
+             quizzes: bodyParams["quizzes"],
+             podcastLink: bodyParams["podcastLink"]
            }
          ) do
       {:ok, newPost} -> text(conn, "Created post with id #{newPost.id}")
@@ -93,7 +94,8 @@ defmodule LakotaEdApiWeb.PostController do
                                     postContent: bodyParams["content"],
                                     categories: bodyParams["categories"],
                                     tags: bodyParams["tags"],
-                                    quizzes: bodyParams["quizzes"]
+                                    quizzes: bodyParams["quizzes"],
+                                    podcastLink: bodyParams["podcastLink"]
 
     case Repo.update(newPost) do
       {:ok, postResponse} -> text(conn, "Updated post: #{postResponse.id}")

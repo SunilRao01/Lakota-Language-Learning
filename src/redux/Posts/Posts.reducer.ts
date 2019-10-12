@@ -20,7 +20,8 @@ export interface Post {
     creationDate: string,
     categories: string[],
     tags: string[],
-    quizzes?: IQuiz[]
+    quizzes?: IQuiz[],
+    podcastLink?: string
 }
 
 export interface PostPayload {
@@ -30,7 +31,8 @@ export interface PostPayload {
     creationDate: string,
     categories: string[],
     tags: string[],
-    quizzes?: IQuiz[]
+    quizzes?: IQuiz[],
+    podcastLink?: string
 }
 
 export interface PostState {

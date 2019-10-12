@@ -9,6 +9,7 @@ defmodule LakotaEdApi.Post do
     field :categories, {:array, :string}
     field :tags, {:array, :string}
     field :quizzes, {:array, :map}
+    field :podcastLink, :string
 
     timestamps()
   end
@@ -16,7 +17,7 @@ defmodule LakotaEdApi.Post do
   @doc false
   def changeset(%Post{} = post, attrs) do
     post
-    |> cast(attrs, [:postTitle, :postContent, :categories, :tags, :quizzes])
+    |> cast(attrs, [:postTitle, :postContent, :categories, :tags, :quizzes, :podcastLink])
     |> validate_required([:postTitle, :postContent, :categories, :tags])
   end
 end
