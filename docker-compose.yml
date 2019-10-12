@@ -34,5 +34,17 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  app:
+    container_name: lakota_ed_api
+    build:
+      context: .
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+
 volumes:
   pgdata:
