@@ -18,9 +18,9 @@ services:
     depends_on:
       - postgres
     volumes:
-      - './lakota-ed-api/lib:/app/lib'
-      - './lakota-ed-api/priv:/app/priv'
-      - './lakota-ed-api/config:/app/config'
+      - './lakota_ed_api/lib:/app/lib'
+      - './lakota_ed_api/priv:/app/priv'
+      - './lakota_ed_api/config:/app/config'
     restart: always
 
   postgres:
