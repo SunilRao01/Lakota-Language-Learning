@@ -6,15 +6,10 @@ services:
       context: lakota_ed_api
     environment:
       - BUILD_COMMIT_SHA=localdev
-      - CHAMBER_ENABLED=false
-      - POSTGRES_DB=lakota_ed_api
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PASS=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_USER=postgres
       - PHXPORT=4000
     ports:
       - "4000:4000"
+    container_name: "lakota_ed_api"
     depends_on:
       - postgres
     volumes:
@@ -25,26 +20,14 @@ services:
 
   postgres:
     image: postgres:11.4
+    container_name: "lakota_ed_api_postgres_db"
     environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=lakota_ed_api
     restart: always
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-  app:
-    container_name: lakota_ed_api
-    build:
-      context: .
-    volumes:
-      - '.:/app'
-      - '/app/node_modules'
     ports:
-      - '3000:3000'
-    environment:
-      - NODE_ENV=development
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
 
-volumes:
-  pgdata:

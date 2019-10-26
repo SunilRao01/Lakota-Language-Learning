@@ -5,8 +5,8 @@ config :lakota_ed_api,
        LakotaEdApi.Repo,
        username: "postgres",
        password: "postgres",
-       database: "lakota_ed_api_dev",
-       hostname: "localhost",
+       database: "lakota_ed_api",
+       hostname: "67.205.165.131",
        show_sensitive_data_on_connection_error: true,
        pool_size: 10
 
