@@ -3,7 +3,7 @@ import axios from 'axios'
 import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
 
-const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '167.71.81.111'
+const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '67.205.165.131'
 
 export interface IQuiz {
     question: string,

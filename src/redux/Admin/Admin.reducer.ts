@@ -11,7 +11,7 @@ export const initialAdminState: AdminState = {
     jwt: ''
 };
 
-const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '167.71.81.111'
+const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '67.205.165.131'
 
 export const backendLogin = (username: string, password: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
