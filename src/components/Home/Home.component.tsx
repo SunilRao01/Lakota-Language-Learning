@@ -24,12 +24,12 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
     const [wordOfTheDayPosts, setWordOfTheDayPosts] = useState<Post[]>([])
     const [allCategories, setAllCategories] = useState<Set<string>>(new Set<string>())
     const [allTags, setAllTags] = useState<Set<string>>(new Set<string>())
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        props.getPosts(1)
-
-
+        props.getPosts(currentPage)
     }, []);
+
     useEffect(() => {
         setWordOfTheDayPosts(props.posts.filter(p => p.tags.includes('word of the day')))
 
@@ -58,6 +58,28 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                                 {i < props.posts.length - 1 ? <hr/> : ``}
                             </div>)
                     }
+                    <button className="button is-info pagination-button"
+                            disabled={currentPage === 1}
+                            onClick={() => {
+                                if (currentPage > 1) {
+                                    props.getPosts(currentPage-1)
+                                    setCurrentPage(currentPage-1)
+                                    console.log(currentPage)
+                                }
+                            }}>
+                        Previous Page
+                    </button>
+                    <button className="button is-info pagination-button"
+                            disabled={props.posts.length === 0}
+                            onClick={() => {
+                                if (props.posts.length !== 0) {
+                                    props.getPosts(currentPage+1)
+                                    setCurrentPage(currentPage+1)
+                                    console.log(currentPage)
+                                }
+                            }}>
+                        Next Page
+                    </button>
                     <br/>
                 </div>
                 <div className='column'>
@@ -76,12 +98,12 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                         <div>
                             {
                                 allCategories.size > 0 &&
-                                    Array.from(allCategories.values()).map((c: string, i: number) => {
-                                        return <div className='swing-in-top-bck' key={i}>
-                                                <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
-                                                {`${i < allCategories.size - 1 ? `, ` : ``}`}
-                                            </div>
-                                    })
+                                Array.from(allCategories.values()).map((c: string, i: number) => {
+                                    return <div className='swing-in-top-bck' key={i}>
+                                        <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
+                                        {`${i < allCategories.size - 1 ? `, ` : ``}`}
+                                    </div>
+                                })
                             }
                         </div>
                     </div>
