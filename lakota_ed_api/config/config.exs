@@ -12,8 +12,8 @@ config :lakota_ed_api,
 
 # Configures the endpoint
 config :lakota_ed_api, LakotaEdApiWeb.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "JEshUOjGYI2IuTJmFjGQzftRba7y8BgjaeGzzvqiuJjhTIvNGm/9Zd4VUlRHTfoJ",
+  url: [host: System.get_env("HOST")],
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   render_errors: [view: LakotaEdApiWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: LakotaEdApi.PubSub, adapter: Phoenix.PubSub.PG2]
 
