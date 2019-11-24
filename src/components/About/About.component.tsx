@@ -8,13 +8,21 @@ export const About: FC = () => {
     return <div className='container'>
         <h1 className='title'>About</h1>
         <div className='content'>
+            <p>I’m Hiŋskéhaŋska. I’m Lakȟóta, born and raised on Salish land in the present-day state of Washington. My
+                mother and uncle are from Bismark, and my Grandma is from McLaughlin, South Dakota. At university I
+                studied Spanish language literature, linguistics, and culture. During university, I finally felt the
+                need to learn Lakȟótiyapi, a language that nobody in my family speaks, due to the attendance of my
+                grandmother’s grandmother at the Benedictine Agricultural Boarding School in Kenel. I’ve been learning
+                the language for a couple years now.</p>
             <b>Social Media:</b>
             <br/>
             <div className="buttons">
-                <a href='https://twitter.com/andrea_lakota' rel='noopener' className="button is-rounded is-medium twitter-icon">
+                <a href='https://twitter.com/andrea_lakota' rel='noopener'
+                   className="button is-rounded is-medium twitter-icon">
                     <img src={TwitterSvg} alt=''/>
                 </a>
-                <a href='https://twitter.com/andrea_lakota' rel='noopener' className="button is-rounded is-medium facebook-icon">
+                <a href='https://twitter.com/andrea_lakota' rel='noopener'
+                   className="button is-rounded is-medium facebook-icon">
                     <img src={FacebookSvg} alt=''/>
                 </a>
             </div>
