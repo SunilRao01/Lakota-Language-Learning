@@ -1,4 +1,4 @@
-import {deletePost, PostActionTypes, setCurrentPost, setPosts, setUpdatingPostLoading} from './Posts.action';
+import {deletePost, PostActionTypes, setCurrentPost, setLesson, setPosts, setUpdatingPostLoading} from './Posts.action';
 import axios from 'axios'
 import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
@@ -11,6 +11,11 @@ export interface IQuiz {
     answer: string,
     successMessage: string,
     errorMessage: string
+}
+
+export interface Lesson {
+    name: string,
+    posts: Post[]
 }
 
 export interface Post {
@@ -38,19 +43,31 @@ export interface PostPayload {
 export interface PostState {
     posts: Post[],
     updatingPostLoading: boolean,
-    currentPost?: Post
+    currentPost?: Post,
+    lessons: Lesson[]
 }
 
 export const initialPostState: PostState = {
     posts: [],
-    updatingPostLoading: false
+    updatingPostLoading: false,
+    lessons: []
 };
 
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
+        return axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`)
+        .then((res: any) => {
             dispatch(setPosts(res.data.posts))
+        })
+    }
+}
+
+export const backendGetPostsByCategory = (category: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        return axios.get(`http://${apiUrl}:4000/posts?category=${category}`)
+        .then((res: any) => {
+            dispatch(setLesson(category, res.data.posts))
         })
     }
 }
@@ -115,6 +132,17 @@ export const postReducer = (
             return {
                 ...state,
                 posts: action.payload as Post[]
+            }
+        }
+        case 'SET_LESSON': {
+            return {
+                ...state,
+                lessons: [
+                    ...state.lessons, {
+                        name: action.payload.lessonName,
+                        posts: action.payload.posts
+                    }
+                ]
             }
         }
         case 'ADD_POST': {

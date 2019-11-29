@@ -3,10 +3,10 @@ use Mix.Config
 # Configure your database
 config :lakota_ed_api,
        LakotaEdApi.Repo,
-       username: System.get_env("DB_USERNAME"),
-       password: System.get_env("DB_PASSWORD"),
-       database: System.get_env("DB_NAME"),
-       hostname: System.get_env("DB_HOST"),
+       username: "postgres",
+       password: "postgres",
+       database: "lakota_ed_api",
+       hostname: "localhost",
        show_sensitive_data_on_connection_error: true,
        pool_size: 10
 
@@ -19,10 +19,10 @@ config :lakota_ed_api,
 config :lakota_ed_api,
        LakotaEdApiWeb.Endpoint,
        http: [
-         port: System.get_env("PORT")
+         port: "4000"
        ],
        url: [
-         host: System.get_env("HOST")
+         host: "localhost"
        ],
        debug_errors: true,
        code_reloader: true,
@@ -32,7 +32,7 @@ config :lakota_ed_api,
 config :lakota_ed_api,
        LakotaEdApiWeb.Guardian,
        issuer: "LakotaEdApi",
-       secret_key: System.get_env("SECRET_KEY"),
+       secret_key: "14wmV7ZHGKik5xs4zL34QORvwjEKFUFxyQhn0UsP9t03sG5VlLi2tZkLkL198O6P",
        ttl: {30, :days},
        allowed_drift: 2000,
        verify_issuer: true
