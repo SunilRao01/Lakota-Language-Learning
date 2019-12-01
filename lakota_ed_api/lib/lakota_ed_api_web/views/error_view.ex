@@ -23,6 +23,12 @@ defmodule LakotaEdApiWeb.ErrorView do
     }
   end
 
+  def render("invalid_uri_param.json", %{invalid_uri: invalid_uri}) do
+    %{
+      message: "\"#{invalid_uri}\": Invalid URI query string param detected."
+    }
+  end
+
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
   # def render("500.json", _assigns) do

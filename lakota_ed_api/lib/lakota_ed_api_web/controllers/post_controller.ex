@@ -1,4 +1,4 @@
-import Ecto.Query, only: [from: 2]
+import Ecto.Query, only: [from: 2, dynamic: 2, dynamic: 1]
 
 defmodule LakotaEdApiWeb.PostController do
   require Logger
@@ -10,49 +10,55 @@ defmodule LakotaEdApiWeb.PostController do
 
   action_fallback(LakotaEdApiWeb.FallbackController)
 
-   plug Guardian.Plug.EnsureAuthenticated when action in [:create, :delete, :update]
-   plug Guardian.Plug.VerifySession when action in [:create, :delete, :update]
-   plug Guardian.Plug.VerifyHeader when action in [:create, :delete, :update]
+  plug Guardian.Plug.EnsureAuthenticated when action in [:create, :delete, :update]
+  plug Guardian.Plug.VerifySession when action in [:create, :delete, :update]
+  plug Guardian.Plug.VerifyHeader when action in [:create, :delete, :update]
 
   def posts(conn, _, _) do
-    # Conditionally serves content based on query strings; currently mutually exclusive
-    case hd(Map.keys(conn.query_params)) do
-      "page" ->
-        {page, _} = Integer.parse(conn.query_params["page"])
-        offset = 5 * (page - 1)
-        query = from Post, limit: 5, offset: ^offset, order_by: [desc: :inserted_at]
-        case Repo.all(query) do
-          posts ->
-            conn
-            |> put_view(LakotaEdApiWeb.PostView)
-            |> render("multiple_posts.json", %{posts: posts})
-        end
+    where_conditions = Enum.reduce(
+      conn.query_params,
+      dynamic(true),
+      fn
+        {"category", category}, conditions ->
+          dynamic([p], ^category in p.categories and ^conditions)
 
-      "category" ->
-        category = conn.query_params["category"]
-        query = from p in Post,
-                     where: fragment("exists (select * from unnest(?) tag where tag like ?)", p.categories, ^category)
-        case Repo.all(query) do
-          posts ->
-            conn
-            |> put_view(LakotaEdApiWeb.PostView)
-            |> render("multiple_posts.json", %{posts: posts})
-        end
+        {"tag", tag}, conditions ->
+          dynamic([p], ^tag in p.tags and ^conditions)
 
-      "tag" ->
-        tag = conn.query_params["tag"]
-        query = from p in Post, where: fragment("exists (select * from unnest(?) tag where tag like ?)", p.tags, ^tag)
-        case Repo.all(query) do
-          posts ->
-            conn
-            |> put_view(LakotaEdApiWeb.PostView)
-            |> render("multiple_posts.json", %{posts: posts})
-        end
+        {_, _}, conditions -> conditions
+      end
+    )
 
-      true ->
+    filter_conditions = if conn.query_params["page"] do
+      page = String.to_integer(conn.query_params["page"])
+
+      [
+        limit: 5,
+        offset: (5 * (page - 1)),
+        order_by: [
+          desc: :inserted_at
+        ]
+      ]
+    else
+      :nil
+    end
+
+    query = if (filter_conditions != :nil) do
+      from p in Post,
+           where: ^where_conditions,
+           limit: ^filter_conditions[:limit],
+           offset: ^filter_conditions[:offset],
+           order_by: ^filter_conditions[:order_by]
+    else
+      from p in Post,
+           where: ^where_conditions
+    end
+
+    case Repo.all(query) do
+      posts ->
         conn
-        |> put_view(LakotaEdApiWeb.ErrorView)
-        |> render("query_error.json", "Couldn't find any relevant query strings!")
+        |> put_view(LakotaEdApiWeb.PostView)
+        |> render("multiple_posts.json", %{posts: posts})
     end
   end
 
