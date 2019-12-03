@@ -58,7 +58,7 @@ export const PostsComponent: FC<PostsProps> = props => {
                             }
                         </div>
                         <br/>
-                        <p>{props.post.creationDate}</p>
+                        <p>{new Date(props.post.creationDate).toString()}</p>
                         <div className='has-text-weight-bold'>Categories:</div>
                         <p>
                             {

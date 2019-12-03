@@ -44,11 +44,14 @@ export const PostCard: FC<PostCardProps> = props => {
                         <div id={`post-content-${props.post.id}`}/>
                         }
                         <br/>
-                        <div className='is-size-7'>{props.post.creationDate}</div>
-                        <div className='has-text-weight-bold is-size-7'>Categories:</div>
+                        <div className='is-size-7'>
+                            <b>Posted: </b>{new Date(props.post.creationDate).toString()}
+                        </div>
+                        <b className='is-size-7'>Categories: </b>
                         {
                             props.post.categories.map((c: string, i: number) => {
-                                return (<div key={i}>
+                                return (<div className='categories' key={i}>
+
                                     {props.onClickCategory
                                         ? <a className='is-size-7' onClick={e => clickFunction(e, c)}>{`${c}`}</a>
                                         : <Link className='is-size-7' to={`/posts?category=${c}`}>{`${c}`}</Link>}
