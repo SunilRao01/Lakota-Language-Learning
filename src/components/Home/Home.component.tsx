@@ -99,7 +99,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                                 Array.from(allCategories.values()).map((c: string, i: number) => {
                                     return <div className='swing-in-top-bck' key={i}>
                                         <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
-                                        {`${i < allCategories.size - 1 ? `, ` : ``}`}
+                                        {`${i < allCategories.size - 1 ? `,` : ``}`}&nbsp;
                                     </div>
                                 })
                             }
