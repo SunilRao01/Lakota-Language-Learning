@@ -56,8 +56,7 @@ export const initialPostState: PostState = {
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`)
-        .then((res: any) => {
+        return axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
             dispatch(setPosts(res.data.posts))
         })
     }
@@ -65,9 +64,18 @@ export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {
 
 export const backendGetPostsByCategory = (category: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://${apiUrl}:4000/posts?category=${category}`)
-        .then((res: any) => {
+        return axios.get(`http://${apiUrl}:4000/posts?category=${category}`).then((res: any) => {
             dispatch(setLesson(category, res.data.posts))
+        })
+    }
+}
+
+export const backendGetPostsByFilters = (pageNumber?: number, categories?: string[], tags?: string[]): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
+    const uri = `http://${apiUrl}:4000/posts${pageNumber ? `?page=${pageNumber}` : ``}${(categories && categories.length > 0) ? categories.map(c => `&category[]=${c}`).join('') : ``}${(tags && tags.length > 0) ? tags.map(t => `&tag[]=${t}`).join('') : ``}`
+
+    return async (dispatch: Dispatch) => {
+        return axios.get(uri).then((res: any) => {
+            dispatch(setPosts(res.data.posts))
         })
     }
 }
@@ -173,7 +181,7 @@ export const postReducer = (
         case 'SET_CURRENT_POST': {
             return {
                 ...state,
-                currentPost:  {
+                currentPost: {
                     ...action.payload,
                     content: action.payload.content
                 }

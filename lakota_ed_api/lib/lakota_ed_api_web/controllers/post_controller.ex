@@ -20,10 +20,19 @@ defmodule LakotaEdApiWeb.PostController do
       dynamic(true),
       fn
         {"category", category}, conditions ->
-          dynamic([p], ^category in p.categories and ^conditions)
+          if is_list(category) do
+            Enum.reduce category, conditions, fn c, acc -> dynamic([p], ^c in p.categories and ^acc) end
+          else
+            dynamic([p], ^category in p.categories and ^conditions)
+          end
+
 
         {"tag", tag}, conditions ->
-          dynamic([p], ^tag in p.tags and ^conditions)
+          if is_list(tag) do
+            Enum.reduce tag, conditions, fn t, acc -> dynamic([p], ^t in p.tags and ^acc) end
+          else
+            dynamic([p], ^tag in p.tags and ^conditions)
+          end
 
         {_, _}, conditions -> conditions
       end
@@ -43,6 +52,8 @@ defmodule LakotaEdApiWeb.PostController do
       :nil
     end
 
+    IO.inspect conn.query_params
+
     query = if (filter_conditions != :nil) do
       from p in Post,
            where: ^where_conditions,
@@ -53,6 +64,8 @@ defmodule LakotaEdApiWeb.PostController do
       from p in Post,
            where: ^where_conditions
     end
+
+
 
     case Repo.all(query) do
       posts ->

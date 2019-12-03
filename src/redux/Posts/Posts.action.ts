@@ -22,7 +22,6 @@ export interface AddPost {
     payload: Post
 }
 
-
 export interface DeletePost {
     type: 'DELETE_POST',
     payload: number

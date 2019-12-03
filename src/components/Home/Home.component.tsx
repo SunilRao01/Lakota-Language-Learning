@@ -64,7 +64,6 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                                 if (currentPage > 1) {
                                     props.getPosts(currentPage-1)
                                     setCurrentPage(currentPage-1)
-                                    console.log(currentPage)
                                 }
                             }}>
                         Previous Page
@@ -75,7 +74,6 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                                 if (props.posts.length !== 0) {
                                     props.getPosts(currentPage+1)
                                     setCurrentPage(currentPage+1)
-                                    console.log(currentPage)
                                 }
                             }}>
                         Next Page

@@ -22,7 +22,7 @@ export const PostCard: FC<PostCardProps> = props => {
 
     useEffect(() => {
         if (!props.showTitleOnly) {
-            let contentView = new Viewer({
+            new Viewer({
                 el: document.querySelector(`#post-content-${props.post.id}`)!,
                 initialValue: props.post.content
             })
@@ -51,7 +51,7 @@ export const PostCard: FC<PostCardProps> = props => {
                                 return (<div key={i}>
                                     {props.onClickCategory
                                         ? <a className='is-size-7' onClick={e => clickFunction(e, c)}>{`${c}`}</a>
-                                        : <Link className='is-size-7' to={`/posts?categories=${c}`}>{`${c}`}</Link>}
+                                        : <Link className='is-size-7' to={`/posts?category=${c}`}>{`${c}`}</Link>}
                                     {`${i < props.post.categories.length - 1 ? `, ` : ``}`}
                                 </div>)
                             })

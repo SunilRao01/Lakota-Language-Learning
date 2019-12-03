@@ -19,7 +19,7 @@ export const Tag: FC<TagProps> = props => {
                 ? <a onClick={e => clickFunction(e, props.text)} className="button is-info is-small">
                     {props.text}
                 </a>
-                : <Link className="button is-info is-small" to={`/posts?tags=${props.text}`}>
+                : <Link className="button is-info is-small" to={`/posts?tag=${props.text}`}>
                     {props.text}
                 </Link>
             }
