@@ -9,12 +9,9 @@ export interface SetPosts {
     payload: Post[]
 }
 
-export interface SetLesson {
-    type: 'SET_LESSON',
-    payload: {
-        lessonName: string,
-        posts: Post[]
-    }
+export interface SetLessons {
+    type: 'SET_LESSONS',
+    payload: string[]
 }
 
 export interface AddPost {
@@ -27,6 +24,10 @@ export interface DeletePost {
     payload: number
 }
 
+export interface ClearPosts {
+    type: 'CLEAR_POSTS'
+}
+
 export interface SetCurrentPost {
     type: 'SET_CURRENT_POST',
     payload: PostPayload
@@ -37,8 +38,8 @@ export interface SetUpdatingPostLoading {
     payload: boolean
 }
 
-export type PostActionTypes = GetPosts | SetPosts | SetLesson
-    | AddPost | DeletePost | SetCurrentPost | SetUpdatingPostLoading
+export type PostActionTypes = GetPosts | SetPosts | SetLessons
+    | AddPost | DeletePost | ClearPosts | SetCurrentPost | SetUpdatingPostLoading
 
 export const getPosts = (): PostActionTypes => {
     return {
@@ -60,6 +61,12 @@ export const deletePost = (postId: number): PostActionTypes => {
     }
 };
 
+export const clearPosts = (): PostActionTypes => {
+    return {
+        type: 'CLEAR_POSTS'
+    }
+}
+
 export const setPosts = (posts: Post[]): PostActionTypes => {
     return {
         type: 'SET_POSTS',
@@ -67,13 +74,10 @@ export const setPosts = (posts: Post[]): PostActionTypes => {
     }
 }
 
-export const setLesson = (lessonName: string, posts: Post[]): PostActionTypes => {
+export const setLessons = (lessonNames: string[]): PostActionTypes => {
     return {
-        type: 'SET_LESSON',
-        payload: {
-            lessonName: lessonName,
-            posts: posts
-        }
+        type: 'SET_LESSONS',
+        payload: lessonNames
     }
 }
 

@@ -1,7 +1,8 @@
-import {deletePost, PostActionTypes, setCurrentPost, setLesson, setPosts, setUpdatingPostLoading} from './Posts.action';
+import {deletePost, PostActionTypes, setCurrentPost, setPosts, setUpdatingPostLoading} from './Posts.action';
 import axios from 'axios'
 import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
+import {RootState} from '../../store'
 
 const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '67.205.165.131'
 
@@ -11,11 +12,6 @@ export interface IQuiz {
     answer: string,
     successMessage: string,
     errorMessage: string
-}
-
-export interface Lesson {
-    name: string,
-    posts: Post[]
 }
 
 export interface Post {
@@ -44,15 +40,14 @@ export interface PostState {
     posts: Post[],
     updatingPostLoading: boolean,
     currentPost?: Post,
-    lessons: Lesson[]
+    lessons: string[]
 }
 
 export const initialPostState: PostState = {
     posts: [],
     updatingPostLoading: false,
-    lessons: []
+    lessons: ['cat1']
 };
-
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
@@ -65,7 +60,21 @@ export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {
 export const backendGetPostsByCategory = (category: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
         return axios.get(`http://${apiUrl}:4000/posts?category=${category}`).then((res: any) => {
-            dispatch(setLesson(category, res.data.posts))
+            dispatch(setPosts(res.data.posts))
+        })
+    }
+}
+
+export const backendGetPostsByLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch, getState: () => RootState) => {
+        let categoryParams = ``
+        getState().postState.lessons.forEach((l, i) =>
+            i == 0
+                ? categoryParams = `?category=${l}`
+                : categoryParams += `&category=${l}`)
+
+        return axios.get(`http://${apiUrl}:4000/posts${categoryParams}`).then((res: any) => {
+            dispatch(setPosts(res.data.posts))
         })
     }
 }
@@ -142,15 +151,10 @@ export const postReducer = (
                 posts: action.payload as Post[]
             }
         }
-        case 'SET_LESSON': {
+        case 'SET_LESSONS': {
             return {
                 ...state,
-                lessons: [
-                    ...state.lessons, {
-                        name: action.payload.lessonName,
-                        posts: action.payload.posts
-                    }
-                ]
+                lessons: action.payload
             }
         }
         case 'ADD_POST': {
@@ -177,6 +181,12 @@ export const postReducer = (
             }
 
             return state
+        }
+        case 'CLEAR_POSTS': {
+            return {
+                ...state,
+                posts: []
+            }
         }
         case 'SET_CURRENT_POST': {
             return {
