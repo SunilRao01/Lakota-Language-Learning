@@ -20,3 +20,5 @@ API/Backend:
 
 CI/CD:
 - Concourse
+
+A collaboration with [Mors](https://twitter.com/mors_lakota)
