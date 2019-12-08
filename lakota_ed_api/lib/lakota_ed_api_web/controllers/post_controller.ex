@@ -75,6 +75,52 @@ defmodule LakotaEdApiWeb.PostController do
     end
   end
 
+  def categories(conn, _, _) do
+    query = from p in Post, select: p.categories
+
+    case Repo.all(query) do
+      categories ->
+        unique_categories = MapSet.to_list Enum.reduce(
+                                             categories,
+                                             MapSet.new(),
+                                             fn (cat_array, cat_set) ->
+                                               Enum.reduce(
+                                                 cat_array,
+                                                 cat_set,
+                                                 fn (cat_value, cat_set) ->
+                                                   MapSet.put(cat_set, cat_value)
+                                                 end
+                                               )
+                                             end
+                                           )
+        conn
+        |> json(unique_categories)
+    end
+  end
+
+  def tags(conn, _, _) do
+    query = from p in Post, select: p.tags
+
+    case Repo.all(query) do
+      tags ->
+        unique_tags = MapSet.to_list Enum.reduce(
+                                             tags,
+                                             MapSet.new(),
+                                             fn (tag_array, tag_set) ->
+                                               Enum.reduce(
+                                                 tag_array,
+                                                 tag_set,
+                                                 fn (tag_value, tag_set) ->
+                                                   MapSet.put(tag_set, tag_value)
+                                                 end
+                                               )
+                                             end
+                                           )
+        conn
+        |> json(unique_tags)
+    end
+  end
+
   def show(conn, %{"id" => id}, _) do
     case Repo.get(Post, id) do
       nil ->

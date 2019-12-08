@@ -22,9 +22,13 @@ defmodule LakotaEdApiWeb.Router do
   scope "/", LakotaEdApiWeb do
     pipe_through :unsecure_api
     post "/login", SessionController, :create
+    post "/verify-session", SessionController, :verify_session
+
     get "/post/:id", PostController, :show
     get "/posts", PostController, :posts
-    post "/verify-session", SessionController, :verify_session
+    get "/categories", PostController, :categories
+    get "/tags", PostController, :tags
+
 
     pipe_through :secure_api
     resources "/post", PostController, only: [:create, :update, :delete]
