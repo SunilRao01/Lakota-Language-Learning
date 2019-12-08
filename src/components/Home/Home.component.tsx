@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import './Home.css'
-import {backendGetPosts, Post} from '../../redux/Posts/Posts.reducer';
+import {backendGetCategories, backendGetPosts, backendGetTags, Post} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {RootState} from '../../store'
 import {PostCard} from '../PostCard/PostCard.component'
@@ -10,32 +10,50 @@ import {ThunkDispatch} from 'redux-thunk'
 
 interface HomeActions {
     getPosts: (pageNumber: number) => void
+    getCategories: () => void
+    getTags: () => void
 }
 
 interface HomeProps {
-    posts: Post[]
+    posts: Post[],
+    categories: string[],
+    tags: string[]
 }
 
 type HomePropsWithActions = HomeProps & HomeActions
 
+export const mapStateToProps = (state: RootState): HomeProps => ({
+    posts: state.postState.posts,
+    categories: state.postState.categories ? state.postState.categories : [],
+    tags: state.postState.tags ? state.postState.tags : []
+});
+
+export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeActions => {
+    return {
+        getPosts: async (pageNumber: number) => {
+            await dispatch(backendGetPosts(pageNumber))
+        },
+        getCategories: async () => {
+            await dispatch(backendGetCategories())
+        },
+        getTags: async () => {
+            await dispatch(backendGetTags())
+        }
+    }
+};
+
 const HomeComponent: FC<HomePropsWithActions> = props => {
     const [wordOfTheDayPosts, setWordOfTheDayPosts] = useState<Post[]>([])
-    const [allCategories, setAllCategories] = useState<Set<string>>(new Set<string>())
-    const [allTags, setAllTags] = useState<Set<string>>(new Set<string>())
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         props.getPosts(currentPage)
+        props.getCategories()
+        props.getTags()
     }, []);
 
     useEffect(() => {
         setWordOfTheDayPosts(props.posts.filter(p => p.tags.includes('word of the day')))
-
-        // Set categories and tags
-        props.posts.forEach(p => {
-            p.categories.forEach((c: string) => setAllCategories(allCategories.add(c)))
-            p.tags.forEach((t: string) => setAllTags(allTags.add(t)))
-        })
     }, [props.posts]);
 
     return (
@@ -93,11 +111,11 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                         <h3 className='title is-3'>Categories:</h3>
                         <div>
                             {
-                                allCategories.size > 0 &&
-                                Array.from(allCategories.values()).map((c: string, i: number) => {
+                                props.categories.length > 0 &&
+                                Array.from(props.categories.values()).map((c: string, i: number) => {
                                     return <div className='swing-in-top-bck' key={i}>
-                                        <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
-                                        {`${i < allCategories.size - 1 ? `,` : ``}`}&nbsp;
+                                        <Link to={`/posts?category=${c}`}>{`${c}`}</Link>
+                                        {`${i < props.categories.length - 1 ? `,` : ``}`}&nbsp;
                                     </div>
                                 })
                             }
@@ -107,8 +125,8 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     <div>
                         <h3 className='title is-3'>Tags:</h3>
                         <div className='field is-grouped tags-section'>
-                            {allTags.size > 0 &&
-                            Array.from(allTags).map((t: string, i: number) => {
+                            {props.tags.length > 0 &&
+                            Array.from(props.tags).map((t: string, i: number) => {
                                 return (<Tag key={i} text={t}/>)
                             })}
                         </div>
@@ -117,18 +135,6 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             </div>
         </div>
     );
-};
-
-export const mapStateToProps = (state: RootState): HomeProps => ({
-    posts: state.postState.posts
-});
-
-export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeActions => {
-    return {
-        getPosts: async (pageNumber: number) => {
-                await dispatch(backendGetPosts(pageNumber))
-        }
-    }
 };
 
 export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeComponent);

@@ -1,4 +1,11 @@
-import {deletePost, PostActionTypes, setCurrentPost, setPosts, setUpdatingPostLoading} from './Posts.action';
+import {
+    deletePost,
+    PostActionTypes,
+    setCategories,
+    setCurrentPost,
+    setPosts, setTags,
+    setUpdatingPostLoading
+} from './Posts.action';
 import axios from 'axios'
 import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
@@ -40,7 +47,9 @@ export interface PostState {
     posts: Post[],
     updatingPostLoading: boolean,
     currentPost?: Post,
-    lessons: string[]
+    lessons: string[],
+    categories?: string[]
+    tags?: string[]
 }
 
 export const initialPostState: PostState = {
@@ -53,6 +62,22 @@ export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {
     return async (dispatch: Dispatch) => {
         axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
             dispatch(setPosts(res.data.posts))
+        })
+    }
+}
+
+export const backendGetCategories = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.get(`http://${apiUrl}:4000/categories`).then((res: any) => {
+            dispatch(setCategories(res.data))
+        })
+    }
+}
+
+export const backendGetTags = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.get(`http://${apiUrl}:4000/tags`).then((res: any) => {
+            dispatch(setTags(res.data))
         })
     }
 }
@@ -147,6 +172,18 @@ export const postReducer = (
             return {
                 ...state,
                 lessons: action.payload
+            }
+        }
+        case 'SET_CATEGORIES': {
+            return {
+                ...state,
+                categories: action.payload
+            }
+        }
+        case 'SET_TAGS': {
+            return {
+                ...state,
+                tags: action.payload
             }
         }
         case 'ADD_POST': {
