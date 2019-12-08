@@ -1,7 +1,6 @@
 import React, {FC, useEffect, useState} from 'react';
 import './Home.css'
 import {backendGetPosts, Post} from '../../redux/Posts/Posts.reducer';
-import {addPost} from '../../redux/Posts/Posts.action';
 import {connect} from 'react-redux';
 import {RootState} from '../../store'
 import {PostCard} from '../PostCard/PostCard.component'
@@ -10,8 +9,7 @@ import {Link} from 'react-router-dom'
 import {ThunkDispatch} from 'redux-thunk'
 
 interface HomeActions {
-    getPosts: (pageNumber: number) => void,
-    addPost: (newPost: Post) => void
+    getPosts: (pageNumber: number) => void
 }
 
 interface HomeProps {
@@ -81,7 +79,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     <br/>
                 </div>
                 <div className='column'>
-                    <div className='word-of-the-day-section'>
+                    <div className='word-of-the-day-section' data-testid='word-of-the-day'>
                         <h3 className='title is-3'>Word of the Day:</h3>
                         {
                             wordOfTheDayPosts.map((p: Post, i: number) =>
@@ -128,9 +126,8 @@ export const mapStateToProps = (state: RootState): HomeProps => ({
 export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeActions => {
     return {
         getPosts: async (pageNumber: number) => {
-            await dispatch(backendGetPosts(pageNumber))
-        },
-        addPost: (newPost: Post) => dispatch(addPost(newPost))
+                await dispatch(backendGetPosts(pageNumber))
+        }
     }
 };
 

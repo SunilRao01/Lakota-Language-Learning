@@ -51,15 +51,7 @@ export const initialPostState: PostState = {
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
-            dispatch(setPosts(res.data.posts))
-        })
-    }
-}
-
-export const backendGetPostsByCategory = (category: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
-    return async (dispatch: Dispatch) => {
-        return axios.get(`http://${apiUrl}:4000/posts?category=${category}`).then((res: any) => {
+        axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
             dispatch(setPosts(res.data.posts))
         })
     }
