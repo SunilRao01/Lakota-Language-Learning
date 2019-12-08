@@ -1,17 +1,15 @@
 import React, {FC, useEffect, useState} from 'react';
 import './Home.css'
-import {Post} from '../../redux/Posts/Posts.reducer';
-import {addPost, getPosts} from '../../redux/Posts/Posts.action';
+import {backendGetPosts, Post} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
-import {AnyAction, Dispatch} from 'redux'
 import {RootState} from '../../store'
 import {PostCard} from '../PostCard/PostCard.component'
 import {Tag} from '../Tag/Tag.component'
 import {Link} from 'react-router-dom'
+import {ThunkDispatch} from 'redux-thunk'
 
 interface HomeActions {
-    getPosts: () => void,
-    addPost: (newPost: Post) => void
+    getPosts: (pageNumber: number) => void
 }
 
 interface HomeProps {
@@ -24,10 +22,13 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
     const [wordOfTheDayPosts, setWordOfTheDayPosts] = useState<Post[]>([])
     const [allCategories, setAllCategories] = useState<Set<string>>(new Set<string>())
     const [allTags, setAllTags] = useState<Set<string>>(new Set<string>())
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        props.getPosts()
+        props.getPosts(currentPage)
+    }, []);
 
+    useEffect(() => {
         setWordOfTheDayPosts(props.posts.filter(p => p.tags.includes('word of the day')))
 
         // Set categories and tags
@@ -35,7 +36,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             p.categories.forEach((c: string) => setAllCategories(allCategories.add(c)))
             p.tags.forEach((t: string) => setAllTags(allTags.add(t)))
         })
-    }, []);
+    }, [props.posts]);
 
     return (
         <div className='container'>
@@ -49,16 +50,36 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
                     {
-                        props.posts.map((p: Post, i: number) =>
+                        props.posts.length > 0 && props.posts.map((p: Post, i: number) =>
                             <div key={i}>
                                 <PostCard post={p}/>
                                 {i < props.posts.length - 1 ? <hr/> : ``}
                             </div>)
                     }
+                    <button className="button is-info pagination-button"
+                            disabled={currentPage === 1}
+                            onClick={() => {
+                                if (currentPage > 1) {
+                                    props.getPosts(currentPage-1)
+                                    setCurrentPage(currentPage-1)
+                                }
+                            }}>
+                        Previous Page
+                    </button>
+                    <button className="button is-info pagination-button"
+                            disabled={props.posts.length === 0}
+                            onClick={() => {
+                                if (props.posts.length !== 0) {
+                                    props.getPosts(currentPage+1)
+                                    setCurrentPage(currentPage+1)
+                                }
+                            }}>
+                        Next Page
+                    </button>
                     <br/>
                 </div>
                 <div className='column'>
-                    <div className='word-of-the-day-section'>
+                    <div className='word-of-the-day-section' data-testid='word-of-the-day'>
                         <h3 className='title is-3'>Word of the Day:</h3>
                         {
                             wordOfTheDayPosts.map((p: Post, i: number) =>
@@ -73,12 +94,12 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                         <div>
                             {
                                 allCategories.size > 0 &&
-                                    Array.from(allCategories.values()).map((c: string, i: number) => {
-                                        return <div className='swing-in-top-bck' key={i}>
-                                                <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
-                                                {`${i < allCategories.size - 1 ? `, ` : ``}`}
-                                            </div>
-                                    })
+                                Array.from(allCategories.values()).map((c: string, i: number) => {
+                                    return <div className='swing-in-top-bck' key={i}>
+                                        <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
+                                        {`${i < allCategories.size - 1 ? `,` : ``}`}&nbsp;
+                                    </div>
+                                })
                             }
                         </div>
                     </div>
@@ -102,10 +123,11 @@ export const mapStateToProps = (state: RootState): HomeProps => ({
     posts: state.postState.posts
 });
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
+export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeActions => {
     return {
-        getPosts: () => dispatch(getPosts()),
-        addPost: (newPost: Post) => dispatch(addPost(newPost))
+        getPosts: async (pageNumber: number) => {
+                await dispatch(backendGetPosts(pageNumber))
+        }
     }
 };
 

@@ -1,0 +1,32 @@
+.quiz-card {
+    max-width: 240px;
+}
+
+.quiz-card-cross {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+}
+
+.card-content > .content > .field > .control {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.card-content > .content > .field > .control > .radio {
+    margin: 0 0 5px;
+}
+
+.card-content > .content > .field > .control > .radio > input {
+    margin-right: 5px;
+}
+
+.success-message {
+    color: darkgreen;
+}
+
+.error-message {
+    color: darkred;
+}

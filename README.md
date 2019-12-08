@@ -21,4 +21,4 @@ API/Backend:
 CI/CD:
 - Concourse
 
-The live development version of this application can be found here: http://167.71.81.111/
+A collaboration with [Mors](https://twitter.com/mors_lakota)

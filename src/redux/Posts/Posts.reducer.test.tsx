@@ -7,8 +7,8 @@ describe('postReducer', () => {
         const actualState = postReducer({
             posts: [{
                 id: 3,
-                postTitle: 'test post title',
-                postContent: 'test post',
+                title: 'test post title',
+                content: 'test post',
                 creationDate: new Date(2020, 6, 23),
                 categories: ['test category', 'test category 2'],
                 tags: ['test tag', 'test tag 2']
@@ -30,8 +30,8 @@ describe('postReducer', () => {
     it('should add post for ADD_POST action', () => {
         const newPost: Post = {
             id: 3,
-            postTitle: 'test post title',
-            postContent: 'test post',
+            title: 'test post title',
+            content: 'test post',
             creationDate: new Date(2020, 6, 23),
             categories: ['test category', 'test category 2'],
             tags: ['test tag', 'test tag 2']

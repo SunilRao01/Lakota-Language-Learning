@@ -1,100 +1,133 @@
-import {PostActionTypes} from "./Posts.action";
+import {deletePost, PostActionTypes, setCurrentPost, setPosts, setUpdatingPostLoading} from './Posts.action';
+import axios from 'axios'
+import {AnyAction, Dispatch} from 'redux'
+import {ThunkAction} from 'redux-thunk'
+import {RootState} from '../../store'
 
-export interface Quiz {
-    questions: [{
-        question: string,
-        answers: string[],
-        answer: string
-    }]
+const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '67.205.165.131'
+
+export interface IQuiz {
+    question: string,
+    possibleAnswers: string[],
+    answer: string,
+    successMessage: string,
+    errorMessage: string
 }
 
 export interface Post {
     id: number,
-    postTitle: string,
-    postContent: string,
-    creationDate: Date,
+    title: string,
+    content: string,
+    creationDate: string,
     categories: string[],
     tags: string[],
-    quizzes?: Quiz
+    quizzes?: IQuiz[],
+    podcastLink?: string
+}
+
+export interface PostPayload {
+    id: number,
+    title: string,
+    content: string,
+    creationDate: string,
+    categories: string[],
+    tags: string[],
+    quizzes?: IQuiz[],
+    podcastLink?: string
 }
 
 export interface PostState {
-    posts: Post[]
+    posts: Post[],
+    updatingPostLoading: boolean,
+    currentPost?: Post,
+    lessons: string[]
 }
 
 export const initialPostState: PostState = {
-    posts: [{
-        id: 0,
-        postTitle: 'Lakota Grammar 1',
-        postContent: 'Sample post 1',
-        creationDate: new Date(2019, 5, 1),
-        categories: ['Grammar Lesson'],
-        tags: ['grammar', 'unit lesson'],
-        quizzes: {
-            questions: [{
-                question: 'What is the answer?',
-                answers: ['option 1', 'option 2', 'option 3'],
-                answer: 'option 3'
-            }]
-        }
-    }, {
-        id: 1,
-        postTitle: 'Origins of Lakota Action Words',
-        postContent: 'Sample post 2',
-        creationDate: new Date(2019, 5, 1),
-        categories: ['Vocabulary Lesson'],
-        tags: ['history'],
-        quizzes: {
-            questions: [{
-                question: 'What is the answer?',
-                answers: ['option 1', 'option 2', 'option 3'],
-                answer: 'option 3'
-            }]
-        }
-    }, {
-        id: 2,
-        postTitle: 'Regional Dialectics',
-        postContent: 'Sample post 3',
-        creationDate: new Date(2019, 5, 1),
-        categories: ['Grammar Lesson'],
-        tags: ['geography', 'history'],
-        quizzes: {
-            questions: [{
-                question: 'What is the answer?',
-                answers: ['option 1', 'option 2', 'option 3'],
-                answer: 'option 3'
-            }]
-        }
-    }, {
-        id: 3,
-        postTitle: 'Word of the Day: Sampleword',
-        postContent: 'Lemons are yummy.',
-        creationDate: new Date(2019, 5, 1),
-        categories: ['Vocabulary Lesson'],
-        tags: ['word of the day', 'food', 'semantics', 'spelling'],
-        quizzes: {
-            questions: [{
-                question: 'What is the answer?',
-                answers: ['option 1', 'option 2', 'option 3'],
-                answer: 'option 3'
-            }]
-        }
-    }, {
-        id: 4,
-        postTitle: 'Word of the Day: Sampleword',
-        postContent: 'Sampleword is a word, and this is what it means:',
-        creationDate: new Date(2019, 5, 1),
-        categories: ['Vocabulary Lesson'],
-        tags: ['word of the day', 'history', 'spelling', 'geography'],
-        quizzes: {
-            questions: [{
-                question: 'What is the answer?',
-                answers: ['option 1', 'option 2', 'option 3'],
-                answer: 'option 3'
-            }]
-        }
-    }]
+    posts: [],
+    updatingPostLoading: false,
+    lessons: ['cat1']
 };
+
+export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
+            dispatch(setPosts(res.data.posts))
+        })
+    }
+}
+
+export const backendGetPostsByLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch, getState: () => RootState) => {
+        let categoryParams = ``
+        getState().postState.lessons.forEach((l, i) =>
+            i == 0
+                ? categoryParams = `?category=${l}`
+                : categoryParams += `&category=${l}`)
+
+        return axios.get(`http://${apiUrl}:4000/posts${categoryParams}`).then((res: any) => {
+            dispatch(setPosts(res.data.posts))
+        })
+    }
+}
+
+export const backendGetPostsByFilters = (pageNumber?: number, categories?: string[], tags?: string[]): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
+    const uri = `http://${apiUrl}:4000/posts${pageNumber ? `?page=${pageNumber}` : ``}${(categories && categories.length > 0) ? categories.map(c => `&category[]=${c}`).join('') : ``}${(tags && tags.length > 0) ? tags.map(t => `&tag[]=${t}`).join('') : ``}`
+
+    return async (dispatch: Dispatch) => {
+        return axios.get(uri).then((res: any) => {
+            dispatch(setPosts(res.data.posts))
+        })
+    }
+}
+
+export const backendCreatePost = (newPost: Post, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setUpdatingPostLoading(true))
+
+        axios.post(`http://${apiUrl}:4000/post`, newPost, {
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            }
+        }).then(() => {
+            dispatch(setUpdatingPostLoading(false))
+        })
+    }
+}
+
+export const backendUpdatePost = (postId: number, updatedPost: PostPayload, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setUpdatingPostLoading(true))
+
+        axios.put(`http://${apiUrl}:4000/post/${postId}`, updatedPost, {
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            }
+        }).then(() => {
+            dispatch(setUpdatingPostLoading(false))
+        })
+    }
+}
+
+export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        return axios.get(`http://${apiUrl}:4000/post/${postId}`).then((res: any) => {
+            dispatch(setCurrentPost(res.data))
+        })
+    }
+}
+
+export const backendDeletePost = (inputPostId: number, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        return axios.delete(`http://${apiUrl}:4000/post/${inputPostId}`, {
+            headers: {
+                Authorization: `Bearer ${jwt}`
+            }
+        }).then(() => {
+            dispatch(deletePost(inputPostId))
+        })
+    }
+}
 
 export const postReducer = (
     state = initialPostState,
@@ -102,23 +135,18 @@ export const postReducer = (
 ): PostState => {
     switch (action.type) {
         case 'GET_POSTS': {
-            // TODO: Create async call to get posts
-            //  from backend here when ready
-
-            const sourcePosts = state.posts
-            let outputPosts: Post[] = []
-            let outputTags: Set<string> = new Set()
-            let outputCategories: Set<string> = new Set()
-
-            sourcePosts.forEach(p => {
-                outputPosts.push(p)
-                p.tags.forEach(t => outputTags.add(t))
-                p.categories.forEach(c => outputCategories.add(c))
-            })
-
+            return state
+        }
+        case 'SET_POSTS': {
             return {
                 ...state,
-                posts: outputPosts
+                posts: action.payload as Post[]
+            }
+        }
+        case 'SET_LESSONS': {
+            return {
+                ...state,
+                lessons: action.payload
             }
         }
         case 'ADD_POST': {
@@ -136,10 +164,36 @@ export const postReducer = (
             });
 
             if (index > -1) {
-                state.posts.splice(index, 1)
+                let newPosts = state.posts;
+                newPosts.splice(index, 1)
+                return {
+                    ...state,
+                    posts: newPosts
+                }
             }
 
             return state
+        }
+        case 'CLEAR_POSTS': {
+            return {
+                ...state,
+                posts: []
+            }
+        }
+        case 'SET_CURRENT_POST': {
+            return {
+                ...state,
+                currentPost: {
+                    ...action.payload,
+                    content: action.payload.content
+                }
+            }
+        }
+        case 'SET_UPDATING_POST_LOADING': {
+            return {
+                ...state,
+                updatingPostLoading: action.payload
+            }
         }
         default:
             return state

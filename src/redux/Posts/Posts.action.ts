@@ -1,7 +1,17 @@
-import {Post} from "./Posts.reducer";
+import {Post, PostPayload} from './Posts.reducer';
 
 export interface GetPosts {
     type: 'GET_POSTS'
+}
+
+export interface SetPosts {
+    type: 'SET_POSTS',
+    payload: Post[]
+}
+
+export interface SetLessons {
+    type: 'SET_LESSONS',
+    payload: string[]
 }
 
 export interface AddPost {
@@ -9,13 +19,27 @@ export interface AddPost {
     payload: Post
 }
 
-
 export interface DeletePost {
     type: 'DELETE_POST',
     payload: number
 }
 
-export type PostActionTypes = GetPosts | AddPost | DeletePost
+export interface ClearPosts {
+    type: 'CLEAR_POSTS'
+}
+
+export interface SetCurrentPost {
+    type: 'SET_CURRENT_POST',
+    payload: PostPayload
+}
+
+export interface SetUpdatingPostLoading {
+    type: 'SET_UPDATING_POST_LOADING',
+    payload: boolean
+}
+
+export type PostActionTypes = GetPosts | SetPosts | SetLessons
+    | AddPost | DeletePost | ClearPosts | SetCurrentPost | SetUpdatingPostLoading
 
 export const getPosts = (): PostActionTypes => {
     return {
@@ -36,3 +60,37 @@ export const deletePost = (postId: number): PostActionTypes => {
         payload: postId
     }
 };
+
+export const clearPosts = (): PostActionTypes => {
+    return {
+        type: 'CLEAR_POSTS'
+    }
+}
+
+export const setPosts = (posts: Post[]): PostActionTypes => {
+    return {
+        type: 'SET_POSTS',
+        payload: posts
+    }
+}
+
+export const setLessons = (lessonNames: string[]): PostActionTypes => {
+    return {
+        type: 'SET_LESSONS',
+        payload: lessonNames
+    }
+}
+
+export const setCurrentPost = (post: PostPayload): PostActionTypes => {
+    return {
+        type: 'SET_CURRENT_POST',
+        payload: post
+    }
+}
+
+export const setUpdatingPostLoading = (status: boolean): PostActionTypes => {
+    return {
+        type: 'SET_UPDATING_POST_LOADING',
+        payload: status
+    }
+}

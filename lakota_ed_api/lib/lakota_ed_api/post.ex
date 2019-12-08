@@ -4,10 +4,12 @@ defmodule LakotaEdApi.Post do
   alias LakotaEdApi.Post
 
   schema "posts" do
-    field :categories, {:array, :string}
-    field :postContent, :string
     field :postTitle, :string
+    field :postContent, :string
+    field :categories, {:array, :string}
     field :tags, {:array, :string}
+    field :quizzes, {:array, :map}
+    field :podcastLink, :string
 
     timestamps()
   end
@@ -15,7 +17,7 @@ defmodule LakotaEdApi.Post do
   @doc false
   def changeset(%Post{} = post, attrs) do
     post
-    |> cast(attrs, [:postTitle, :postContent, :categories, :tags])
+    |> cast(attrs, [:postTitle, :postContent, :categories, :tags, :quizzes, :podcastLink])
     |> validate_required([:postTitle, :postContent, :categories, :tags])
   end
 end

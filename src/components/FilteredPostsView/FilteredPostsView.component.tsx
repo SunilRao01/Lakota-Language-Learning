@@ -1,23 +1,19 @@
 import React, {FC, useEffect, useState} from 'react'
 import {RootState} from '../../store'
 import {connect} from 'react-redux'
-import {Post} from '../../redux/Posts/Posts.reducer'
-import {AnyAction, Dispatch} from 'redux'
-import {setFilterCategories, setFilterTags} from '../../redux/Filter/Filter.action'
+import {backendGetPostsByFilters, Post} from '../../redux/Posts/Posts.reducer'
 import qs from 'query-string'
 import {Tag} from '../Tag/Tag.component'
 import {PostCard} from '../PostCard/PostCard.component'
 import {Link, RouteComponentProps} from 'react-router-dom'
+import {ThunkDispatch} from 'redux-thunk'
 
 interface FilteredPostsViewOwnProps {
-    filterTags: string[],
-    filterCategories: string[],
     posts: Post[]
 }
 
 interface FilteredPostsViewActions {
-    setFilterTags: (newTags: string[]) => void,
-    setFilterCategories: (newCategories: string[]) => void
+    getPostsByFilter: (pageNumber: number, categories?: string[], tags?: string[]) => void
 }
 
 type FilteredPostsViewProps =
@@ -28,137 +24,78 @@ type FilteredPostsViewProps =
 
 export const mapStateToProps = (state: RootState): FilteredPostsViewOwnProps => {
     return {
-        posts: state.postState.posts,
-        filterTags: state.filterState.filters.tags,
-        filterCategories: state.filterState.filters.categories
+        posts: state.postState.posts
     }
 }
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): FilteredPostsViewActions => {
+export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): FilteredPostsViewActions => {
     return {
-        setFilterTags: (tags: string[]) => dispatch(setFilterTags(tags)),
-        setFilterCategories: (categories: string[]) => dispatch(setFilterCategories(categories))
+        getPostsByFilter: async (pageNumber: number, categories?: string[], tags?: string[]) => {
+            await dispatch(backendGetPostsByFilters(pageNumber, categories ? categories : [], tags ? tags : []))
+        }
     }
 }
 
 export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
-    const [filteredPosts, setFilteredPosts] = useState<Post[]>([])
-
-    const filterPostsByField = (posts: Post[], tags: string[] = [], categories: string[] = []): Post[] => {
-        return posts.filter((p: Post) => {
-            let result = true
-
-            if (tags.length > 0) {
-                tags.forEach(t => {
-                    if (!p.tags.includes(t)) {
-                        result = false
-                    }
-                })
-            }
-
-            if (categories.length > 0) {
-                categories.forEach(c => {
-                    if (!p.categories.includes(c)) {
-                        result = false
-                    }
-                })
-            }
-
-            return result
-        })
-    }
+    const [currentPage, setCurrentPage] = useState(1);
+    const [categoryFilters, setCategoryFilters] = useState<string[]>([])
+    const [tagFilters, setTagFilters] = useState<string[]>([])
 
     useEffect(() => {
-        const queryStrings = qs.parse(props.location.search, {arrayFormat: 'comma'})
+        const queryStrings = qs.parse(props.location.search)
 
-        // Update filterState in store for tags
-        let tags: any = queryStrings['tags'];
-        if (typeof tags === 'string') {
-            tags = [tags]
-        }
-        if (!tags) {
-            props.setFilterTags([])
-        } else {
-            tags && props.setFilterTags(tags)
+        let tags: any = queryStrings['tag'];
+        if (tags) {
+            if (typeof tags === 'string' && tags.length > 0) {
+                setTagFilters([tags])
+            } else if (Array.isArray(tags)) {
+                setTagFilters(tags)
+            }
         }
 
-        // Update filterState in store for categories
-        let categories: any = queryStrings['categories'];
-        if (typeof categories === 'string') {
-            categories = [categories]
+        let categories: any = queryStrings['category'];
+        if (categories) {
+            if (typeof categories === 'string' && categories.length > 0) {
+                setCategoryFilters([categories])
+            } else if (Array.isArray(categories)) {
+                setCategoryFilters(categories)
+            }
         }
-
-        if (!categories) {
-            props.setFilterCategories([])
-        } else {
-            categories && props.setFilterCategories(categories)
-        }
-
-        // Update filtered posts in state
-        const fp = filterPostsByField(props.posts, tags, categories)
-        setFilteredPosts(fp)
     }, [props.location.search]) // Call hook when any filter url query params change
 
-    const addTagFilter = (tag: any) => {
-        if (!props.filterTags.includes(tag)) {
-            if (props.filterTags.length === 0) {
-                let newUrl: string = props.location.pathname
-                newUrl += `&tags=${tag}`
+    useEffect(() => {
+        props.getPostsByFilter(currentPage, categoryFilters, tagFilters)
+    }, [tagFilters, categoryFilters])
 
-                if (qs.parse(props.location.search)['categories']) {
-                    newUrl = `&tags=${tag}`
+    const addTagFilter = (tag: string) => {
+        if (!tagFilters.includes(tag)) {
+            const newTagFilters = [
+                ...tagFilters,
+                tag
+            ]
+            setTagFilters(newTagFilters)
 
-                    props.history.push(`${props.location.pathname}${props.location.search.toString()}${newUrl}`)
-                } else {
-                    props.history.push(newUrl)
-                }
-            } else if (props.filterTags.length === 1) {
-                let querystring: any = qs.parse(props.location.search, {arrayFormat: 'comma'})
+            console.log(props.location)
 
-                props.history.push(`${props.location.pathname}?`
-                    + qs.stringify({
-                        tags: `${querystring['tags']},${tag}`
-                    }))
-            } else {
-                let querystring: any = qs.parse(props.location.search, {arrayFormat: 'comma'})
-                querystring['tags'].push(tag)
+            const newUrl = `${props.location.pathname}${props.location.search}&tag=${tag}`
 
-                props.history.push(`${props.location.pathname}?`
-                    + qs.stringify(querystring, {arrayFormat: 'comma'}))
-            }
+            props.history.push(newUrl)
         }
     }
 
-    const addCategoryFilter = (category: any) => {
-        if (!props.filterCategories.includes(category)) {
-            if (props.filterCategories.length === 0) {
-                let newUrl: string = props.location.pathname
-                newUrl += `&categories=${category}`
+    const addCategoryFilter = (category: string) => {
+        if (!categoryFilters.includes(category)) {
+            const newCategoryFilters = [
+                ...categoryFilters,
+                category
+            ]
+            setCategoryFilters(newCategoryFilters)
 
-                if (qs.parse(props.location.search)['tags']) {
-                    newUrl = `&categories=${category}`
+            const newUrl = `${props.location.pathname}${props.location.search}&category=${category}`
 
-                    props.history.push(`${props.location.pathname}${props.location.search.toString()}${newUrl}`)
-                } else {
-                    props.history.push(newUrl)
-                }
-            } else if (props.filterCategories.length === 1) {
-                let querystring: any = qs.parse(props.location.search, {arrayFormat: 'comma'})
-
-                props.history.push(`${props.location.pathname}?`
-                    + qs.stringify({
-                        categories: `${querystring['categories']},${category}`
-                    }))
-            } else {
-                let querystring: any = qs.parse(props.location.search, {arrayFormat: 'comma'})
-                querystring['categories'].push(category)
-
-                props.history.push(`${props.location.pathname}?`
-                    + qs.stringify(querystring, {arrayFormat: 'comma'}))
-            }
+            props.history.push(newUrl)
         }
     }
-
 
     return (
         <div className='container'>
@@ -166,11 +103,11 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                 <div className='is-size-3 title'>Tags:</div>
                 {
                     <div className="tags are-large">
-                        {
-                            props.filterTags.length === 0
-                                ? <div>No Tag Filters</div>
-                                : props.filterTags.map((_, i: number) =>
-                                    <Tag key={i} text={props.filterTags[i]}/>)
+                        {!tagFilters ||
+                        tagFilters.length === 0
+                            ? <div>No Tag Filters</div>
+                            : tagFilters.map((_, i: number) =>
+                                <Tag key={i} text={tagFilters[i]}/>)
                         }
                     </div>
                 }
@@ -178,14 +115,14 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                 <div className='is-size-3 title'>Categories:</div>
                 {
                     <div className="tags are-large">
-                        {
-                            props.filterCategories.length === 0
-                                ? <div>No Category Filters</div>
-                                : props.filterCategories.map((c: string, i: number) =>
-                                    <div key={i}>
-                                        <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
-                                        {`${i < props.filterCategories.length - 1 ? `, ` : ``}`}
-                                    </div>)
+                        {!categoryFilters ||
+                        categoryFilters.length === 0
+                            ? <div>No Category Filters</div>
+                            : categoryFilters.map((c: string, i: number) =>
+                                <div key={i}>
+                                    <Link to={` / posts ? categories =${c}`}>{`${c}`}</Link>
+                                    {`${i < categoryFilters.length - 1 ? `, ` : ``}`}
+                                </div>)
                         }
                     </div>
                 }
@@ -195,11 +132,31 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
 
             <div className='is-size-3 title'>Filtered Posts:</div>
             {
-                filteredPosts.map((p: Post, i: number) => <div key={i}>
+                props.posts.map((p: Post, i: number) => <div key={i}>
                     <PostCard post={p} onClickCategory={addCategoryFilter} onClickTag={addTagFilter}/>
-                    {i < filteredPosts.length - 1 ? <hr/> : ``}
+                    {i < props.posts.length - 1 ? <hr/> : ``}
                 </div>)
             }
+            <button className="button is-info pagination-button"
+                    disabled={currentPage === 1}
+                    onClick={() => {
+                        if (currentPage > 1) {
+                            // props.getPosts(currentPage-1)
+                            setCurrentPage(currentPage - 1)
+                        }
+                    }}>
+                Previous Page
+            </button>
+            <button className="button is-info pagination-button"
+                    disabled={props.posts.length === 0}
+                    onClick={() => {
+                        if (props.posts.length !== 0) {
+                            // props.getPosts(currentPage+1)
+                            setCurrentPage(currentPage + 1)
+                        }
+                    }}>
+                Next Page
+            </button>
         </div>
     )
 }
