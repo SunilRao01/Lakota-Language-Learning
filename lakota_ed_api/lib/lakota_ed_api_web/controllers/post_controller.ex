@@ -76,7 +76,9 @@ defmodule LakotaEdApiWeb.PostController do
   end
 
   def categories(conn, _, _) do
-    query = from p in Post, select: p.categories
+    query = from p in Post, select: p.categories, order_by: [
+      desc: :inserted_at
+    ]
 
     case Repo.all(query) do
       categories ->
@@ -99,7 +101,9 @@ defmodule LakotaEdApiWeb.PostController do
   end
 
   def tags(conn, _, _) do
-    query = from p in Post, select: p.tags
+    query = from p in Post, select: p.tags, order_by: [
+      desc: :inserted_at
+    ]
 
     case Repo.all(query) do
       tags ->

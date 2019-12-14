@@ -1,4 +1,5 @@
 import {
+    addPosts,
     deletePost,
     PostActionTypes,
     setCategories,
@@ -91,7 +92,7 @@ export const backendGetPostsByLessons = (): ThunkAction<Promise<any>, RootState,
                 : categoryParams += `&category=${l}`)
 
         return axios.get(`http://${apiUrl}:4000/posts${categoryParams}`).then((res: any) => {
-            dispatch(setPosts(res.data.posts))
+            dispatch(addPosts(res.data.posts))
         })
     }
 }
@@ -165,7 +166,16 @@ export const postReducer = (
         case 'SET_POSTS': {
             return {
                 ...state,
-                posts: action.payload as Post[]
+                posts: action.payload
+            }
+        }
+        case 'ADD_POSTS': {
+            return {
+                ...state,
+                posts: [
+                    ...state.posts,
+                    ...action.payload
+                ]
             }
         }
         case 'SET_LESSONS': {

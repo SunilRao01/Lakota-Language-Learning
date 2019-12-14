@@ -1,6 +1,12 @@
 import React, {FC, useEffect, useState} from 'react';
 import './Home.css'
-import {backendGetCategories, backendGetPosts, backendGetTags, Post} from '../../redux/Posts/Posts.reducer';
+import {
+    backendGetCategories,
+    backendGetPosts,
+    backendGetPostsByFilters,
+    backendGetTags,
+    Post
+} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {RootState} from '../../store'
 import {PostCard} from '../PostCard/PostCard.component'
@@ -12,6 +18,7 @@ interface HomeActions {
     getPosts: (pageNumber: number) => void
     getCategories: () => void
     getTags: () => void
+    getWordOfTheDayPosts: () => void
 }
 
 interface HomeProps {
@@ -38,6 +45,9 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeAc
         },
         getTags: async () => {
             await dispatch(backendGetTags())
+        },
+        getWordOfTheDayPosts: async () => {
+            await dispatch(backendGetPostsByFilters(1, [], ['word of the day']))
         }
     }
 };
@@ -50,6 +60,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
         props.getPosts(currentPage)
         props.getCategories()
         props.getTags()
+        props.getWordOfTheDayPosts()
     }, []);
 
     useEffect(() => {
@@ -68,7 +79,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
                     {
-                        props.posts.length > 0 && props.posts.map((p: Post, i: number) =>
+                        props.posts.map((p: Post, i: number) =>
                             <div key={i}>
                                 <PostCard post={p}/>
                                 {i < props.posts.length - 1 ? <hr/> : ``}
