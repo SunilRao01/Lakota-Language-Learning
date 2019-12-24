@@ -3,8 +3,8 @@ import './Home.css'
 import {
     backendGetCategories,
     backendGetPosts,
-    backendGetPostsByFilters,
     backendGetTags,
+    backendGetWordOfTheDayPosts,
     Post
 } from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
@@ -23,6 +23,7 @@ interface HomeActions {
 
 interface HomeProps {
     posts: Post[],
+    wordOfTheDayPosts: Post[],
     categories: string[],
     tags: string[]
 }
@@ -31,6 +32,7 @@ type HomePropsWithActions = HomeProps & HomeActions
 
 export const mapStateToProps = (state: RootState): HomeProps => ({
     posts: state.postState.posts,
+    wordOfTheDayPosts: state.postState.wordOfTheDayPosts ? state.postState.wordOfTheDayPosts : [],
     categories: state.postState.categories ? state.postState.categories : [],
     tags: state.postState.tags ? state.postState.tags : []
 });
@@ -47,25 +49,24 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeAc
             await dispatch(backendGetTags())
         },
         getWordOfTheDayPosts: async () => {
-            await dispatch(backendGetPostsByFilters(1, [], ['word of the day']))
+            await dispatch(backendGetWordOfTheDayPosts(1))
         }
     }
 };
 
 const HomeComponent: FC<HomePropsWithActions> = props => {
-    const [wordOfTheDayPosts, setWordOfTheDayPosts] = useState<Post[]>([])
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        props.getPosts(currentPage)
-        props.getCategories()
-        props.getTags()
-        props.getWordOfTheDayPosts()
-    }, []);
+        const fetchData = async () => {
+            await props.getPosts(currentPage)
+            await props.getCategories()
+            await props.getTags()
+            await props.getWordOfTheDayPosts()
+        }
 
-    useEffect(() => {
-        setWordOfTheDayPosts(props.posts.filter(p => p.tags.includes('word of the day')))
-    }, [props.posts]);
+        fetchData()
+    }, []);
 
     return (
         <div className='container'>
@@ -78,6 +79,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             <div className='columns is-variable is-4'>
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
+                    {/*<progress className="progress is-small is-info" max="100">60%</progress>*/}
                     {
                         props.posts.map((p: Post, i: number) =>
                             <div key={i}>
@@ -111,7 +113,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     <div className='word-of-the-day-section' data-testid='word-of-the-day'>
                         <h3 className='title is-3'>Word of the Day:</h3>
                         {
-                            wordOfTheDayPosts.map((p: Post, i: number) =>
+                            props.wordOfTheDayPosts.map((p: Post, i: number) =>
                                 <div key={i}>
                                     <PostCard post={p} showTitleOnly={true}/>
                                 </div>)

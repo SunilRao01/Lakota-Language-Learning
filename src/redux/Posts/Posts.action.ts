@@ -9,6 +9,11 @@ export interface SetPosts {
     payload: Post[]
 }
 
+export interface SetWordOfTheDayPosts {
+    type: 'SET_WORD_OF_THE_DAY_POSTS',
+    payload: Post[]
+}
+
 export interface AddPosts {
     type: 'ADD_POSTS',
     payload: Post[]
@@ -54,7 +59,7 @@ export interface SetUpdatingPostLoading {
 }
 
 export type PostActionTypes = GetPosts | SetPosts | SetLessons | SetCategories | SetTags | AddPosts
-    | AddPost | DeletePost | ClearPosts | SetCurrentPost | SetUpdatingPostLoading
+    | AddPost | DeletePost | ClearPosts | SetCurrentPost | SetUpdatingPostLoading | SetWordOfTheDayPosts
 
 export const getPosts = (): PostActionTypes => {
     return {
@@ -85,6 +90,13 @@ export const clearPosts = (): PostActionTypes => {
 export const setPosts = (posts: Post[]): PostActionTypes => {
     return {
         type: 'SET_POSTS',
+        payload: posts
+    }
+}
+
+export const setWordOfTheDayPosts = (posts: Post[]): PostActionTypes => {
+    return {
+        type: 'SET_WORD_OF_THE_DAY_POSTS',
         payload: posts
     }
 }

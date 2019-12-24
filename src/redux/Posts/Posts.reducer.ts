@@ -5,7 +5,7 @@ import {
     setCategories,
     setCurrentPost,
     setPosts, setTags,
-    setUpdatingPostLoading
+    setUpdatingPostLoading, setWordOfTheDayPosts
 } from './Posts.action';
 import axios from 'axios'
 import {AnyAction, Dispatch} from 'redux'
@@ -50,7 +50,8 @@ export interface PostState {
     currentPost?: Post,
     lessons: string[],
     categories?: string[]
-    tags?: string[]
+    tags?: string[],
+    wordOfTheDayPosts?: Post[]
 }
 
 export const initialPostState: PostState = {
@@ -61,8 +62,14 @@ export const initialPostState: PostState = {
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
+        return axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
+            console.log('dispatching action...', res.data.posts)
             dispatch(setPosts(res.data.posts))
+
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -71,6 +78,11 @@ export const backendGetCategories = (): ThunkAction<Promise<any>, RootState, {},
     return async (dispatch: Dispatch) => {
         axios.get(`http://${apiUrl}:4000/categories`).then((res: any) => {
             dispatch(setCategories(res.data))
+
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -79,6 +91,9 @@ export const backendGetTags = (): ThunkAction<Promise<any>, RootState, {}, AnyAc
     return async (dispatch: Dispatch) => {
         axios.get(`http://${apiUrl}:4000/tags`).then((res: any) => {
             dispatch(setTags(res.data))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -93,6 +108,23 @@ export const backendGetPostsByLessons = (): ThunkAction<Promise<any>, RootState,
 
         return axios.get(`http://${apiUrl}:4000/posts${categoryParams}`).then((res: any) => {
             dispatch(addPosts(res.data.posts))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendGetWordOfTheDayPosts = (pageNumber?: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
+    const uri = `http://${apiUrl}:4000/posts${pageNumber ? `?page=${pageNumber}` : ``}&category[]=word of the day`
+
+    return async (dispatch: Dispatch) => {
+        return axios.get(uri).then((res: any) => {
+            dispatch(setWordOfTheDayPosts(res.data.posts))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -103,6 +135,10 @@ export const backendGetPostsByFilters = (pageNumber?: number, categories?: strin
     return async (dispatch: Dispatch) => {
         return axios.get(uri).then((res: any) => {
             dispatch(setPosts(res.data.posts))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -117,6 +153,9 @@ export const backendCreatePost = (newPost: Post, jwt: string): ThunkAction<Promi
             }
         }).then(() => {
             dispatch(setUpdatingPostLoading(false))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -131,6 +170,9 @@ export const backendUpdatePost = (postId: number, updatedPost: PostPayload, jwt:
             }
         }).then(() => {
             dispatch(setUpdatingPostLoading(false))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -139,6 +181,9 @@ export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}
     return async (dispatch: Dispatch) => {
         return axios.get(`http://${apiUrl}:4000/post/${postId}`).then((res: any) => {
             dispatch(setCurrentPost(res.data))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -151,6 +196,9 @@ export const backendDeletePost = (inputPostId: number, jwt: string): ThunkAction
             }
         }).then(() => {
             dispatch(deletePost(inputPostId))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -167,6 +215,12 @@ export const postReducer = (
             return {
                 ...state,
                 posts: action.payload
+            }
+        }
+        case 'SET_WORD_OF_THE_DAY_POSTS': {
+            return {
+                ...state,
+                wordOfTheDayPosts: action.payload
             }
         }
         case 'ADD_POSTS': {
