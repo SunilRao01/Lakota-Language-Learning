@@ -29,8 +29,8 @@ defmodule LakotaEdApiWeb.Router do
     get "/categories", PostController, :categories
     get "/tags", PostController, :tags
 
-
     pipe_through :secure_api
     resources "/post", PostController, only: [:create, :update, :delete]
+    resources "/lessons", LessonController, except: [:new, :edit]
   end
 end

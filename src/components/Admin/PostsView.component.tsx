@@ -32,7 +32,10 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
     return (
         <div className='container'>
             <h1 className='title'>Admin: Posts View</h1>
-            <Link to={'/admin/posts/new'} className='button is-primary'>Create New Post</Link>
+            <div className='buttons'>
+                <Link to={'/admin/posts/new'} className='button is-primary'>Create New Post</Link>
+                <Link to={'/admin/posts/new'} className='button is-primary'>Change Lessons</Link>
+            </div>
             <hr/>
             {
                 props.posts.map((p: Post, i: number) =>

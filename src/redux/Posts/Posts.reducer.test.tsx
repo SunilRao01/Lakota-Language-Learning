@@ -9,10 +9,12 @@ describe('postReducer', () => {
                 id: 3,
                 title: 'test post title',
                 content: 'test post',
-                creationDate: new Date(2020, 6, 23),
+                creationDate: '',
                 categories: ['test category', 'test category 2'],
                 tags: ['test tag', 'test tag 2']
-            }]
+            }],
+            lessons: [],
+            updatingPostLoading: false,
         }, getPosts())
 
         // Verify posts
@@ -32,7 +34,7 @@ describe('postReducer', () => {
             id: 3,
             title: 'test post title',
             content: 'test post',
-            creationDate: new Date(2020, 6, 23),
+            creationDate: '',
             categories: ['test category', 'test category 2'],
             tags: ['test tag', 'test tag 2']
         }

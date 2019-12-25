@@ -52,8 +52,6 @@ defmodule LakotaEdApiWeb.PostController do
       :nil
     end
 
-    IO.inspect conn.query_params
-
     query = if (filter_conditions != :nil) do
       from p in Post,
            where: ^where_conditions,

@@ -3,7 +3,7 @@ import {
     deletePost,
     PostActionTypes,
     setCategories,
-    setCurrentPost,
+    setCurrentPost, setLessons,
     setPosts, setTags,
     setUpdatingPostLoading, setWordOfTheDayPosts
 } from './Posts.action';
@@ -91,6 +91,17 @@ export const backendGetTags = (): ThunkAction<Promise<any>, RootState, {}, AnyAc
     return async (dispatch: Dispatch) => {
         axios.get(`http://${apiUrl}:4000/tags`).then((res: any) => {
             dispatch(setTags(res.data))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendGetLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.get(`http://${apiUrl}:4000/lessons`).then((res: any) => {
+            dispatch(setLessons(res.data))
         }).catch(err => {
             console.error(err)
             Promise.reject(err)
