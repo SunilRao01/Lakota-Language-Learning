@@ -57,7 +57,7 @@ export interface PostState {
 export const initialPostState: PostState = {
     posts: [],
     updatingPostLoading: false,
-    lessons: ['cat1']
+    lessons: []
 };
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
@@ -101,7 +101,7 @@ export const backendGetTags = (): ThunkAction<Promise<any>, RootState, {}, AnyAc
 export const backendGetLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
         axios.get(`http://${apiUrl}:4000/lessons`).then((res: any) => {
-            dispatch(setLessons(res.data))
+            dispatch(setLessons(res.data.data.map((s: any) => s.lesson)))
         }).catch(err => {
             console.error(err)
             Promise.reject(err)

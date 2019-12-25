@@ -1,6 +1,6 @@
 import React, {FC, Fragment, useEffect} from 'react';
 import {RootState} from '../../store'
-import {backendGetPostsByLessons, Post} from '../../redux/Posts/Posts.reducer'
+import {backendGetLessons, backendGetPostsByLessons, Post} from '../../redux/Posts/Posts.reducer'
 import {ThunkDispatch} from 'redux-thunk'
 import {connect} from 'react-redux'
 import {RouteComponentProps} from 'react-router'
@@ -15,6 +15,7 @@ export interface LessonsProps {
 export interface LessonsActions {
     getPostsForLessons: () => void;
     clearPosts: () => void;
+    getLessons: () => void;
 }
 
 export type LessonsPropsAndActions = LessonsProps & LessonsActions & RouteComponentProps;
@@ -29,12 +30,17 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Lesson
         getPostsForLessons: async () => {
             await dispatch(backendGetPostsByLessons())
         },
-        clearPosts: () => dispatch(clearPosts())
+        clearPosts: () => dispatch(clearPosts()),
+        getLessons: async () => {
+            await dispatch(backendGetLessons())
+        }
     }
 }
 
 const LessonsComponent: FC<LessonsPropsAndActions> = props => {
     useEffect(() => {
+        props.getLessons()
+
         props.clearPosts()
         props.getPostsForLessons()
     }, [])
