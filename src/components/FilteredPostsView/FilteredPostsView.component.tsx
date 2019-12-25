@@ -7,6 +7,7 @@ import {Tag} from '../Tag/Tag.component'
 import {PostCard} from '../PostCard/PostCard.component'
 import {Link, RouteComponentProps} from 'react-router-dom'
 import {ThunkDispatch} from 'redux-thunk'
+import {clearPosts} from '../../redux/Posts/Posts.action'
 
 interface FilteredPostsViewOwnProps {
     posts: Post[]
@@ -14,6 +15,7 @@ interface FilteredPostsViewOwnProps {
 
 interface FilteredPostsViewActions {
     getPostsByFilter: (pageNumber: number, categories?: string[], tags?: string[]) => void
+    clearPosts: () => void
 }
 
 type FilteredPostsViewProps =
@@ -32,7 +34,8 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Filter
     return {
         getPostsByFilter: async (pageNumber: number, categories?: string[], tags?: string[]) => {
             await dispatch(backendGetPostsByFilters(pageNumber, categories ? categories : [], tags ? tags : []))
-        }
+        },
+        clearPosts: () => dispatch(clearPosts()),
     }
 }
 
@@ -64,6 +67,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
     }, [props.location.search]) // Call hook when any filter url query params change
 
     useEffect(() => {
+        props.clearPosts()
         props.getPostsByFilter(currentPage, categoryFilters, tagFilters)
     }, [tagFilters, categoryFilters])
 
@@ -120,7 +124,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                             ? <div>No Category Filters</div>
                             : categoryFilters.map((c: string, i: number) =>
                                 <div key={i}>
-                                    <Link to={` / posts ? categories =${c}`}>{`${c}`}</Link>
+                                    <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
                                     {`${i < categoryFilters.length - 1 ? `, ` : ``}`}
                                 </div>)
                         }

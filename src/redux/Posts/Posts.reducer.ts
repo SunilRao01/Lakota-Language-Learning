@@ -29,7 +29,7 @@ export interface Post {
     creationDate: string,
     categories: string[],
     tags: string[],
-    quizzes?: IQuiz[],
+        quizzes?: IQuiz[],
     podcastLink?: string
 }
 
