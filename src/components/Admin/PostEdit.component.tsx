@@ -63,14 +63,18 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
     const [editorState, setEditorState] = useState()
 
     useEffect(() => {
-        const urlParams = props.history.location.pathname.split('/')
-        const postId = parseInt(urlParams[urlParams.length - 1])
+        const fetchData = async () => {
+            const urlParams = props.history.location.pathname.split('/')
+            const postId = parseInt(urlParams[urlParams.length - 1])
 
-        props.getPost(postId)
-        setUpdatedPost({
-            ...updatedPost,
-            id: postId
-        })
+            await props.getPost(postId)
+            setUpdatedPost({
+                ...updatedPost,
+                id: postId
+            })
+        }
+
+        fetchData()
     }, [])
 
     useEffect(() => {

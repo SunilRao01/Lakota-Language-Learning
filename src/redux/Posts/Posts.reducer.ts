@@ -3,11 +3,15 @@ import {
     deletePost,
     PostActionTypes,
     setCategories,
-    setCurrentPost, setLessons,
-    setPosts, setTags,
-    setUpdatingPostLoading, setWordOfTheDayPosts
+    setCurrentPost,
+    setLessons,
+    addLesson,
+    setPosts,
+    setTags,
+    setUpdatingPostLoading,
+    setWordOfTheDayPosts, deleteLesson
 } from './Posts.action';
-import axios from 'axios'
+import axios, {AxiosResponse} from 'axios'
 import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
 import {RootState} from '../../store'
@@ -29,7 +33,7 @@ export interface Post {
     creationDate: string,
     categories: string[],
     tags: string[],
-        quizzes?: IQuiz[],
+    quizzes?: IQuiz[],
     podcastLink?: string
 }
 
@@ -48,7 +52,7 @@ export interface PostState {
     posts: Post[],
     updatingPostLoading: boolean,
     currentPost?: Post,
-    lessons: string[],
+    lessons: {id: number, lesson: string}[],
     categories?: string[]
     tags?: string[],
     wordOfTheDayPosts?: Post[]
@@ -74,6 +78,59 @@ export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {
     }
 }
 
+export const backendGetLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.get(`http://${apiUrl}:4000/lessons`).then((res: any) => {
+            dispatch(setLessons(res.data.data))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendAddLesson = (lesson: string, jwt: string): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.post(
+            `http://${apiUrl}:4000/lessons`,
+            {
+                lesson: {
+                    lesson: lesson
+                }
+            }, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`
+                }
+            }
+        ).then((res: AxiosResponse<any>) => {
+            dispatch(addLesson(res.data.data))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendDeleteLesson = (lessonId: number, jwt: string): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.delete(
+            `http://${apiUrl}:4000/lessons/${lessonId}`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`
+                }
+            }
+        ).then((res: AxiosResponse<any>) => {
+            dispatch(deleteLesson(lessonId))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
 export const backendGetCategories = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
         axios.get(`http://${apiUrl}:4000/categories`).then((res: any) => {
@@ -91,17 +148,6 @@ export const backendGetTags = (): ThunkAction<Promise<any>, RootState, {}, AnyAc
     return async (dispatch: Dispatch) => {
         axios.get(`http://${apiUrl}:4000/tags`).then((res: any) => {
             dispatch(setTags(res.data))
-        }).catch(err => {
-            console.error(err)
-            Promise.reject(err)
-        })
-    }
-}
-
-export const backendGetLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
-    return async (dispatch: Dispatch) => {
-        axios.get(`http://${apiUrl}:4000/lessons`).then((res: any) => {
-            dispatch(setLessons(res.data.data.map((s: any) => s.lesson)))
         }).catch(err => {
             console.error(err)
             Promise.reject(err)
@@ -247,6 +293,20 @@ export const postReducer = (
             return {
                 ...state,
                 lessons: action.payload
+            }
+        }
+        case 'ADD_LESSON': {
+            return {
+                ...state,
+                lessons: [...state.lessons, action.payload]
+            }
+        }
+        case 'DELETE_LESSON': {
+            let newLessons = state.lessons.filter(l => l.id !== action.payload)
+
+            return {
+                ...state,
+                lessons: newLessons
             }
         }
         case 'SET_CATEGORIES': {

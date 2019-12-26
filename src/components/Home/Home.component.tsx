@@ -98,7 +98,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                         Previous Page
                     </button>
                     <button className="button is-info pagination-button"
-                            disabled={props.posts.length === 0}
+                            disabled={props.posts.length === 0 || props.posts.length < 5}
                             onClick={() => {
                                 if (props.posts.length !== 0) {
                                     props.getPosts(currentPage+1)
@@ -116,7 +116,8 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                             props.wordOfTheDayPosts.map((p: Post, i: number) =>
                                 <div key={i}>
                                     <PostCard post={p} showTitleOnly={true}/>
-                                </div>)
+                                </div>
+                            )
                         }
                     </div>
 

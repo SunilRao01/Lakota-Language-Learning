@@ -26,7 +26,11 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
     }
 
     useEffect(() => {
-        props.getPosts(1)
+        const fetchData = async () => {
+            await props.getPosts(1)
+        }
+
+        fetchData()
     }, [])
 
     return (
@@ -34,7 +38,7 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
             <h1 className='title'>Admin: Posts View</h1>
             <div className='buttons'>
                 <Link to={'/admin/posts/new'} className='button is-primary'>Create New Post</Link>
-                <Link to={'/admin/posts/new'} className='button is-primary'>Change Lessons</Link>
+                <Link to={'/admin/lessons'} className='button is-primary'>Change Lessons</Link>
             </div>
             <hr/>
             {

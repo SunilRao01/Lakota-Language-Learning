@@ -22,10 +22,14 @@ type PostsProps = PostsOwnProps & RouteComponentProps<{ postId: string }> & Post
 
 export const PostsComponent: FC<PostsProps> = props => {
     useEffect(() => {
-        const urlParams = props.history.location.pathname.split('/')
-        const postId = parseInt(urlParams[urlParams.length - 1])
+        const fetchData = async () => {
+            const urlParams = props.history.location.pathname.split('/')
+            const postId = parseInt(urlParams[urlParams.length - 1])
 
-        props.getPost(postId)
+            await props.getPost(postId)
+        }
+
+        fetchData()
     }, [])
 
     useEffect(() => {
