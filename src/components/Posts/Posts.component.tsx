@@ -1,15 +1,17 @@
 import React, {FC, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {RootState} from '../../store'
-import {backendGetPost, IQuiz} from '../../redux/Posts/Posts.reducer'
+import {backendGetPost, IQuiz, Post} from '../../redux/Posts/Posts.reducer'
 import {Tag} from '../Tag/Tag.component'
 import {RouteComponentProps} from 'react-router'
 import {ThunkDispatch} from 'redux-thunk'
 import Viewer from 'tui-editor/dist/tui-editor-Viewer'
 import {QuizCard} from '../QuizCard/QuizCard.component'
+import {Link} from 'react-router-dom'
+import './Posts.css'
 
 interface PostsOwnProps {
-    post: any
+    post: Post | undefined
 }
 
 interface PostActions {
@@ -20,10 +22,14 @@ type PostsProps = PostsOwnProps & RouteComponentProps<{ postId: string }> & Post
 
 export const PostsComponent: FC<PostsProps> = props => {
     useEffect(() => {
-        const urlParams = props.history.location.pathname.split('/')
-        const postId = parseInt(urlParams[urlParams.length - 1])
+        const fetchData = async () => {
+            const urlParams = props.history.location.pathname.split('/')
+            const postId = parseInt(urlParams[urlParams.length - 1])
 
-        props.getPost(postId)
+            await props.getPost(postId)
+        }
+
+        fetchData()
     }, [])
 
     useEffect(() => {
@@ -45,27 +51,40 @@ export const PostsComponent: FC<PostsProps> = props => {
                         <div id='post-content'/>
                         }
                         <br/>
-                        {props.post.podcastLink.length > 0 ? <div dangerouslySetInnerHTML={{__html: props.post.podcastLink}}></div> : ``}
+                        {props.post.podcastLink &&
+                        props.post.podcastLink.length > 0 ?
+                            <div dangerouslySetInnerHTML={{__html: props.post.podcastLink}}></div> : ``
+                        }
                         <br/>
-                        <h3>Quiz:</h3>
-                        <div style={{
-                            display: 'flex',
-                            flexWrap: 'wrap'
-                        }}>
-                            {
-                                props.post.quizzes &&
-                                props.post.quizzes.map((q: IQuiz, i: number) => <QuizCard key={i} quiz={q}/>)
-                            }
-                        </div>
+                        <hr/>
+                        {
+                            props.post.quizzes &&
+                            props.post.quizzes.length > 0 &&
+                            <div>
+                                <h3>Quiz:</h3>
+                                <div style={{
+                                    display: 'flex',
+                                    flexWrap: 'wrap'
+                                }}>
+                                {
+                                    props.post.quizzes.map((q: IQuiz, i: number) => <QuizCard key={i} quiz={q}/>)
+                                }
+                                </div>
+                            </div>
+                        }
+
                         <br/>
-                        <p>{new Date(props.post.creationDate).toString()}</p>
-                        <div className='has-text-weight-bold'>Categories:</div>
+                        <div className='has-text-weight-bold section-title'>Posted: </div><p className='is-size-8'>{new Date(props.post.creationDate).toString()}</p>
+                        <div className='has-text-weight-bold section-title'>Categories:</div>
                         <p>
                             {
-                                props.post.categories.map((c: string, i: number) => `${c}${i < props.post.categories.length - 1 ? ', ' : ''}`)
+                                props.post.categories.map((c: string, i: number) =>
+                                    <Link className='is-size-6' to={`/posts?category=${c}`}>
+                                        {`${c}${i < props.post!.categories.length - 1 ? ', ' : ''}`}
+                                    </Link>)
                             }
                         </p>
-                        <div className='has-text-weight-bold tags control'>Tags:</div>
+                        <div className='has-text-weight-bold section-title'>Tags:</div>
                         <div className='field is-grouped'>
                             {
                                 props.post.tags.map((p: any, i: any) => <Tag key={i} text={p}/>)

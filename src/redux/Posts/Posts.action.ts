@@ -9,8 +9,28 @@ export interface SetPosts {
     payload: Post[]
 }
 
+export interface SetWordOfTheDayPosts {
+    type: 'SET_WORD_OF_THE_DAY_POSTS',
+    payload: Post[]
+}
+
+export interface AddPosts {
+    type: 'ADD_POSTS',
+    payload: Post[]
+}
+
 export interface SetLessons {
     type: 'SET_LESSONS',
+    payload: {id: number, lesson: string}[]
+}
+
+export interface SetCategories {
+    type: 'SET_CATEGORIES',
+    payload: string[]
+}
+
+export interface SetTags {
+    type: 'SET_TAGS',
     payload: string[]
 }
 
@@ -38,8 +58,24 @@ export interface SetUpdatingPostLoading {
     payload: boolean
 }
 
-export type PostActionTypes = GetPosts | SetPosts | SetLessons
-    | AddPost | DeletePost | ClearPosts | SetCurrentPost | SetUpdatingPostLoading
+export interface SetLessons {
+    type: 'SET_LESSONS',
+    payload: {id: number, lesson: string}[]
+}
+
+export interface AddLesson {
+    type: 'ADD_LESSON',
+    payload: {id: number, lesson: string}
+}
+
+export interface DeleteLesson {
+    type: 'DELETE_LESSON',
+    payload: number
+}
+
+export type PostActionTypes = GetPosts | SetPosts | SetLessons | SetCategories | SetTags | AddPosts
+    | AddPost | DeletePost | ClearPosts | SetCurrentPost | SetUpdatingPostLoading | SetWordOfTheDayPosts
+    | SetLessons | AddLesson | DeleteLesson
 
 export const getPosts = (): PostActionTypes => {
     return {
@@ -74,10 +110,52 @@ export const setPosts = (posts: Post[]): PostActionTypes => {
     }
 }
 
-export const setLessons = (lessonNames: string[]): PostActionTypes => {
+export const setWordOfTheDayPosts = (posts: Post[]): PostActionTypes => {
+    return {
+        type: 'SET_WORD_OF_THE_DAY_POSTS',
+        payload: posts
+    }
+}
+
+export const addPosts = (posts: Post[]): PostActionTypes => {
+    return {
+        type: 'ADD_POSTS',
+        payload: posts
+    }
+}
+
+export const setCategories = (categories: string[]): PostActionTypes => {
+    return {
+        type: 'SET_CATEGORIES',
+        payload: categories
+    }
+}
+
+export const setTags = (tags: string[]): PostActionTypes => {
+    return {
+        type: 'SET_TAGS',
+        payload: tags
+    }
+}
+
+export const setLessons = (lessons: {id: number, lesson: string}[]): PostActionTypes => {
     return {
         type: 'SET_LESSONS',
-        payload: lessonNames
+        payload: lessons
+    }
+}
+
+export const addLesson = (lesson: {id: number, lesson: string}): PostActionTypes => {
+    return {
+        type: 'ADD_LESSON',
+        payload: lesson
+    }
+}
+
+export const deleteLesson = (lessonId: number): PostActionTypes => {
+    return {
+        type: 'DELETE_LESSON',
+        payload: lessonId
     }
 }
 

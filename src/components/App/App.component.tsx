@@ -13,6 +13,7 @@ import {PostsView} from '../Admin/PostsView.component'
 import {PostEdit} from '../Admin/PostEdit.component'
 import {AdminLogin} from '../Admin/AdminLogin.component'
 import {PostCreate} from '../Admin/PostCreate.component'
+import {AdminLessons} from '../Admin/AdminLessons.component'
 
 export const App: FC = () => {
     return (
@@ -35,6 +36,7 @@ export const App: FC = () => {
                             <Route path='/admin/login' exact component={AdminLogin}/>
                             <Route path='/admin/post/:postId/' exact component={PostEdit}/>
                             <Route path='/admin/posts/new' exact component={PostCreate}/>
+                            <Route path='/admin/lessons' exact component={AdminLessons}/>
                             <Redirect from='/admin' to='/admin/login'/>
                         </Switch>
                     </main>

@@ -1,6 +1,6 @@
 import React, {FC, Fragment, useEffect} from 'react';
 import {RootState} from '../../store'
-import {backendGetPostsByLessons, Post} from '../../redux/Posts/Posts.reducer'
+import {backendGetLessons, backendGetPostsByLessons, Post} from '../../redux/Posts/Posts.reducer'
 import {ThunkDispatch} from 'redux-thunk'
 import {connect} from 'react-redux'
 import {RouteComponentProps} from 'react-router'
@@ -9,12 +9,13 @@ import {clearPosts} from '../../redux/Posts/Posts.action'
 
 export interface LessonsProps {
     posts: Post[],
-    lessons: string[]
+    lessons: { id: number, lesson: string }[]
 }
 
 export interface LessonsActions {
     getPostsForLessons: () => void;
     clearPosts: () => void;
+    getLessons: () => void;
 }
 
 export type LessonsPropsAndActions = LessonsProps & LessonsActions & RouteComponentProps;
@@ -29,14 +30,24 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Lesson
         getPostsForLessons: async () => {
             await dispatch(backendGetPostsByLessons())
         },
-        clearPosts: () => dispatch(clearPosts())
+        clearPosts: () => dispatch(clearPosts()),
+        getLessons: async () => {
+            await dispatch(backendGetLessons())
+        }
+
     }
 }
 
 const LessonsComponent: FC<LessonsPropsAndActions> = props => {
     useEffect(() => {
-        props.clearPosts()
-        props.getPostsForLessons()
+       const fetchData = async () => {
+           await props.getLessons()
+
+           props.clearPosts()
+           await props.getPostsForLessons()
+       }
+
+       fetchData()
     }, [])
 
     return (
@@ -46,8 +57,8 @@ const LessonsComponent: FC<LessonsPropsAndActions> = props => {
             {
                 props.lessons.map((lesson, i) => (
                     <Fragment key={i}>
-                        <h3 className='title is-4'>{lesson}</h3>
-                        {props.posts.filter(p => p.categories.includes(lesson)).map((p, i) => (
+                        <h3 className='title is-4'>{lesson.lesson}</h3>
+                        {props.posts.filter(p => p.categories.includes(lesson.lesson)).map((p, i) => (
                             <div key={i}>
                                 <PostCard post={p}/>
                             </div>

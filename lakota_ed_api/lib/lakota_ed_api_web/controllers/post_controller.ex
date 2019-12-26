@@ -52,8 +52,6 @@ defmodule LakotaEdApiWeb.PostController do
       :nil
     end
 
-    IO.inspect conn.query_params
-
     query = if (filter_conditions != :nil) do
       from p in Post,
            where: ^where_conditions,
@@ -72,6 +70,56 @@ defmodule LakotaEdApiWeb.PostController do
         conn
         |> put_view(LakotaEdApiWeb.PostView)
         |> render("multiple_posts.json", %{posts: posts})
+    end
+  end
+
+  def categories(conn, _, _) do
+    query = from p in Post, select: p.categories, order_by: [
+      desc: :inserted_at
+    ]
+
+    case Repo.all(query) do
+      categories ->
+        unique_categories = MapSet.to_list Enum.reduce(
+                                             categories,
+                                             MapSet.new(),
+                                             fn (cat_array, cat_set) ->
+                                               Enum.reduce(
+                                                 cat_array,
+                                                 cat_set,
+                                                 fn (cat_value, cat_set) ->
+                                                   MapSet.put(cat_set, cat_value)
+                                                 end
+                                               )
+                                             end
+                                           )
+        conn
+        |> json(unique_categories)
+    end
+  end
+
+  def tags(conn, _, _) do
+    query = from p in Post, select: p.tags, order_by: [
+      desc: :inserted_at
+    ]
+
+    case Repo.all(query) do
+      tags ->
+        unique_tags = MapSet.to_list Enum.reduce(
+                                             tags,
+                                             MapSet.new(),
+                                             fn (tag_array, tag_set) ->
+                                               Enum.reduce(
+                                                 tag_array,
+                                                 tag_set,
+                                                 fn (tag_value, tag_set) ->
+                                                   MapSet.put(tag_set, tag_value)
+                                                 end
+                                               )
+                                             end
+                                           )
+        conn
+        |> json(unique_tags)
     end
   end
 

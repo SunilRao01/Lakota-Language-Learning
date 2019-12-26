@@ -7,6 +7,7 @@ import {Tag} from '../Tag/Tag.component'
 import {PostCard} from '../PostCard/PostCard.component'
 import {Link, RouteComponentProps} from 'react-router-dom'
 import {ThunkDispatch} from 'redux-thunk'
+import {clearPosts} from '../../redux/Posts/Posts.action'
 
 interface FilteredPostsViewOwnProps {
     posts: Post[]
@@ -14,6 +15,7 @@ interface FilteredPostsViewOwnProps {
 
 interface FilteredPostsViewActions {
     getPostsByFilter: (pageNumber: number, categories?: string[], tags?: string[]) => void
+    clearPosts: () => void
 }
 
 type FilteredPostsViewProps =
@@ -32,7 +34,8 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Filter
     return {
         getPostsByFilter: async (pageNumber: number, categories?: string[], tags?: string[]) => {
             await dispatch(backendGetPostsByFilters(pageNumber, categories ? categories : [], tags ? tags : []))
-        }
+        },
+        clearPosts: () => dispatch(clearPosts()),
     }
 }
 
@@ -64,7 +67,12 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
     }, [props.location.search]) // Call hook when any filter url query params change
 
     useEffect(() => {
-        props.getPostsByFilter(currentPage, categoryFilters, tagFilters)
+        const fetchData = async () => {
+            props.clearPosts()
+            await props.getPostsByFilter(currentPage, categoryFilters, tagFilters)
+        }
+
+        fetchData()
     }, [tagFilters, categoryFilters])
 
     const addTagFilter = (tag: string) => {
@@ -120,7 +128,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                             ? <div>No Category Filters</div>
                             : categoryFilters.map((c: string, i: number) =>
                                 <div key={i}>
-                                    <Link to={` / posts ? categories =${c}`}>{`${c}`}</Link>
+                                    <Link to={`/posts?categories=${c}`}>{`${c}`}</Link>
                                     {`${i < categoryFilters.length - 1 ? `, ` : ``}`}
                                 </div>)
                         }
@@ -141,18 +149,20 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                     disabled={currentPage === 1}
                     onClick={() => {
                         if (currentPage > 1) {
-                            // props.getPosts(currentPage-1)
                             setCurrentPage(currentPage - 1)
+
+                            props.getPostsByFilter(currentPage - 1, categoryFilters, tagFilters)
                         }
                     }}>
                 Previous Page
             </button>
             <button className="button is-info pagination-button"
-                    disabled={props.posts.length === 0}
+                    disabled={props.posts.length === 0 || props.posts.length < 5}
                     onClick={() => {
                         if (props.posts.length !== 0) {
-                            // props.getPosts(currentPage+1)
                             setCurrentPage(currentPage + 1)
+
+                            props.getPostsByFilter(currentPage + 1, categoryFilters, tagFilters)
                         }
                     }}>
                 Next Page

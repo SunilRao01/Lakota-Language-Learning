@@ -1,5 +1,17 @@
-import {deletePost, PostActionTypes, setCurrentPost, setPosts, setUpdatingPostLoading} from './Posts.action';
-import axios from 'axios'
+import {
+    addPosts,
+    deletePost,
+    PostActionTypes,
+    setCategories,
+    setCurrentPost,
+    setLessons,
+    addLesson,
+    setPosts,
+    setTags,
+    setUpdatingPostLoading,
+    setWordOfTheDayPosts, deleteLesson
+} from './Posts.action';
+import axios, {AxiosResponse} from 'axios'
 import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
 import {RootState} from '../../store'
@@ -40,19 +52,105 @@ export interface PostState {
     posts: Post[],
     updatingPostLoading: boolean,
     currentPost?: Post,
-    lessons: string[]
+    lessons: {id: number, lesson: string}[],
+    categories?: string[]
+    tags?: string[],
+    wordOfTheDayPosts?: Post[]
 }
 
 export const initialPostState: PostState = {
     posts: [],
     updatingPostLoading: false,
-    lessons: ['cat1']
+    lessons: []
 };
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
+        return axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
+            console.log('dispatching action...', res.data.posts)
             dispatch(setPosts(res.data.posts))
+
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendGetLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.get(`http://${apiUrl}:4000/lessons`).then((res: any) => {
+            dispatch(setLessons(res.data.data))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendAddLesson = (lesson: string, jwt: string): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.post(
+            `http://${apiUrl}:4000/lessons`,
+            {
+                lesson: {
+                    lesson: lesson
+                }
+            }, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`
+                }
+            }
+        ).then((res: AxiosResponse<any>) => {
+            dispatch(addLesson(res.data.data))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendDeleteLesson = (lessonId: number, jwt: string): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.delete(
+            `http://${apiUrl}:4000/lessons/${lessonId}`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`
+                }
+            }
+        ).then((res: AxiosResponse<any>) => {
+            dispatch(deleteLesson(lessonId))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendGetCategories = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.get(`http://${apiUrl}:4000/categories`).then((res: any) => {
+            dispatch(setCategories(res.data))
+
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendGetTags = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios.get(`http://${apiUrl}:4000/tags`).then((res: any) => {
+            dispatch(setTags(res.data))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -66,7 +164,24 @@ export const backendGetPostsByLessons = (): ThunkAction<Promise<any>, RootState,
                 : categoryParams += `&category=${l}`)
 
         return axios.get(`http://${apiUrl}:4000/posts${categoryParams}`).then((res: any) => {
-            dispatch(setPosts(res.data.posts))
+            dispatch(addPosts(res.data.posts))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
+        })
+    }
+}
+
+export const backendGetWordOfTheDayPosts = (pageNumber?: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
+    const uri = `http://${apiUrl}:4000/posts${pageNumber ? `?page=${pageNumber}` : ``}&category[]=word of the day`
+
+    return async (dispatch: Dispatch) => {
+        return axios.get(uri).then((res: any) => {
+            dispatch(setWordOfTheDayPosts(res.data.posts))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -77,6 +192,10 @@ export const backendGetPostsByFilters = (pageNumber?: number, categories?: strin
     return async (dispatch: Dispatch) => {
         return axios.get(uri).then((res: any) => {
             dispatch(setPosts(res.data.posts))
+            Promise.resolve(res.data)
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -91,6 +210,9 @@ export const backendCreatePost = (newPost: Post, jwt: string): ThunkAction<Promi
             }
         }).then(() => {
             dispatch(setUpdatingPostLoading(false))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -105,6 +227,9 @@ export const backendUpdatePost = (postId: number, updatedPost: PostPayload, jwt:
             }
         }).then(() => {
             dispatch(setUpdatingPostLoading(false))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -113,6 +238,9 @@ export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}
     return async (dispatch: Dispatch) => {
         return axios.get(`http://${apiUrl}:4000/post/${postId}`).then((res: any) => {
             dispatch(setCurrentPost(res.data))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -125,6 +253,9 @@ export const backendDeletePost = (inputPostId: number, jwt: string): ThunkAction
             }
         }).then(() => {
             dispatch(deletePost(inputPostId))
+        }).catch(err => {
+            console.error(err)
+            Promise.reject(err)
         })
     }
 }
@@ -140,13 +271,54 @@ export const postReducer = (
         case 'SET_POSTS': {
             return {
                 ...state,
-                posts: action.payload as Post[]
+                posts: action.payload
+            }
+        }
+        case 'SET_WORD_OF_THE_DAY_POSTS': {
+            return {
+                ...state,
+                wordOfTheDayPosts: action.payload
+            }
+        }
+        case 'ADD_POSTS': {
+            return {
+                ...state,
+                posts: [
+                    ...state.posts,
+                    ...action.payload
+                ]
             }
         }
         case 'SET_LESSONS': {
             return {
                 ...state,
                 lessons: action.payload
+            }
+        }
+        case 'ADD_LESSON': {
+            return {
+                ...state,
+                lessons: [...state.lessons, action.payload]
+            }
+        }
+        case 'DELETE_LESSON': {
+            let newLessons = state.lessons.filter(l => l.id !== action.payload)
+
+            return {
+                ...state,
+                lessons: newLessons
+            }
+        }
+        case 'SET_CATEGORIES': {
+            return {
+                ...state,
+                categories: action.payload
+            }
+        }
+        case 'SET_TAGS': {
+            return {
+                ...state,
+                tags: action.payload
             }
         }
         case 'ADD_POST': {
