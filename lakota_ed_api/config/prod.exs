@@ -15,6 +15,7 @@ config :lakota_ed_api,
          host: "sleepy-sierra-08774",
          port: 443
        ],
+       http: [port: {:system, "PORT"}],
        force_ssl: [
          rewrite_on: [:x_forwarded_proto]
        ],
