@@ -15,7 +15,7 @@
       <excludeFolder url="file://$MODULE_DIR$/lakota_ed_api/deps" />
       <excludeFolder url="file://$MODULE_DIR$/lakota_ed_api/priv" />
     </content>
-    <orderEntry type="jdk" jdkName="Elixir 1.8.1" jdkType="Elixir SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
