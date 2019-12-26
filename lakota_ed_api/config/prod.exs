@@ -4,7 +4,7 @@ use Mix.Config
 # Configure your database
 config :lakota_ed_api,
        LakotaEdApi.Repo,
-       pool_size: System.get_env("POOL_SIZE"),
+       pool_size: 18,
        ssl: true,
        url: System.get_env("DATABASE_URL")
 
