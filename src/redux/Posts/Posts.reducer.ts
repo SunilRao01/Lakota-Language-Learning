@@ -16,7 +16,7 @@ import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
 import {RootState} from '../../store'
 
-const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '67.205.165.131'
+const apiUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:4000' : 'https://sleepy-sierra-08774.herokuapp.com'
 
 export interface IQuiz {
     question: string,
@@ -66,7 +66,7 @@ export const initialPostState: PostState = {
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://${apiUrl}:4000/posts?page=${pageNumber}`).then((res: any) => {
+        return axios.get(`${apiUrl}/posts?page=${pageNumber}`).then((res: any) => {
             console.log('dispatching action...', res.data.posts)
             dispatch(setPosts(res.data.posts))
 
@@ -80,7 +80,7 @@ export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {
 
 export const backendGetLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        axios.get(`http://${apiUrl}:4000/lessons`).then((res: any) => {
+        axios.get(`${apiUrl}/lessons`).then((res: any) => {
             dispatch(setLessons(res.data.data))
             Promise.resolve(res.data)
         }).catch(err => {
@@ -93,7 +93,7 @@ export const backendGetLessons = (): ThunkAction<Promise<any>, RootState, {}, An
 export const backendAddLesson = (lesson: string, jwt: string): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
         axios.post(
-            `http://${apiUrl}:4000/lessons`,
+            `${apiUrl}/lessons`,
             {
                 lesson: {
                     lesson: lesson
@@ -116,7 +116,7 @@ export const backendAddLesson = (lesson: string, jwt: string): ThunkAction<Promi
 export const backendDeleteLesson = (lessonId: number, jwt: string): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
         axios.delete(
-            `http://${apiUrl}:4000/lessons/${lessonId}`, {
+            `${apiUrl}/lessons/${lessonId}`, {
                 headers: {
                     Authorization: `Bearer ${jwt}`
                 }
@@ -133,7 +133,7 @@ export const backendDeleteLesson = (lessonId: number, jwt: string): ThunkAction<
 
 export const backendGetCategories = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        axios.get(`http://${apiUrl}:4000/categories`).then((res: any) => {
+        axios.get(`${apiUrl}/categories`).then((res: any) => {
             dispatch(setCategories(res.data))
 
             Promise.resolve(res.data)
@@ -146,7 +146,7 @@ export const backendGetCategories = (): ThunkAction<Promise<any>, RootState, {},
 
 export const backendGetTags = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        axios.get(`http://${apiUrl}:4000/tags`).then((res: any) => {
+        axios.get(`${apiUrl}/tags`).then((res: any) => {
             dispatch(setTags(res.data))
         }).catch(err => {
             console.error(err)
@@ -163,7 +163,7 @@ export const backendGetPostsByLessons = (): ThunkAction<Promise<any>, RootState,
                 ? categoryParams = `?category=${l}`
                 : categoryParams += `&category=${l}`)
 
-        return axios.get(`http://${apiUrl}:4000/posts${categoryParams}`).then((res: any) => {
+        return axios.get(`${apiUrl}/posts${categoryParams}`).then((res: any) => {
             dispatch(addPosts(res.data.posts))
         }).catch(err => {
             console.error(err)
@@ -173,7 +173,7 @@ export const backendGetPostsByLessons = (): ThunkAction<Promise<any>, RootState,
 }
 
 export const backendGetWordOfTheDayPosts = (pageNumber?: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
-    const uri = `http://${apiUrl}:4000/posts${pageNumber ? `?page=${pageNumber}` : ``}&category[]=word of the day`
+    const uri = `${apiUrl}/posts${pageNumber ? `?page=${pageNumber}` : ``}&category[]=word of the day`
 
     return async (dispatch: Dispatch) => {
         return axios.get(uri).then((res: any) => {
@@ -187,7 +187,7 @@ export const backendGetWordOfTheDayPosts = (pageNumber?: number): ThunkAction<Pr
 }
 
 export const backendGetPostsByFilters = (pageNumber?: number, categories?: string[], tags?: string[]): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
-    const uri = `http://${apiUrl}:4000/posts${pageNumber ? `?page=${pageNumber}` : ``}${(categories && categories.length > 0) ? categories.map(c => `&category[]=${c}`).join('') : ``}${(tags && tags.length > 0) ? tags.map(t => `&tag[]=${t}`).join('') : ``}`
+    const uri = `${apiUrl}/posts${pageNumber ? `?page=${pageNumber}` : ``}${(categories && categories.length > 0) ? categories.map(c => `&category[]=${c}`).join('') : ``}${(tags && tags.length > 0) ? tags.map(t => `&tag[]=${t}`).join('') : ``}`
 
     return async (dispatch: Dispatch) => {
         return axios.get(uri).then((res: any) => {
@@ -204,7 +204,7 @@ export const backendCreatePost = (newPost: Post, jwt: string): ThunkAction<Promi
     return async (dispatch: Dispatch) => {
         dispatch(setUpdatingPostLoading(true))
 
-        axios.post(`http://${apiUrl}:4000/post`, newPost, {
+        axios.post(`${apiUrl}/post`, newPost, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }
@@ -221,7 +221,7 @@ export const backendUpdatePost = (postId: number, updatedPost: PostPayload, jwt:
     return async (dispatch: Dispatch) => {
         dispatch(setUpdatingPostLoading(true))
 
-        axios.put(`http://${apiUrl}:4000/post/${postId}`, updatedPost, {
+        axios.put(`${apiUrl}/post/${postId}`, updatedPost, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }
@@ -236,7 +236,7 @@ export const backendUpdatePost = (postId: number, updatedPost: PostPayload, jwt:
 
 export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.get(`http://${apiUrl}:4000/post/${postId}`).then((res: any) => {
+        return axios.get(`${apiUrl}/post/${postId}`).then((res: any) => {
             dispatch(setCurrentPost(res.data))
         }).catch(err => {
             console.error(err)
@@ -247,7 +247,7 @@ export const backendGetPost = (postId: number): ThunkAction<Promise<any>, {}, {}
 
 export const backendDeletePost = (inputPostId: number, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.delete(`http://${apiUrl}:4000/post/${inputPostId}`, {
+        return axios.delete(`${apiUrl}/post/${inputPostId}`, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }

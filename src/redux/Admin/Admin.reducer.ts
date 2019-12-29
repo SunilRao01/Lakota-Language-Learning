@@ -11,11 +11,11 @@ export const initialAdminState: AdminState = {
     jwt: ''
 };
 
-const apiUrl = process.env.NODE_ENV !== 'production' ? 'localhost' : '67.205.165.131'
+const apiUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:4000' : 'https://sleepy-sierra-08774.herokuapp.com'
 
 export const backendLogin = (username: string, password: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        return axios.post(`http://${apiUrl}:4000/login`, {
+        return axios.post(`${apiUrl}/login`, {
             email: username,
             password: password
         }).then((res: any) => {
@@ -26,7 +26,7 @@ export const backendLogin = (username: string, password: string): ThunkAction<Pr
 
 export const backendVerifySession = (jwt: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async () => {
-        return axios.post(`http://${apiUrl}:4000/verify-session`, {
+        return axios.post(`${apiUrl}/verify-session`, {
             token: jwt
         }).then(() => {
             return true
