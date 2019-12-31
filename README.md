@@ -6,19 +6,20 @@
 
 A custom CMS that will host educational material about the Native American language Lakota.
 
-<h4>Created with:</h4>
+<h3>Created with:</h3>
 
-Frontend:
+<h4>Frontend:</h4>
 - React
 - Redux
 - TypeScript
 - Bulma CSS
 
-API/Backend:
+<h4>API/Backend:</h4>
 - Elixir
 - Phoenix
 
-CI/CD:
-- Concourse
+---
 
-A collaboration with [Mors](https://twitter.com/mors_lakota)
+This project is a collaboration with a [friend](https://twitter.com/hehakasapafan); they are the one that is creating all the actual educational material.
+
+To follow along with updates on this platform, make sure to follow the [twitter account](https://twitter.com/LanguageLakota)
