@@ -8,7 +8,12 @@ export interface SetCategoryFilter {
     payload: string[]
 }
 
-export type FilterActionTypes = SetTagFilter | SetCategoryFilter
+export interface SetCurrentPage {
+    type: 'SET_CURRENT_PAGE',
+    payload: number
+}
+
+export type FilterActionTypes = SetTagFilter | SetCategoryFilter | SetCurrentPage
 
 export const setFilterTags = (tags: string[]): FilterActionTypes => {
     return {
@@ -21,5 +26,12 @@ export const setFilterCategories = (categories: string[]): FilterActionTypes => 
     return {
         type: 'SET_FILTER_CATEGORY',
         payload: categories
+    }
+}
+
+export const setCurrentPage = (pageNum: number): FilterActionTypes => {
+    return {
+        type: 'SET_CURRENT_PAGE',
+        payload: pageNum
     }
 }

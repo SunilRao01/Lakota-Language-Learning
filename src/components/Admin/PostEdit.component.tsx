@@ -1,5 +1,5 @@
 import React, {ChangeEvent, FC, useEffect, useState} from 'react';
-import {backendGetPost, backendUpdatePost, IQuiz, PostPayload} from '../../redux/Posts/Posts.reducer';
+import {backendGetPost, backendUpdatePost, IQuiz, Post} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {ThunkDispatch} from 'redux-thunk'
 import {RootState} from '../../store'
@@ -332,7 +332,7 @@ export const mapStateToProps = (state: RootState): PostEditProps => {
 
 export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): PostEditActions => {
     return {
-        updatePost: async (postId: number, post: PostPayload, jwt: string) => {
+        updatePost: async (postId: number, post: Post, jwt: string) => {
             await dispatch(backendUpdatePost(postId, post, jwt))
         },
         getPost: async (postId: number) => {

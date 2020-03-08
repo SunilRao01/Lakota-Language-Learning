@@ -1,4 +1,4 @@
-import {Post, PostPayload} from './Posts.reducer';
+import {Post} from './Posts.reducer';
 
 export interface GetPosts {
     type: 'GET_POSTS'
@@ -50,7 +50,7 @@ export interface ClearPosts {
 
 export interface SetCurrentPost {
     type: 'SET_CURRENT_POST',
-    payload: PostPayload
+    payload: Post
 }
 
 export interface SetUpdatingPostLoading {
@@ -159,7 +159,7 @@ export const deleteLesson = (lessonId: number): PostActionTypes => {
     }
 }
 
-export const setCurrentPost = (post: PostPayload): PostActionTypes => {
+export const setCurrentPost = (post: Post): PostActionTypes => {
     return {
         type: 'SET_CURRENT_POST',
         payload: post

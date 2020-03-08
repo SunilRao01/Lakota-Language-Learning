@@ -37,17 +37,6 @@ export interface Post {
     podcastLink?: string
 }
 
-export interface PostPayload {
-    id: number,
-    title: string,
-    content: string,
-    creationDate: string,
-    categories: string[],
-    tags: string[],
-    quizzes?: IQuiz[],
-    podcastLink?: string
-}
-
 export interface PostState {
     posts: Post[],
     updatingPostLoading: boolean,
@@ -217,7 +206,7 @@ export const backendCreatePost = (newPost: Post, jwt: string): ThunkAction<Promi
     }
 }
 
-export const backendUpdatePost = (postId: number, updatedPost: PostPayload, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const backendUpdatePost = (postId: number, updatedPost: Post, jwt: string): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
         dispatch(setUpdatingPostLoading(true))
 
@@ -355,10 +344,7 @@ export const postReducer = (
         case 'SET_CURRENT_POST': {
             return {
                 ...state,
-                currentPost: {
-                    ...action.payload,
-                    content: action.payload.content
-                }
+                currentPost: action.payload
             }
         }
         case 'SET_UPDATING_POST_LOADING': {

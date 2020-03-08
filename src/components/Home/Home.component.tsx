@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useEffect} from 'react';
 import './Home.css'
 import {
     backendGetCategories,
@@ -13,19 +13,22 @@ import {PostCard} from '../PostCard/PostCard.component'
 import {Tag} from '../Tag/Tag.component'
 import {Link} from 'react-router-dom'
 import {ThunkDispatch} from 'redux-thunk'
+import {setCurrentPage} from '../../redux/Filter/Filter.action'
 
 interface HomeActions {
     getPosts: (pageNumber: number) => void
     getCategories: () => void
     getTags: () => void
     getWordOfTheDayPosts: () => void
+    setCurrentPage: (pageNum: number) => void
 }
 
 interface HomeProps {
     posts: Post[],
     wordOfTheDayPosts: Post[],
     categories: string[],
-    tags: string[]
+    tags: string[],
+    currentPage: number;
 }
 
 type HomePropsWithActions = HomeProps & HomeActions
@@ -34,7 +37,8 @@ export const mapStateToProps = (state: RootState): HomeProps => ({
     posts: state.postState.posts,
     wordOfTheDayPosts: state.postState.wordOfTheDayPosts ? state.postState.wordOfTheDayPosts : [],
     categories: state.postState.categories ? state.postState.categories : [],
-    tags: state.postState.tags ? state.postState.tags : []
+    tags: state.postState.tags ? state.postState.tags : [],
+    currentPage: state.filterState.currentPage
 });
 
 export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeActions => {
@@ -50,19 +54,22 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeAc
         },
         getWordOfTheDayPosts: async () => {
             await dispatch(backendGetWordOfTheDayPosts(1))
-        }
+        },
+        setCurrentPage: (pageNum: number) => dispatch(setCurrentPage(pageNum))
     }
 };
 
 const HomeComponent: FC<HomePropsWithActions> = props => {
-    const [currentPage, setCurrentPage] = useState(1);
-
     useEffect(() => {
         const fetchData = async () => {
-            await props.getPosts(currentPage)
-            await props.getCategories()
-            await props.getTags()
-            await props.getWordOfTheDayPosts()
+            if (props.currentPage === 0) {
+                props.setCurrentPage(1);
+
+                await props.getPosts(1)
+                await props.getCategories()
+                await props.getTags()
+                await props.getWordOfTheDayPosts()
+            }
         }
 
         fetchData()
@@ -88,11 +95,11 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                             </div>)
                     }
                     <button className="button is-info pagination-button"
-                            disabled={currentPage === 1}
+                            disabled={props.currentPage === 1}
                             onClick={() => {
-                                if (currentPage > 1) {
-                                    props.getPosts(currentPage-1)
-                                    setCurrentPage(currentPage-1)
+                                if (props.currentPage > 1) {
+                                    props.getPosts(props.currentPage-1)
+                                    setCurrentPage(props.currentPage-1)
                                 }
                             }}>
                         Previous Page
@@ -101,8 +108,8 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                             disabled={props.posts.length === 0 || props.posts.length < 5}
                             onClick={() => {
                                 if (props.posts.length !== 0) {
-                                    props.getPosts(currentPage+1)
-                                    setCurrentPage(currentPage+1)
+                                    props.getPosts(props.currentPage+1)
+                                    setCurrentPage(props.currentPage+1)
                                 }
                             }}>
                         Next Page

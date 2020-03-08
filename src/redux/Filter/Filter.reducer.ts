@@ -5,7 +5,8 @@ export interface FilterState {
         ids: number[],
         tags: string[],
         categories: string[]
-    }
+    },
+    currentPage: number
 }
 
 export const initialFilterState: FilterState = {
@@ -13,7 +14,8 @@ export const initialFilterState: FilterState = {
         ids: [],
         tags: [],
         categories: []
-    }
+    },
+    currentPage: 0
 }
 
 
@@ -35,6 +37,12 @@ export const filterReducer = (
                     ...state.filters,
                     categories: action.payload
                 }}
+        }
+        case 'SET_CURRENT_PAGE': {
+            return {
+                ...state,
+                currentPage: action.payload
+            }
         }
         default:
             return state
