@@ -90,7 +90,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     {
                         props.posts.map((p: Post, i: number) =>
                             <div key={i}>
-                                <PostCard post={p}/>
+                                <PostCard showPreviewOnly={true} post={p}/>
                                 {i < props.posts.length - 1 ? <hr/> : ``}
                             </div>)
                     }

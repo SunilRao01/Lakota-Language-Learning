@@ -37,8 +37,8 @@ describe('Home', () => {
                     title: 'title',
                     content: 'content',
                     creationDate: 'nao',
-                    categories: [],
-                    tags: []
+                    categories: ['word of the day'],
+                    tags: ['word of the day']
                 }, {
                     id: 2,
                     title: 'title2',
@@ -53,7 +53,17 @@ describe('Home', () => {
                     creationDate: 'nao3',
                     categories: [],
                     tags: ['word of the day']
-                }]
+                }],
+                wordOfTheDayPosts: [
+                    {
+                        id: 7,
+                        title: 'title3',
+                        content: 'content3',
+                        creationDate: 'nao3',
+                        categories: [],
+                        tags: ['word of the day']
+                    }
+                ]
             }
         }
 

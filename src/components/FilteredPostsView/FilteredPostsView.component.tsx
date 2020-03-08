@@ -141,7 +141,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
             <div className='is-size-3 title'>Filtered Posts:</div>
             {
                 props.posts.map((p: Post, i: number) => <div key={i}>
-                    <PostCard post={p} onClickCategory={addCategoryFilter} onClickTag={addTagFilter}/>
+                    <PostCard showPreviewOnly={true} post={p} onClickCategory={addCategoryFilter} onClickTag={addTagFilter}/>
                     {i < props.posts.length - 1 ? <hr/> : ``}
                 </div>)
             }

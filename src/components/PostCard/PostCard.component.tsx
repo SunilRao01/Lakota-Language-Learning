@@ -10,7 +10,8 @@ interface PostCardProps {
     post: Post,
     onClickTag?: (e: any) => void,
     onClickCategory?: (e: string) => void,
-    showTitleOnly?: boolean
+    showTitleOnly?: boolean,
+    showPreviewOnly?: boolean
 }
 
 export const PostCard: FC<PostCardProps> = props => {
@@ -24,13 +25,13 @@ export const PostCard: FC<PostCardProps> = props => {
         if (!props.showTitleOnly) {
             new Viewer({
                 el: document.querySelector(`#post-content-${props.post.id}`)!,
-                initialValue: props.post.content
+                initialValue: props.post.content,
             })
         }
     }, [])
 
     return (
-        <div data-testid={props.showTitleOnly ? `postcard-small` : `postcard-large`}
+        <div data-testid={props.showTitleOnly ? 'postcard-small' : 'postcard-large'}
              className='column swing-in-top-bck is-full'>
             <div className='card'>
                 <header className='card-header'>
@@ -41,7 +42,7 @@ export const PostCard: FC<PostCardProps> = props => {
                 <div className='card-content'>
                     <div className='content'>
                         {props.post.content &&
-                        <div id={`post-content-${props.post.id}`}/>
+                        <div className={`${props.showPreviewOnly === true ? 'preview-mode' : ''}`} id={`post-content-${props.post.id}`}/>
                         }
                         <br/>
                         <div className='is-size-7'>

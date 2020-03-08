@@ -1,6 +1,6 @@
 import React from 'react';
 import {initialPostState, Post, postReducer} from './Posts.reducer'
-import {addPost, deletePost, getPosts} from './Posts.action'
+import {addPost, getPosts} from './Posts.action'
 
 describe('postReducer', () => {
     it('should get posts for GET_POST action', () => {
@@ -21,9 +21,9 @@ describe('postReducer', () => {
         expect(actualState.posts.length).toEqual(1)
         expect(actualState.posts[0]).toEqual({
             id: 3,
-            postTitle: 'test post title',
-            postContent: 'test post',
-            creationDate: new Date(2020, 6, 23),
+            title: 'test post title',
+            content: 'test post',
+            creationDate: '',
             categories: ['test category', 'test category 2'],
             tags: ['test tag', 'test tag 2']
         })
@@ -43,11 +43,5 @@ describe('postReducer', () => {
         const expectedPosts: Post[] = [...initialPostState.posts, newPost]
 
         expect(actualState.posts).toEqual(expectedPosts)
-    });
-
-    it('should delete post for DELETE_POST action', () => {
-        const actualState = postReducer(initialPostState, deletePost(0))
-
-        expect(actualState.posts.length).toEqual(4)
     });
 });
