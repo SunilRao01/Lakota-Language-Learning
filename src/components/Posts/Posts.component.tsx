@@ -34,7 +34,6 @@ export const PostsComponent: FC<PostsProps> = props => {
 
         const targetPost = props.posts.filter(p => p.id === postId);
         if (targetPost.length > 0) {
-            console.log('detected post in store')
             props.setCurrentPost(targetPost[0]);
         } else {
             fetchData();

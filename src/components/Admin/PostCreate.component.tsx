@@ -129,8 +129,6 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                                 let newQuizzes = updatedPost.quizzes;
                                 newQuizzes.splice(index, 1)
 
-                                console.log('new quizzes', newQuizzes)
-
                                 setUpdatedPost({
                                     ...updatedPost,
                                     quizzes: newQuizzes
@@ -254,8 +252,6 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
 
                 let newPost = updatedPost
                 newPost.postContent = editorState
-
-                console.log('Going to create this new post: ', newPost)
 
                 await props.createPost(newPost, props.jwt)
                 setShowUpdateStatus(true)

@@ -83,8 +83,6 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
             ]
             setTagFilters(newTagFilters)
 
-            console.log(props.location)
-
             const newUrl = `${props.location.pathname}${props.location.search}&tag=${tag}`
 
             props.history.push(newUrl)

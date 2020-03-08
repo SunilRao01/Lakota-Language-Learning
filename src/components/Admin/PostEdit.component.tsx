@@ -166,8 +166,6 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                                     let newQuizzes = updatedPost.quizzes;
                                     newQuizzes.splice(index, 1)
 
-                                    console.log('new quizzes', newQuizzes)
-
                                     setUpdatedPost({
                                         ...updatedPost,
                                         quizzes: newQuizzes

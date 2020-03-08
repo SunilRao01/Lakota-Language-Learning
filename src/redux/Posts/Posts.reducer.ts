@@ -56,7 +56,6 @@ export const initialPostState: PostState = {
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
         return axios.get(`${apiUrl}/posts?page=${pageNumber}`).then((res: any) => {
-            console.log('dispatching action...', res.data.posts)
             dispatch(setPosts(res.data.posts))
 
             Promise.resolve(res.data)
