@@ -15,7 +15,7 @@ export const initialFilterState: FilterState = {
         tags: [],
         categories: []
     },
-    currentPage: 0
+    currentPage: 1
 }
 
 

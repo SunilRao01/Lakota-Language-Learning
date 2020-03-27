@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {backendDeletePost, backendGetPosts, Post} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {RootState} from '../../store'
@@ -21,6 +21,8 @@ interface PostsViewProps {
 type PostsViewPropsWithActions = PostsViewProps & PostsViewActions
 
 const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
+    const [currentPage, setCurrentPage] = useState(1);
+
     if (!props.jwt || props.jwt.length == 0) {
         return <Redirect to={'/admin/login'} />
     }
@@ -55,6 +57,26 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
                         {i < props.posts.length - 1 ? <hr/> : ``}
                     </div>)
             }
+            <button className="button is-info pagination-button"
+                    disabled={currentPage === 1}
+                    onClick={() => {
+                        if (currentPage > 1) {
+                            props.getPosts(currentPage-1)
+                            setCurrentPage(currentPage-1)
+                        }
+                    }}>
+                Previous Page
+            </button>
+            <button className="button is-info pagination-button"
+                    disabled={props.posts.length === 0 || props.posts.length < 5}
+                    onClick={() => {
+                        if (props.posts.length !== 0) {
+                            props.getPosts(currentPage+1)
+                            setCurrentPage(currentPage+1)
+                        }
+                    }}>
+                Next Page
+            </button>
         </div>
     );
 };

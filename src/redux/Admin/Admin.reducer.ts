@@ -4,11 +4,13 @@ import {ThunkAction} from 'redux-thunk'
 import {AdminActionTypes, setJwt} from './Admin.action'
 
 export interface AdminState {
-    jwt: string
+    jwt: string,
+    currentPage: number
 }
 
 export const initialAdminState: AdminState = {
-    jwt: ''
+    jwt: '',
+    currentPage: 1
 };
 
 const apiUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:4000' : 'https://sleepy-sierra-08774.herokuapp.com'
@@ -51,6 +53,12 @@ export const adminReducer = (
             return {
                 ...state,
                 jwt: action.payload
+            }
+        }
+        case 'SET_CURRENT_PAGE': {
+            return {
+                ...state,
+                currentPage: action.payload
             }
         }
         default:

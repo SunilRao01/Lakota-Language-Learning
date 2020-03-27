@@ -1,10 +1,16 @@
+import {FilterActionTypes} from '../Filter/Filter.action'
 
 export interface SetJWT {
     type: 'SET_JWT',
     payload: string
 }
 
-export type AdminActionTypes = SetJWT
+export interface SetCurrentPage {
+    type: 'SET_CURRENT_PAGE',
+    payload: number
+}
+
+export type AdminActionTypes = SetJWT | SetCurrentPage
 
 export const setJwt = (jwt: string): AdminActionTypes => {
     return {
@@ -13,3 +19,9 @@ export const setJwt = (jwt: string): AdminActionTypes => {
     }
 }
 
+export const setCurrentPage = (pageNum: number): FilterActionTypes => {
+    return {
+        type: 'SET_CURRENT_PAGE',
+        payload: pageNum
+    }
+}
