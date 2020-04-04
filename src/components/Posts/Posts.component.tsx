@@ -59,11 +59,12 @@ export const PostsComponent: FC<PostsProps> = props => {
                         <div id='post-content'/>
                         }
                         <br/>
-                        {props.post.podcastLink &&
-                        props.post.podcastLink.length > 0 ?
-                            <div dangerouslySetInnerHTML={{__html: props.post.podcastLink}}/> : ``
-                        }
-                        <br/>
+                        {/*TODO: Temporarily disable podcast link; source unfinalized*/}
+                        {/*{props.post.podcastLink &&*/}
+                        {/*props.post.podcastLink.length > 0 ?*/}
+                        {/*    <div dangerouslySetInnerHTML={{__html: props.post.podcastLink}}/> : ``*/}
+                        {/*}*/}
+                        {/*<br/>*/}
                         <hr/>
                         {
                             props.post.quizzes &&
