@@ -230,21 +230,8 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                     }}>Add Quiz
                     </button>
                 </div>
-
-
             </div>
-            <div className='field'>
-                <h3 className="title is-3">Podcast Embed Code</h3>
-                <div className='control'>
-                    <textarea
-                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setUpdatedPost({
-                            ...updatedPost,
-                            podcastLink: e.target.value
-                        })}
-                        className='textarea' placeholder='Podcast Embed Link'
-                    />
-                </div>
-            </div>
+
             <hr/>
 
             <button onClick={async () => {
