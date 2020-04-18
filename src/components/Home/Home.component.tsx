@@ -73,7 +73,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             <div className='columns is-centered'>
                 <div className='column is-narrow title-anim'>
                     <p className='title is-2'>Lakota Language Learning</p>
-                    <p className='subtitle is-4 swing-in-top-bck'>Lakota lessons and language tools from Hiŋskéhaŋska</p>
+                    <p className='subtitle is-4 swing-in-top-bck'>Lakota lessons and language tools from Alex</p>
                 </div>
             </div>
             <div className='columns is-variable is-4'>

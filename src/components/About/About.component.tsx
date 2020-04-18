@@ -8,7 +8,7 @@ export const About: FC = () => {
     return <div className='container'>
         <h1 className='title'>About</h1>
         <div className='content'>
-            <p>I’m Hiŋskéhaŋska. I’m Lakȟóta, born and raised on Salish land in the present-day state of Washington. My
+            <p>I’m Alex. I’m Lakȟóta, born and raised on Salish land in the present-day state of Washington. My
                 mother and uncle are from Bismark, and my Grandma is from McLaughlin, South Dakota. At university I
                 studied Spanish language literature, linguistics, and culture. During university, I finally felt the
                 need to learn Lakȟótiyapi, a language that nobody in my family speaks, due to the attendance of my
