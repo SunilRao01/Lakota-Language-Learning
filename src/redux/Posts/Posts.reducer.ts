@@ -209,7 +209,7 @@ export const backendUpdatePost = (postId: number, updatedPost: Post, jwt: string
     return async (dispatch: Dispatch) => {
         dispatch(setUpdatingPostLoading(true))
 
-        axios.put(`${apiUrl}/post/${postId}`, updatedPost, {
+        axios.patch(`${apiUrl}/post/${postId}`, updatedPost, {
             headers: {
                 Authorization: `Bearer ${jwt}`
             }

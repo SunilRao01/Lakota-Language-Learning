@@ -79,8 +79,12 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
 
     useEffect(() => {
         if (props.currentPost && props.currentPost.title) {
+            const urlParams = props.history.location.pathname.split('/')
+            const postId = parseInt(urlParams[urlParams.length - 1])
+
             setUpdatedPost({
                 ...updatedPost,
+                id: postId,
                 postTitle: props.currentPost.title,
                 postContent: props.currentPost.content,
                 categories: props.currentPost.categories,
