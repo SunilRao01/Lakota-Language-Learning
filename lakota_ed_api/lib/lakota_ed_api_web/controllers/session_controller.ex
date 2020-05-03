@@ -13,8 +13,8 @@ defmodule LakotaEdApiWeb.SessionController do
           user
           |> LakotaEdApiWeb.Guardian.encode_and_sign(
                %{},
-               ttl: {1, :hour}
-               # Sessions last 1 hour until re-login is required
+               ttl: {7, :hour}
+               # Sessions last 7 hour until re-login is required
              )
 
         IO.inspect(claims)
