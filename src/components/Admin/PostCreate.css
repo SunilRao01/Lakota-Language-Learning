@@ -24,6 +24,17 @@
     display: flex;
 }
 
+.tui-editor-contents table th {
+    background-color: transparent;
+}
+
+.tui-editor-contents table td {
+    border: 1px solid #aaa;
+}
+
+.tui-editor-contents table {
+    border: 1px solid #aaa;
+}
 
 
 
@@ -60,3 +71,6 @@
     }
 }
 
+.tui-editor-contents table th {
+    color: black;
+}
