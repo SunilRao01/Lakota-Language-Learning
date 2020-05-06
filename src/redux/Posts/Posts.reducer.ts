@@ -41,7 +41,7 @@ export interface PostState {
     posts: Post[],
     updatingPostLoading: boolean,
     currentPost?: Post,
-    lessons: {id: number, lesson: string}[],
+    lessons: { id: number, lesson: string }[],
     categories?: string[]
     tags?: string[],
     wordOfTheDayPosts?: Post[]
@@ -68,12 +68,12 @@ export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {
 
 export const backendGetLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
-        axios.get(`${apiUrl}/lessons`).then((res: any) => {
+        return axios.get(`${apiUrl}/lessons`).then((res: any) => {
             dispatch(setLessons(res.data.data))
-            Promise.resolve(res.data)
+            return Promise.resolve(res.data.data)
         }).catch(err => {
             console.error(err)
-            Promise.reject(err)
+            return Promise.reject(err)
         })
     }
 }
@@ -143,13 +143,16 @@ export const backendGetTags = (): ThunkAction<Promise<any>, RootState, {}, AnyAc
     }
 }
 
-export const backendGetPostsByLessons = (): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
-    return async (dispatch: Dispatch, getState: () => RootState) => {
+export const backendGetPostsByLessons = (lessons: string[]): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
         let categoryParams = ``
-        getState().postState.lessons.forEach((l, i) =>
-            i == 0
-                ? categoryParams = `?category=${l}`
-                : categoryParams += `&category=${l}`)
+        lessons.forEach((l, i) => {
+            if (i == 0) {
+                categoryParams = `?category[]=${l}`
+            } else {
+                categoryParams += `&category[]=${l}`
+            }
+        })
 
         return axios.get(`${apiUrl}/posts${categoryParams}`).then((res: any) => {
             dispatch(addPosts(res.data.posts))
@@ -269,11 +272,15 @@ export const postReducer = (
             }
         }
         case 'ADD_POSTS': {
+            let newPosts = action.payload;
+            // Don't add duplicate posts
+            newPosts = newPosts.filter(p => !state.posts.find(fp => fp.id !== p.id))
+
             return {
                 ...state,
                 posts: [
                     ...state.posts,
-                    ...action.payload
+                    ...newPosts
                 ]
             }
         }

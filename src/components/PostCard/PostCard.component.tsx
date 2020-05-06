@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from 'react'
+import React, {FC, useEffect, useState} from 'react'
 import {Post} from '../../redux/Posts/Posts.reducer'
 import {Link} from 'react-router-dom'
 import './PostCard.css'
@@ -15,6 +15,9 @@ interface PostCardProps {
 }
 
 export const PostCard: FC<PostCardProps> = props => {
+    // generates hash for tui editor render target div (needs to be a unique id)
+    const [viewHash] = useState(Math.random().toString(4).substring(2, 15))
+
     const clickFunction = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, t: string) => {
         e.preventDefault()
 
@@ -24,7 +27,7 @@ export const PostCard: FC<PostCardProps> = props => {
     useEffect(() => {
         if (!props.showTitleOnly) {
             new Viewer({
-                el: document.querySelector(`#post-content-${props.post.id}`)!,
+                el: document.querySelector(`#post-content-${props.post.id}-${viewHash}`)!,
                 initialValue: props.post.content,
             })
         }
@@ -42,7 +45,7 @@ export const PostCard: FC<PostCardProps> = props => {
                 <div className='card-content'>
                     <div className='content'>
                         {props.post.content &&
-                        <div className={`${props.showPreviewOnly === true ? 'preview-mode' : ''}`} id={`post-content-${props.post.id}`}/>
+                        <div className={`${props.showPreviewOnly === true ? 'preview-mode' : ''}`} id={`post-content-${props.post.id}-${viewHash}`}/>
                         }
                         <br/>
                         <div className='is-size-7'>

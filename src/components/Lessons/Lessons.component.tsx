@@ -13,9 +13,9 @@ export interface LessonsProps {
 }
 
 export interface LessonsActions {
-    getPostsForLessons: () => void;
+    getPostsForLessons: (lessons: string[]) => void;
     clearPosts: () => void;
-    getLessons: () => void;
+    getLessons: () => any;
 }
 
 export type LessonsPropsAndActions = LessonsProps & LessonsActions & RouteComponentProps;
@@ -27,12 +27,16 @@ export const mapStateToProps = (state: RootState): LessonsProps => ({
 
 export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): LessonsActions => {
     return {
-        getPostsForLessons: async () => {
-            await dispatch(backendGetPostsByLessons())
+        getPostsForLessons: async (lessons: string[]) => {
+            let output = [];
+            for (const l of lessons) {
+                output.push(await dispatch(backendGetPostsByLessons([l])))
+            }
+            return output;
         },
         clearPosts: () => dispatch(clearPosts()),
         getLessons: async () => {
-            await dispatch(backendGetLessons())
+            return await dispatch(backendGetLessons())
         }
 
     }
@@ -41,10 +45,9 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Lesson
 const LessonsComponent: FC<LessonsPropsAndActions> = props => {
     useEffect(() => {
        const fetchData = async () => {
-           await props.getLessons()
-
+           const lessons: {id: number, lesson: string}[] = await props.getLessons()
            props.clearPosts()
-           await props.getPostsForLessons()
+           await props.getPostsForLessons(lessons.map((l: {id: number, lesson: string}) => l.lesson))
        }
 
        fetchData()
@@ -60,9 +63,10 @@ const LessonsComponent: FC<LessonsPropsAndActions> = props => {
                         <h3 className='title is-4'>{lesson.lesson}</h3>
                         {props.posts.filter(p => p.categories.includes(lesson.lesson)).map((p, i) => (
                             <div key={i}>
-                                <PostCard post={p}/>
+                                <PostCard post={p} showPreviewOnly/>
                             </div>
                         ))}
+                        {i !== props.lessons.length-1 && <hr/>}
                     </Fragment>
                 ))
             }
