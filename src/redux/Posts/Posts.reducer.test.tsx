@@ -1,4 +1,3 @@
-import React from 'react';
 import {initialPostState, Post, postReducer} from './Posts.reducer'
 import {addPost, getPosts} from './Posts.action'
 

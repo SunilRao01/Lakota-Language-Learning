@@ -7,20 +7,22 @@ interface TagProps {
 }
 
 export const Tag: FC<TagProps> = props => {
-    const clickFunction = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, t: string) => {
+    const { onClick, text } = props;
+
+    const clickFunction = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, t: string) => {
         e.preventDefault()
 
-        props.onClick && props.onClick(t)
+        onClick && onClick(t)
     }
 
     return (
         <p className='swing-in-top-bck control'>
-            {props.onClick
-                ? <a onClick={e => clickFunction(e, props.text)} className="button is-info is-small">
-                    {props.text}
-                </a>
-                : <Link className="button is-info is-small" to={`/posts?tag=${props.text}`}>
-                    {props.text}
+            {onClick
+                ? <button onClick={e => clickFunction(e, text)} className="button is-info is-small">
+                    {text}
+                </button>
+                : <Link className="button is-info is-small" to={`/posts?tag=${text}`}>
+                    {text}
                 </Link>
             }
 

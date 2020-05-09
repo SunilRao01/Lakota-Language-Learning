@@ -22,7 +22,6 @@ type FilteredPostsViewProps =
     RouteComponentProps
     & FilteredPostsViewOwnProps
     & FilteredPostsViewActions
-    & RouteComponentProps
 
 export const mapStateToProps = (state: RootState): FilteredPostsViewOwnProps => {
     return {
@@ -40,12 +39,14 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Filter
 }
 
 export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
+    const {location, history, posts, clearPosts, getPostsByFilter} = props;
+
     const [currentPage, setCurrentPage] = useState(1);
     const [categoryFilters, setCategoryFilters] = useState<string[]>([])
     const [tagFilters, setTagFilters] = useState<string[]>([])
 
     useEffect(() => {
-        const queryStrings = qs.parse(props.location.search)
+        const queryStrings = qs.parse(location.search)
 
         let tags: any = queryStrings['tag'];
         if (tags) {
@@ -64,16 +65,16 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                 setCategoryFilters(categories)
             }
         }
-    }, [props.location.search]) // Call hook when any filter url query params change
+    }, [location.search]) // Call hook when any filter url query params change
 
     useEffect(() => {
         const fetchData = async () => {
-            props.clearPosts()
-            await props.getPostsByFilter(currentPage, categoryFilters, tagFilters)
+            clearPosts()
+            await getPostsByFilter(currentPage, categoryFilters, tagFilters)
         }
 
         fetchData()
-    }, [tagFilters, categoryFilters])
+    }, [tagFilters, categoryFilters, clearPosts, getPostsByFilter, currentPage])
 
     const addTagFilter = (tag: string) => {
         if (!tagFilters.includes(tag)) {
@@ -83,9 +84,9 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
             ]
             setTagFilters(newTagFilters)
 
-            const newUrl = `${props.location.pathname}${props.location.search}&tag=${tag}`
+            const newUrl = `${location.pathname}${location.search}&tag=${tag}`
 
-            props.history.push(newUrl)
+            history.push(newUrl)
         }
     }
 
@@ -97,9 +98,9 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
             ]
             setCategoryFilters(newCategoryFilters)
 
-            const newUrl = `${props.location.pathname}${props.location.search}&category=${category}`
+            const newUrl = `${location.pathname}${location.search}&category=${category}`
 
-            props.history.push(newUrl)
+            history.push(newUrl)
         }
     }
 
@@ -138,9 +139,9 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
 
             <div className='is-size-3 title'>Filtered Posts:</div>
             {
-                props.posts.map((p: Post, i: number) => <div key={i}>
+                posts.map((p: Post, i: number) => <div key={i}>
                     <PostCard showPreviewOnly={true} post={p} onClickCategory={addCategoryFilter} onClickTag={addTagFilter}/>
-                    {i < props.posts.length - 1 ? <hr/> : ``}
+                    {i < posts.length - 1 ? <hr/> : ``}
                 </div>)
             }
             <button className="button is-info pagination-button"
@@ -149,18 +150,18 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
                         if (currentPage > 1) {
                             setCurrentPage(currentPage - 1)
 
-                            props.getPostsByFilter(currentPage - 1, categoryFilters, tagFilters)
+                            getPostsByFilter(currentPage - 1, categoryFilters, tagFilters)
                         }
                     }}>
                 Previous Page
             </button>
             <button className="button is-info pagination-button"
-                    disabled={props.posts.length === 0 || props.posts.length < 5}
+                    disabled={posts.length === 0 || posts.length < 5}
                     onClick={() => {
-                        if (props.posts.length !== 0) {
+                        if (posts.length !== 0) {
                             setCurrentPage(currentPage + 1)
 
-                            props.getPostsByFilter(currentPage + 1, categoryFilters, tagFilters)
+                            getPostsByFilter(currentPage + 1, categoryFilters, tagFilters)
                         }
                     }}>
                 Next Page

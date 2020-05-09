@@ -34,9 +34,7 @@ interface PostCreatePayload {
 }
 
 const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = props => {
-    if (!props.jwt || props.jwt.length == 0) {
-        return <Redirect to={'/admin/login'}/>
-    }
+    const { jwt, updatePostLoading, createPost } = props;
 
     const [editorState, setEditorState] = useState()
     const [updatedPost, setUpdatedPost] = useState<PostCreatePayload>({
@@ -70,6 +68,10 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
             setEditorState(editor.getValue())
         })
     }, [])
+
+    if (!jwt || jwt.length === 0) {
+        return <Redirect to={'/admin/login'}/>
+    }
 
     return (
         <div className='container'>
@@ -240,19 +242,19 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
                 let newPost = updatedPost
                 newPost.postContent = editorState
 
-                await props.createPost(newPost, props.jwt)
+                await createPost(newPost, jwt)
                 setShowUpdateStatus(true)
             }} className='button is-primary'>Create Post
             </button>
 
-            {props.updatePostLoading &&
+            {updatePostLoading &&
             <div className='notification is-warning'>
                 <button className='delete'/>
                 Creating post...
             </div>
             }
 
-            {!props.updatePostLoading && showUpdateStatus &&
+            {!updatePostLoading && showUpdateStatus &&
             <div className='notification is-success'>
                 <button className='delete'/>
                 Created post Successfully!

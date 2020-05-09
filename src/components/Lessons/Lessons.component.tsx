@@ -43,30 +43,32 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Lesson
 }
 
 const LessonsComponent: FC<LessonsPropsAndActions> = props => {
+    const { clearPosts, posts, getLessons, getPostsForLessons, lessons } = props;
+
     useEffect(() => {
        const fetchData = async () => {
-           const lessons: {id: number, lesson: string}[] = await props.getLessons()
-           props.clearPosts()
-           await props.getPostsForLessons(lessons.map((l: {id: number, lesson: string}) => l.lesson))
+           const lessons: {id: number, lesson: string}[] = await getLessons()
+           clearPosts()
+           await getPostsForLessons(lessons.map((l: {id: number, lesson: string}) => l.lesson))
        }
 
        fetchData()
-    }, [])
+    }, [clearPosts, getLessons, getPostsForLessons])
 
     return (
         <div className='container'>
             <h1 className='title'>Lessons</h1>
             <hr/>
             {
-                props.lessons.map((lesson, i) => (
+                lessons.map((lesson, i) => (
                     <Fragment key={i}>
                         <h3 className='title is-4'>{lesson.lesson}</h3>
-                        {props.posts.filter(p => p.categories.includes(lesson.lesson)).map((p, i) => (
+                        {posts.filter(p => p.categories.includes(lesson.lesson)).map((p, i) => (
                             <div key={i}>
                                 <PostCard post={p} showPreviewOnly/>
                             </div>
                         ))}
-                        {i !== props.lessons.length-1 && <hr/>}
+                        {i !== lessons.length-1 && <hr/>}
                     </Fragment>
                 ))
             }

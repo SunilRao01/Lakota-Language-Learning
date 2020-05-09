@@ -24,51 +24,53 @@ interface PostActions {
 type PostsProps = PostsOwnProps & RouteComponentProps<{ postId: string }> & PostActions
 
 export const PostsComponent: FC<PostsProps> = props => {
+    const { posts, getPost, setCurrentPost, post, history } = props;
+
     useEffect(() => {
-        const urlParams = props.history.location.pathname.split('/')
+        const urlParams = history.location.pathname.split('/')
         const postId = parseInt(urlParams[urlParams.length - 1])
 
         const fetchData = async () => {
-            await props.getPost(postId)
+            await getPost(postId)
         }
 
-        const targetPost = props.posts.filter(p => p.id === postId);
+        const targetPost = posts.filter(p => p.id === postId);
         if (targetPost.length > 0) {
-            props.setCurrentPost(targetPost[0]);
+            setCurrentPost(targetPost[0]);
         } else {
             fetchData();
         }
-    }, [props.posts, props.history.location.pathname])
+    }, [posts, history.location.pathname, props, getPost, setCurrentPost])
 
     useEffect(() => {
-        if (props.post && props.post.content) {
+        if (post && post.content) {
             new Viewer({
                 el: document.querySelector('#post-content')!,
-                initialValue: props.post.content
+                initialValue: post.content
             })
         }
-    }, [props.post])
+    }, [post])
 
-    if (props.post) {
+    if (post) {
         return (
             <section className="section">
                 <div className="container">
-                    <h1 className="title">{props.post.title}</h1>
+                    <h1 className="title">{post.title}</h1>
                     <div className='content'>
-                        {props.post.content &&
+                        {post.content &&
                         <div id='post-content'/>
                         }
                         <br/>
                         {/*TODO: Temporarily disable podcast link; source unfinalized*/}
-                        {/*{props.post.podcastLink &&*/}
-                        {/*props.post.podcastLink.length > 0 ?*/}
-                        {/*    <div dangerouslySetInnerHTML={{__html: props.post.podcastLink}}/> : ``*/}
+                        {/*{post.podcastLink &&*/}
+                        {/*post.podcastLink.length > 0 ?*/}
+                        {/*    <div dangerouslySetInnerHTML={{__html: post.podcastLink}}/> : ``*/}
                         {/*}*/}
                         {/*<br/>*/}
                         <hr/>
                         {
-                            props.post.quizzes &&
-                            props.post.quizzes.length > 0 &&
+                            post.quizzes &&
+                            post.quizzes.length > 0 &&
                             <div>
                                 <h3>Quiz:</h3>
                                 <div style={{
@@ -76,27 +78,27 @@ export const PostsComponent: FC<PostsProps> = props => {
                                     flexWrap: 'wrap'
                                 }}>
                                 {
-                                    props.post.quizzes.map((q: IQuiz, i: number) => <QuizCard key={i} quiz={q}/>)
+                                    post.quizzes.map((q: IQuiz, i: number) => <QuizCard key={i} quiz={q}/>)
                                 }
                                 </div>
                             </div>
                         }
 
                         <br/>
-                        <div className='has-text-weight-bold section-title'>Posted: </div><p className='is-size-8'>{new Date(props.post.creationDate).toString()}</p>
+                        <div className='has-text-weight-bold section-title'>Posted: </div><p className='is-size-8'>{new Date(post.creationDate).toString()}</p>
                         <div className='has-text-weight-bold section-title'>Categories:</div>
                         <p>
                             {
-                                props.post.categories.map((c: string, i: number) =>
+                                post.categories.map((c: string, i: number) =>
                                     <Link key={i} className='is-size-6' to={`/posts?category=${c}`}>
-                                        {`${c}${i < props.post!.categories.length - 1 ? ', ' : ''}`}
+                                        {`${c}${i < post!.categories.length - 1 ? ', ' : ''}`}
                                     </Link>)
                             }
                         </p>
                         <div className='has-text-weight-bold section-title'>Tags:</div>
                         <div className='field is-grouped'>
                             {
-                                props.post.tags.map((p: any, i: any) => <Tag key={i} text={p}/>)
+                                post.tags.map((p: any, i: any) => <Tag key={i} text={p}/>)
                             }
                         </div>
 

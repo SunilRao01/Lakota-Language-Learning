@@ -55,18 +55,19 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeAc
 };
 
 const HomeComponent: FC<HomePropsWithActions> = props => {
+    const { posts, categories, getCategories, getPosts, getTags, getWordOfTheDayPosts, tags, wordOfTheDayPosts } = props;
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
-            await props.getPosts(currentPage)
-            await props.getCategories()
-            await props.getTags()
-            await props.getWordOfTheDayPosts()
+            await getPosts(currentPage)
+            await getCategories()
+            await getTags()
+            await getWordOfTheDayPosts()
         }
 
         fetchData()
-    }, []);
+    }, [currentPage, getCategories, getPosts, getTags, getWordOfTheDayPosts]);
 
     return (
         <div className='container'>
@@ -81,27 +82,27 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     <h3 className='title is-3'>Recent Posts:</h3>
                     {/*<progress className="progress is-small is-info" max="100">60%</progress>*/}
                     {
-                        props.posts.map((p: Post, i: number) =>
+                        posts.map((p: Post, i: number) =>
                             <div key={i}>
                                 <PostCard showPreviewOnly={true} post={p}/>
-                                {i < props.posts.length - 1 ? <hr/> : ``}
+                                {i < posts.length - 1 ? <hr/> : ``}
                             </div>)
                     }
                     <button className="button is-info pagination-button"
                             disabled={currentPage === 1}
                             onClick={() => {
                                 if (currentPage >= 1) {
-                                    props.getPosts(currentPage-1)
+                                    getPosts(currentPage-1)
                                     setCurrentPage(currentPage-1)
                                 }
                             }}>
                         Previous Page
                     </button>
                     <button className="button is-info pagination-button"
-                            disabled={props.posts.length === 0 || props.posts.length < 5}
+                            disabled={posts.length === 0 || posts.length < 5}
                             onClick={() => {
-                                if (props.posts.length !== 0) {
-                                    props.getPosts(currentPage+1)
+                                if (posts.length !== 0) {
+                                    getPosts(currentPage+1)
                                     setCurrentPage(currentPage+1)
                                 }
                             }}>
@@ -113,7 +114,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     <div className='word-of-the-day-section' data-testid='word-of-the-day'>
                         <h3 className='title is-3'>Word of the Day:</h3>
                         {
-                            props.wordOfTheDayPosts.map((p: Post, i: number) =>
+                            wordOfTheDayPosts.map((p: Post, i: number) =>
                                 <div key={i}>
                                     <PostCard post={p} showTitleOnly={true}/>
                                 </div>
@@ -125,11 +126,11 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                         <h3 className='title is-3'>Categories:</h3>
                         <div>
                             {
-                                props.categories.length > 0 &&
-                                Array.from(props.categories.values()).map((c: string, i: number) => {
+                                categories.length > 0 &&
+                                Array.from(categories.values()).map((c: string, i: number) => {
                                     return <div className='swing-in-top-bck' key={i}>
                                         <Link to={`/posts?category=${c}`}>{`${c}`}</Link>
-                                        {`${i < props.categories.length - 1 ? `,` : ``}`}&nbsp;
+                                        {`${i < categories.length - 1 ? `,` : ``}`}&nbsp;
                                     </div>
                                 })
                             }
@@ -139,8 +140,8 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     <div>
                         <h3 className='title is-3'>Tags:</h3>
                         <div className='field is-grouped tags-section'>
-                            {props.tags.length > 0 &&
-                            Array.from(props.tags).map((t: string, i: number) => {
+                            {tags.length > 0 &&
+                            Array.from(tags).map((t: string, i: number) => {
                                 return (<Tag key={i} text={t}/>)
                             })}
                         </div>

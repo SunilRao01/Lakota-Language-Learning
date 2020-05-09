@@ -33,7 +33,7 @@ export const backendVerifySession = (jwt: string): ThunkAction<Promise<any>, {},
         }).then(() => {
             return true
         }).catch((err: any) => {
-            if (err && err.response && err.response.status == 401) {
+            if (err && err.response && err.response.status === 401) {
                 return false
             }
         }).finally(() => {

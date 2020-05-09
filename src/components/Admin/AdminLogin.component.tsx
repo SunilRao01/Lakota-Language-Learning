@@ -12,13 +12,14 @@ interface AdminLoginProps {
 
 interface AdminLoginActions {
     login: (username: string, password: string) => void,
-    setJwt: (inputJwt: string) => void,
     verifyAndSetJwt: (inputJwt: string) => void
 }
 
 type AdminLoginPropsAndActions = AdminLoginProps & AdminLoginActions
 
 export const AdminLoginComponent: FC<AdminLoginPropsAndActions> = props => {
+    const { jwt, login, verifyAndSetJwt } = props;
+
     const [inputUsername, setInputUsername] = useState('')
     const [inputPassword, setInputPassword] = useState('')
 
@@ -26,11 +27,11 @@ export const AdminLoginComponent: FC<AdminLoginPropsAndActions> = props => {
         let jwt: (string | null) = localStorage.getItem('lakota_jwt')
 
         if (jwt) {
-            props.verifyAndSetJwt(jwt)
+            verifyAndSetJwt(jwt)
         }
-    }, [])
+    }, [props, verifyAndSetJwt])
 
-    if (props.jwt) {
+    if (jwt) {
         return <Redirect to={'/admin/posts'}/>
     }
 
@@ -39,7 +40,7 @@ export const AdminLoginComponent: FC<AdminLoginPropsAndActions> = props => {
             <div className="field">
                 <form onSubmit={(e: SyntheticEvent) => {
                     e.preventDefault()
-                    props.login(inputUsername, inputPassword)
+                    login(inputUsername, inputPassword)
                 }}>
                     <label className="label">Username</label>
                     <div className="control">
@@ -74,9 +75,6 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): AdminL
     return {
         login: async (username: string, password: string) => {
             await dispatch(backendLogin(username, password))
-        },
-        setJwt: (inputJwt: string) => {
-            dispatch(setJwt(inputJwt))
         },
         verifyAndSetJwt: async (inputJwt: string) => {
             const verified: any = await dispatch(backendVerifySession(inputJwt))

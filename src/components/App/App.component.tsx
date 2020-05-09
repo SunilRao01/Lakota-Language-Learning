@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import '../styles.scss'
 import {NavBar} from '../Navbar/Navbar.component';
-import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import {Home} from '../Home/Home.component';
 import {About} from '../About/About.component';
 import {Lessons} from '../Lessons/Lessons.component';
@@ -14,10 +14,12 @@ import {PostEdit} from '../Admin/PostEdit.component'
 import {AdminLogin} from '../Admin/AdminLogin.component'
 import {PostCreate} from '../Admin/PostCreate.component'
 import {AdminLessons} from '../Admin/AdminLessons.component'
+import ScrollToTop from '../ScrollToTop.component'
 
 export const App: FC = () => {
     return (
         <Router>
+            <ScrollToTop />
             <div className="App">
                 <header className="App-header">
                     <NavBar/>

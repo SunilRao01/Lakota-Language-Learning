@@ -17,12 +17,12 @@ export const About: FC = () => {
             <b>Social Media:</b>
             <br/>
             <div className="buttons">
-                <a href='https://twitter.com/LanguageLakota' rel='noopener'
-                   className="button is-rounded is-medium twitter-icon" target='_blank'>
+                <a href='https://twitter.com/LanguageLakota'
+                   className="button is-rounded is-medium twitter-icon" target='_blank' rel='noopener noreferrer'>
                     <img src={TwitterSvg} alt=''/>
                 </a>
-                <a href='https://www.facebook.com/Lakota-Language-Learning-111490473688572' rel='noopener'
-                   className="button is-rounded is-medium facebook-icon" target='_blank'>
+                <a href='https://www.facebook.com/Lakota-Language-Learning-111490473688572'
+                   className="button is-rounded is-medium facebook-icon" target='_blank' rel='noopener noreferrer'>
                     <img src={FacebookSvg} alt=''/>
                 </a>
             </div>

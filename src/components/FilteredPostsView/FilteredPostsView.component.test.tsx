@@ -1,4 +1,3 @@
-import React from 'react'
 import {mapStateToProps} from './FilteredPostsView.component'
 import {initialRootState} from '../../store'
 

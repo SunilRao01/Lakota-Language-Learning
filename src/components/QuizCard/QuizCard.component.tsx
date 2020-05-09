@@ -9,15 +9,17 @@ interface QuizCardProps {
 }
 
 export const QuizCard: FC<QuizCardProps> = props => {
+    const { onCross, quiz } = props;
+
     const [selectedAnswer, setSelectedAnswer] = useState('')
     const [quizState, setQuizState] = useState(-1) // -1 = no answer, 0 = incorrect answer, 1 = correct answer
 
     const getQuizStatus = () => {
         switch (quizState) {
             case 0:
-                return <div className='error-message'>{props.quiz.errorMessage}</div>
+                return <div className='error-message'>{quiz.errorMessage}</div>
             case 1:
-                return <div className='success-message'>{props.quiz.successMessage}</div>
+                return <div className='success-message'>{quiz.successMessage}</div>
             default:
                 break
         }
@@ -29,7 +31,7 @@ export const QuizCard: FC<QuizCardProps> = props => {
             <form onSubmit={(e: FormEvent) => {
                 e.preventDefault()
 
-                if (selectedAnswer == props.quiz.answer) {
+                if (selectedAnswer === quiz.answer) {
                     setQuizState(1)
                 } else {
                     setQuizState(0)
@@ -38,11 +40,11 @@ export const QuizCard: FC<QuizCardProps> = props => {
                 <div className='card'>
                     <header className='card-header'>
                         <p className='card-header-title'>
-                            {props.quiz.question}
+                            {quiz.question}
                         </p>
-                        {props.onCross &&
+                        {onCross &&
                         <button className='button is-danger' onClick={() => {
-                            props.onCross && props.onCross()
+                            onCross && onCross()
                         }}>
                             <img src={CrossSvg} alt='X'/>
                         </button>
@@ -52,8 +54,8 @@ export const QuizCard: FC<QuizCardProps> = props => {
                         <div className='content'>
                             <div className="field">
                                 <div className="control">
-                                    {props.quiz.possibleAnswers &&
-                                    props.quiz.possibleAnswers.map((pa: string, index: number) => {
+                                    {quiz.possibleAnswers &&
+                                    quiz.possibleAnswers.map((pa: string, index: number) => {
                                         return (
                                             <label key={index} className='radio'>
                                                 <input type="radio" name='quiz-answer'

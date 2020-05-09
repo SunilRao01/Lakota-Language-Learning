@@ -36,9 +36,7 @@ interface PostUpdatePayload {
 }
 
 const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props => {
-    if (!props.jwt || props.jwt.length == 0) {
-        return <Redirect to={'/admin/login'} />
-    }
+    const { getPost, currentPost, updatePost, jwt, updatePostLoading, history } = props;
 
     const [updatedPost, setUpdatedPost] = useState<PostUpdatePayload>({
         id: -1,
@@ -64,10 +62,10 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
 
     useEffect(() => {
         const fetchData = async () => {
-            const urlParams = props.history.location.pathname.split('/')
+            const urlParams = history.location.pathname.split('/')
             const postId = parseInt(urlParams[urlParams.length - 1])
 
-            await props.getPost(postId)
+            await getPost(postId)
             setUpdatedPost({
                 ...updatedPost,
                 id: postId
@@ -75,22 +73,22 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
         }
 
         fetchData()
-    }, [])
+    }, [getPost, history.location.pathname, props, updatedPost])
 
     useEffect(() => {
-        if (props.currentPost && props.currentPost.title) {
-            const urlParams = props.history.location.pathname.split('/')
+        if (currentPost && currentPost.title) {
+            const urlParams = history.location.pathname.split('/')
             const postId = parseInt(urlParams[urlParams.length - 1])
 
             setUpdatedPost({
                 ...updatedPost,
                 id: postId,
-                postTitle: props.currentPost.title,
-                postContent: props.currentPost.content,
-                categories: props.currentPost.categories,
-                tags: props.currentPost.tags,
-                quizzes: props.currentPost.quizzes,
-                podcastLink: props.currentPost.pod
+                postTitle: currentPost.title,
+                postContent: currentPost.content,
+                categories: currentPost.categories,
+                tags: currentPost.tags,
+                quizzes: currentPost.quizzes,
+                podcastLink: currentPost.pod
             })
 
             const editor = new Editor({
@@ -99,16 +97,20 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                 previewStyle: 'vertical',
                 height: '300px',
                 hideModeSwitch: true,
-                initialValue: props.currentPost.content
+                initialValue: currentPost.content
             })
 
             editor.on('change', () => {
                 setEditorState(editor.getValue())
             })
         }
-    }, [props.currentPost])
+    }, [currentPost, history.location.pathname, updatedPost])
 
-    if (updatedPost && props.currentPost) {
+    if (!jwt || jwt.length === 0) {
+        return <Redirect to={'/admin/login'} />
+    }
+
+    if (updatedPost && currentPost) {
         return (
             <div className='container'>
                 <div className='field'>
@@ -120,14 +122,14 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                                 postTitle: e.target.value
                             })}
                             className='input' type='text' placeholder='Post Title'
-                            defaultValue={props.currentPost.title}/>
+                            defaultValue={currentPost.title}/>
                     </div>
                 </div>
 
                 <div className='field'>
                     <label className='label'>Content</label>
                     <div className='control'>
-                        {props.currentPost.content &&
+                        {currentPost.content &&
                         <div id='wysiwyg-editor'>
 
                         </div>}
@@ -143,7 +145,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                                 tags: e.target.value.split(',').map(s => s.trim())
                             })}
                             className='input' placeholder='Post Tags'
-                            defaultValue={props.currentPost.tags.join()}/>
+                            defaultValue={currentPost.tags.join()}/>
                     </div>
                 </div>
 
@@ -156,7 +158,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                                 categories: e.target.value.split(',').map(s => s.trim())
                             })}
                             className='input' placeholder='Post Categories'
-                            defaultValue={props.currentPost.categories.join()}/>
+                            defaultValue={currentPost.categories.join()}/>
                     </div>
                 </div>
 
@@ -296,19 +298,19 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                         postContent: editorState
                     }
 
-                    await props.updatePost(updatedPost.id, updatePostPayload, props.jwt)
+                    await updatePost(updatedPost.id, updatePostPayload, jwt)
                     setShowUpdateStatus(true)
                 }} className='button is-primary'>Edit Post
                 </button>
 
-                {props.updatePostLoading &&
+                {updatePostLoading &&
                 <div className='notification is-warning'>
                     <button className='delete'/>
                     Updating post...
                 </div>
                 }
 
-                {!props.updatePostLoading && showUpdateStatus &&
+                {!updatePostLoading && showUpdateStatus &&
                 <div className='notification is-success admin-button'>
                     <button className='delete'/>
                     Post Updated Successfully!

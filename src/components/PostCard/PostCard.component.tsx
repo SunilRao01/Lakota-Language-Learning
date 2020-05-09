@@ -15,51 +15,53 @@ interface PostCardProps {
 }
 
 export const PostCard: FC<PostCardProps> = props => {
+    const { post, onClickCategory, onClickTag, showPreviewOnly, showTitleOnly } = props;
+
     // generates hash for tui editor render target div (needs to be a unique id)
     const [viewHash] = useState(Math.random().toString(4).substring(2, 15))
 
-    const clickFunction = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, t: string) => {
+    const clickFunction = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, t: string) => {
         e.preventDefault()
 
-        props.onClickCategory && props.onClickCategory(t)
+        onClickCategory && onClickCategory(t)
     }
 
     useEffect(() => {
-        if (!props.showTitleOnly) {
+        if (!showTitleOnly) {
             new Viewer({
-                el: document.querySelector(`#post-content-${props.post.id}-${viewHash}`)!,
-                initialValue: props.post.content,
+                el: document.querySelector(`#post-content-${post.id}-${viewHash}`)!,
+                initialValue: post.content,
             })
         }
-    }, [])
+    }, [post.content, post.id, showTitleOnly, viewHash])
 
     return (
-        <div data-testid={props.showTitleOnly ? 'postcard-small' : 'postcard-large'}
+        <div data-testid={showTitleOnly ? 'postcard-small' : 'postcard-large'}
              className='column swing-in-top-bck is-full'>
             <div className='card'>
                 <header className='card-header'>
-                    <Link to={`/post/${props.post.id}`}><p className='card-header-title'>{props.post.title}</p>
+                    <Link to={`/post/${post.id}`}><p className='card-header-title'>{post.title}</p>
                     </Link>
                 </header>
-                {!props.showTitleOnly &&
+                {!showTitleOnly &&
                 <div className='card-content'>
                     <div className='content'>
-                        {props.post.content &&
-                        <div className={`${props.showPreviewOnly === true ? 'preview-mode' : ''}`} id={`post-content-${props.post.id}-${viewHash}`}/>
+                        {post.content &&
+                        <div className={`${showPreviewOnly === true ? 'preview-mode' : ''}`} id={`post-content-${post.id}-${viewHash}`}/>
                         }
                         <br/>
                         <div className='is-size-7'>
-                            <b>Posted: </b>{new Date(props.post.creationDate).toString()}
+                            <b>Posted: </b>{new Date(post.creationDate).toString()}
                         </div>
                         <b className='is-size-7'>Categories: </b>
                         {
-                            props.post.categories.map((c: string, i: number) => {
+                            post.categories.map((c: string, i: number) => {
                                 return (<div className='categories' key={i}>
 
-                                    {props.onClickCategory
-                                        ? <a className='is-size-7' onClick={e => clickFunction(e, c)}>{`${c}`}</a>
+                                    {onClickCategory
+                                        ? <button className='is-size-7' onClick={e => clickFunction(e, c)}>{`${c}`}</button>
                                         : <Link className='is-size-7' to={`/posts?category=${c}`}>{`${c}`}</Link>}
-                                    {`${i < props.post.categories.length - 1 ? `, ` : ``}`}
+                                    {`${i < post.categories.length - 1 ? `, ` : ``}`}
                                 </div>)
                             })
                         }
@@ -67,8 +69,8 @@ export const PostCard: FC<PostCardProps> = props => {
 
                     <div className='tags'>
                         {
-                            props.post.tags.map((p: string, i: number) =>
-                                <Tag key={i} text={p} onClick={props.onClickTag}/>
+                            post.tags.map((p: string, i: number) =>
+                                <Tag key={i} text={p} onClick={onClickTag}/>
                             )
                         }
                     </div>

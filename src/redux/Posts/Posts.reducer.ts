@@ -91,7 +91,7 @@ export const backendAddLesson = (lesson: string, jwt: string): ThunkAction<Promi
                     Authorization: `Bearer ${jwt}`
                 }
             }
-        ).then((res: AxiosResponse<any>) => {
+        ).then((res: AxiosResponse) => {
             dispatch(addLesson(res.data.data))
             Promise.resolve(res.data)
         }).catch(err => {
@@ -109,7 +109,7 @@ export const backendDeleteLesson = (lessonId: number, jwt: string): ThunkAction<
                     Authorization: `Bearer ${jwt}`
                 }
             }
-        ).then((res: AxiosResponse<any>) => {
+        ).then((res: AxiosResponse) => {
             dispatch(deleteLesson(lessonId))
             Promise.resolve(res.data)
         }).catch(err => {
@@ -147,7 +147,7 @@ export const backendGetPostsByLessons = (lessons: string[]): ThunkAction<Promise
     return async (dispatch: Dispatch) => {
         let categoryParams = ``
         lessons.forEach((l, i) => {
-            if (i == 0) {
+            if (i === 0) {
                 categoryParams = `?category[]=${l}`
             } else {
                 categoryParams += `&category[]=${l}`

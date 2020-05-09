@@ -21,19 +21,21 @@ interface PostsViewProps {
 type PostsViewPropsWithActions = PostsViewProps & PostsViewActions
 
 const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
-    const [currentPage, setCurrentPage] = useState(1);
+    const { jwt, posts, getPosts, deletePost } = props;
 
-    if (!props.jwt || props.jwt.length == 0) {
-        return <Redirect to={'/admin/login'} />
-    }
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
-            await props.getPosts(1)
+            await getPosts(1)
         }
 
         fetchData()
-    }, [])
+    }, [getPosts, props])
+
+    if (!jwt || jwt.length === 0) {
+        return <Redirect to={'/admin/login'} />
+    }
 
     return (
         <div className='container'>
@@ -44,34 +46,34 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
             </div>
             <hr/>
             {
-                props.posts.map((p: Post, i: number) =>
+                posts.map((p: Post, i: number) =>
                     <div key={i}>
                         <PostCard post={p} showTitleOnly={true}/>
                         <Link className="button is-primary admin-button" to={`/admin/post/${p.id}`}>Edit</Link>
                         <button className="button is-danger admin-button"
                                 onClick={async () => {
-                                    await props.deletePost(p.id, props.jwt)
+                                    await deletePost(p.id, jwt)
                                 }}>
                             Delete
                         </button>
-                        {i < props.posts.length - 1 ? <hr/> : ``}
+                        {i < posts.length - 1 ? <hr/> : ``}
                     </div>)
             }
             <button className="button is-info pagination-button"
                     disabled={currentPage === 1}
                     onClick={() => {
                         if (currentPage > 1) {
-                            props.getPosts(currentPage-1)
+                            getPosts(currentPage-1)
                             setCurrentPage(currentPage-1)
                         }
                     }}>
                 Previous Page
             </button>
             <button className="button is-info pagination-button"
-                    disabled={props.posts.length === 0 || props.posts.length < 5}
+                    disabled={posts.length === 0 || posts.length < 5}
                     onClick={() => {
-                        if (props.posts.length !== 0) {
-                            props.getPosts(currentPage+1)
+                        if (posts.length !== 0) {
+                            getPosts(currentPage+1)
                             setCurrentPage(currentPage+1)
                         }
                     }}>

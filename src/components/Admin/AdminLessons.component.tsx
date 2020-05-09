@@ -48,29 +48,31 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): AdminLessonAc
 }
 
 const AdminLessonsComponent: FC<AdminLessonProps & AdminLessonActions> = props => {
+    const { jwt, getCategories, categories, lessons, getLessons, addLesson, deleteLesson } = props;
+
     useEffect(() => {
         const fetchData = async () => {
-            if (!props.lessons || props.lessons.length === 0) {
-                await props.getLessons()
+            if (!lessons || lessons.length === 0) {
+                await getLessons()
             }
 
-            if (!props.categories || props.categories.length === 0) {
-                await props.getCategories()
+            if (!categories || categories.length === 0) {
+                await getCategories()
             }
         }
 
         fetchData()
-    }, [])
+    }, [categories, getCategories, getLessons, lessons, props])
 
     return <div>
         <h3 className='title is-3'>Lessons:</h3>
         <div className='tags'>
-            {props.lessons.map((l, i) => (
+            {lessons.map((l, i) => (
                 <span key={i} className="tag is-info">
                     {l.lesson}
                     <button onClick={
-                        async () => await props.deleteLesson(l.id, props.jwt)
-                    } className="delete is-small"></button>
+                        async () => await deleteLesson(l.id, jwt)
+                    } className="delete is-small" />
                   </span>
             ))}
         </div>
@@ -82,13 +84,13 @@ const AdminLessonsComponent: FC<AdminLessonProps & AdminLessonActions> = props =
             <div className="select">
                 <select onChange={
                     async (event: ChangeEvent<HTMLSelectElement>) => {
-                        if (event.target.value != 'Add a Lesson' && props.lessons.filter(l => l.lesson === event.target.value).length === 0) {
-                            await props.addLesson(event.target.value, props.jwt)
+                            if (event.target.value !== 'Add a Lesson' && lessons.filter(l => l.lesson === event.target.value).length === 0) {
+                            await addLesson(event.target.value, jwt)
                         }
                     }
                 }>
                     <option>Add a Lesson</option>
-                    {props.categories.map((c, index) => <option key={index}>{c}</option>)}
+                    {categories.map((c, index) => <option key={index}>{c}</option>)}
                 </select>
             </div>
         </div>

@@ -28,24 +28,24 @@ export const FAQ: FC = () => {
                 <br/>
                 <i>Muskrat and Skunk</i> by Donald F. Montileaux, translated by Agnes Gay
                 <br/>
-                <a href='http://www.llcbookstore.com/picture-books/)' target='_blank'>Kids books</a> published by the Lakota Language Consortium
+                <a href='http://www.llcbookstore.com/picture-books/)' target='_blank' rel='noopener noreferrer'>Kids books</a> published by the Lakota Language Consortium
                 <br/>
-                <a href='https://archive.org/search.php?query=title%3A%28s%27ina%29%20AND%20contributor%3A%28smithsonian%29' target='_blank'>Sina Sapa Wocekiye
+                <a href='https://archive.org/search.php?query=title%3A%28s%27ina%29%20AND%20contributor%3A%28smithsonian%29' target='_blank' rel='noopener noreferrer'>Sina Sapa Wocekiye
                     Taeyanpaha</a>
                 <br/>
-                <a href='https://newspapers.mnhs.org/jsp/browse.jsp' target='_blank'>Iapi Oaye</a> (search by title, deselect all, and then find Iapi Oaye)
+                <a href='https://newspapers.mnhs.org/jsp/browse.jsp' target='_blank' rel='noopener noreferrer'>Iapi Oaye</a> (search by title, deselect all, and then find Iapi Oaye)
             </p>
             <hr/>
             <b>Where can I listen to Lakȟótiyapi?</b>
             <br/>
-                <a href='http://kalloch.org/KILI/kili.htm' target='_blank'>KILI Radio’s Lakota Language Hour</a>
+                <a href='http://kalloch.org/KILI/kili.htm' target='_blank' rel='noopener noreferrer'>KILI Radio’s Lakota Language Hour</a>
                 <br/>
-                <a href='https://www.youtube.com/channel/UC9JWriLwPH5WFMYKNl2WSUQ/videos' target='_blank'>SRST Language and Culture Institute</a>
+                <a href='https://www.youtube.com/channel/UC9JWriLwPH5WFMYKNl2WSUQ/videos' target='_blank' rel='noopener noreferrer'>SRST Language and Culture Institute</a>
                 <br/>
-                <a href='https://www.youtube.com/watch?v=7xCHht4X2Kc&list=PLWebueRr1D03NQzavj6yIHZimqbjFhQ1Y' target='_blank'>Berenstain Bears dubbed into Lakota</a> along with the&nbsp;
-                <a href='https://www.lakotabears.com/about/episodes.html' target='_blank'>corresponding script</a> of each episode
+                <a href='https://www.youtube.com/watch?v=7xCHht4X2Kc&list=PLWebueRr1D03NQzavj6yIHZimqbjFhQ1Y' target='_blank' rel='noopener noreferrer'>Berenstain Bears dubbed into Lakota</a> along with the&nbsp;
+                <a href='https://www.lakotabears.com/about/episodes.html' target='_blank' rel='noopener noreferrer'>corresponding script</a> of each episode
                 <br/>
-                <a href='https://www.youtube.com/channel/UCzBv3Kp139anLAqm1rf05gg/videos?view=0&sort=dd&shelf_id=0' target='_blank'>The Jesus Film dubbed into Lakota</a> by the Lakota Bible Translation Project
+                <a href='https://www.youtube.com/channel/UCzBv3Kp139anLAqm1rf05gg/videos?view=0&sort=dd&shelf_id=0' target='_blank' rel='noopener noreferrer'>The Jesus Film dubbed into Lakota</a> by the Lakota Bible Translation Project
         </div>
     </div>
 };

@@ -1,4 +1,3 @@
-import React from 'react'
 import {filterReducer, initialFilterState} from './Filter.reducer'
 import {setFilterCategories, setFilterTags} from './Filter.action'
 
