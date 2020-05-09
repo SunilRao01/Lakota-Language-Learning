@@ -62,7 +62,7 @@ const AdminLessonsComponent: FC<AdminLessonProps & AdminLessonActions> = props =
         }
 
         fetchData()
-    }, [categories, getCategories, getLessons, lessons, props])
+    }, [categories, getCategories, getLessons, lessons])
 
     return <div>
         <h3 className='title is-3'>Lessons:</h3>

@@ -40,7 +40,7 @@ export const PostsComponent: FC<PostsProps> = props => {
         } else {
             fetchData();
         }
-    }, [posts, history.location.pathname, props, getPost, setCurrentPost])
+    }, [posts, history.location.pathname, getPost, setCurrentPost])
 
     useEffect(() => {
         if (post && post.content) {

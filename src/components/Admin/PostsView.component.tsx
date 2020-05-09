@@ -31,7 +31,7 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
         }
 
         fetchData()
-    }, [getPosts, props])
+    }, [getPosts])
 
     if (!jwt || jwt.length === 0) {
         return <Redirect to={'/admin/login'} />

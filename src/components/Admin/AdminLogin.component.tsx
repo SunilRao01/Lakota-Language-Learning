@@ -29,7 +29,7 @@ export const AdminLoginComponent: FC<AdminLoginPropsAndActions> = props => {
         if (jwt) {
             verifyAndSetJwt(jwt)
         }
-    }, [props, verifyAndSetJwt])
+    }, [verifyAndSetJwt])
 
     if (jwt) {
         return <Redirect to={'/admin/posts'}/>
