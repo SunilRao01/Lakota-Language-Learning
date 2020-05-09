@@ -57,9 +57,8 @@ export const PostCard: FC<PostCardProps> = props => {
                         {
                             post.categories.map((c: string, i: number) => {
                                 return (<div className='categories' key={i}>
-
                                     {onClickCategory
-                                        ? <button className='is-size-7' onClick={e => clickFunction(e, c)}>{`${c}`}</button>
+                                        ? <button className='is-size-7 category' onClick={e => clickFunction(e, c)}>{`${c}`}</button>
                                         : <Link className='is-size-7' to={`/posts?category=${c}`}>{`${c}`}</Link>}
                                     {`${i < post.categories.length - 1 ? `, ` : ``}`}
                                 </div>)
