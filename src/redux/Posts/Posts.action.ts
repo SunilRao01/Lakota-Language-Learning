@@ -73,9 +73,14 @@ export interface DeleteLesson {
     payload: number
 }
 
-export type PostActionTypes = GetPosts | SetPosts | SetLessons | SetCategories | SetTags | AddPosts
+export interface SetPostLoading {
+    type: 'SET_POST_LOADING',
+    payload: boolean
+}
+
+export type PostActionTypes = GetPosts | SetPosts | SetCategories | SetTags | AddPosts
     | AddPost | DeletePost | ClearPosts | SetCurrentPost | SetUpdatingPostLoading | SetWordOfTheDayPosts
-    | SetLessons | AddLesson | DeleteLesson
+    | SetLessons | AddLesson | DeleteLesson | SetPostLoading
 
 export const getPosts = (): PostActionTypes => {
     return {
@@ -170,5 +175,12 @@ export const setUpdatingPostLoading = (status: boolean): PostActionTypes => {
     return {
         type: 'SET_UPDATING_POST_LOADING',
         payload: status
+    }
+}
+
+export const setPostLoading = (loading: boolean): PostActionTypes => {
+    return {
+        type: 'SET_POST_LOADING',
+        payload: loading
     }
 }

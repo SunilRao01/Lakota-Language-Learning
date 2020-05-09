@@ -13,12 +13,14 @@ import {PostCard} from '../PostCard/PostCard.component'
 import {Tag} from '../Tag/Tag.component'
 import {Link} from 'react-router-dom'
 import {ThunkDispatch} from 'redux-thunk'
+import {setPostLoading} from '../../redux/Posts/Posts.action'
 
 interface HomeActions {
     getPosts: (pageNumber: number) => void
     getCategories: () => void
     getTags: () => void
     getWordOfTheDayPosts: () => void
+    setPostLoading: (loading: boolean) => void
 }
 
 interface HomeProps {
@@ -26,6 +28,7 @@ interface HomeProps {
     wordOfTheDayPosts: Post[],
     categories: string[],
     tags: string[],
+    postsLoading: boolean
 }
 
 type HomePropsWithActions = HomeProps & HomeActions
@@ -35,6 +38,7 @@ export const mapStateToProps = (state: RootState): HomeProps => ({
     wordOfTheDayPosts: state.postState.wordOfTheDayPosts ? state.postState.wordOfTheDayPosts : [],
     categories: state.postState.categories ? state.postState.categories : [],
     tags: state.postState.tags ? state.postState.tags : [],
+    postsLoading: state.postState.loadingPosts
 });
 
 export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeActions => {
@@ -50,24 +54,27 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): HomeAc
         },
         getWordOfTheDayPosts: async () => {
             await dispatch(backendGetWordOfTheDayPosts(1))
-        }
+        },
+        setPostLoading: (loading: boolean) => dispatch(setPostLoading(loading))
     }
 };
 
 const HomeComponent: FC<HomePropsWithActions> = props => {
-    const { posts, categories, getCategories, getPosts, getTags, getWordOfTheDayPosts, tags, wordOfTheDayPosts } = props;
+    const { posts, categories, getCategories, getPosts, getTags, getWordOfTheDayPosts, tags, wordOfTheDayPosts, setPostLoading, postsLoading } = props;
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
         const fetchData = async () => {
+            setPostLoading(true)
             await getPosts(currentPage)
             await getCategories()
             await getTags()
             await getWordOfTheDayPosts()
+            setPostLoading(false)
         }
 
         fetchData()
-    }, [currentPage, getCategories, getPosts, getTags, getWordOfTheDayPosts]);
+    }, [currentPage, getCategories, getPosts, getTags, getWordOfTheDayPosts, setPostLoading]);
 
     return (
         <div className='container'>
@@ -80,15 +87,16 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             <div className='columns is-variable is-4'>
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
-                    {/*<progress className="progress is-small is-info" max="100">60%</progress>*/}
+                    {postsLoading && <progress className="progress is-small is-info" max="100">50%</progress>}
                     {
+                        !postsLoading &&
                         posts.map((p: Post, i: number) =>
                             <div key={i}>
                                 <PostCard showPreviewOnly={true} post={p}/>
                                 {i < posts.length - 1 ? <hr/> : ``}
                             </div>)
                     }
-                    <button className="button is-info pagination-button"
+                    {!postsLoading && <button className="button is-info pagination-button"
                             disabled={currentPage === 1}
                             onClick={() => {
                                 if (currentPage >= 1) {
@@ -97,17 +105,18 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                                 }
                             }}>
                         Previous Page
-                    </button>
-                    <button className="button is-info pagination-button"
+                    </button>}
+                    {!postsLoading && <button className="button is-info pagination-button"
                             disabled={posts.length === 0 || posts.length < 5}
                             onClick={() => {
                                 if (posts.length !== 0) {
+                                    window.scrollTo(0, 0)
                                     getPosts(currentPage+1)
                                     setCurrentPage(currentPage+1)
                                 }
                             }}>
                         Next Page
-                    </button>
+                    </button>}
                     <br/>
                 </div>
                 <div className='column'>

@@ -44,13 +44,15 @@ export interface PostState {
     lessons: { id: number, lesson: string }[],
     categories?: string[]
     tags?: string[],
-    wordOfTheDayPosts?: Post[]
+    wordOfTheDayPosts?: Post[],
+    loadingPosts: boolean
 }
 
 export const initialPostState: PostState = {
     posts: [],
     updatingPostLoading: false,
-    lessons: []
+    lessons: [],
+    loadingPosts: false
 };
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
@@ -357,6 +359,12 @@ export const postReducer = (
             return {
                 ...state,
                 updatingPostLoading: action.payload
+            }
+        }
+        case 'SET_POST_LOADING': {
+            return {
+                ...state,
+                loadingPosts: action.payload
             }
         }
         default:

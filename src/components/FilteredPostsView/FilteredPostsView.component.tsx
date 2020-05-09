@@ -7,15 +7,17 @@ import {Tag} from '../Tag/Tag.component'
 import {PostCard} from '../PostCard/PostCard.component'
 import {Link, RouteComponentProps} from 'react-router-dom'
 import {ThunkDispatch} from 'redux-thunk'
-import {clearPosts} from '../../redux/Posts/Posts.action'
+import {clearPosts, setPostLoading} from '../../redux/Posts/Posts.action'
 
 interface FilteredPostsViewOwnProps {
-    posts: Post[]
+    posts: Post[],
+    postsLoading: boolean
 }
 
 interface FilteredPostsViewActions {
     getPostsByFilter: (pageNumber: number, categories?: string[], tags?: string[]) => void
     clearPosts: () => void
+    setPostLoading: (loading: boolean) => void
 }
 
 type FilteredPostsViewProps =
@@ -25,7 +27,8 @@ type FilteredPostsViewProps =
 
 export const mapStateToProps = (state: RootState): FilteredPostsViewOwnProps => {
     return {
-        posts: state.postState.posts
+        posts: state.postState.posts,
+        postsLoading: state.postState.loadingPosts
     }
 }
 
@@ -35,11 +38,12 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Filter
             await dispatch(backendGetPostsByFilters(pageNumber, categories ? categories : [], tags ? tags : []))
         },
         clearPosts: () => dispatch(clearPosts()),
+        setPostLoading: (loading: boolean) => dispatch(setPostLoading(loading))
     }
 }
 
 export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
-    const {location, history, posts, clearPosts, getPostsByFilter} = props;
+    const {location, history, posts, clearPosts, getPostsByFilter, postsLoading, setPostLoading} = props;
 
     const [currentPage, setCurrentPage] = useState(1);
     const [categoryFilters, setCategoryFilters] = useState<string[]>([])
@@ -69,14 +73,16 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setPostLoading(true);
             clearPosts()
             await getPostsByFilter(currentPage, categoryFilters, tagFilters)
+            setPostLoading(false);
         }
 
         if (categoryFilters.length > 0 || tagFilters.length > 0) {
             fetchData()
         }
-    }, [tagFilters, categoryFilters, clearPosts, getPostsByFilter, currentPage])
+    }, [tagFilters, categoryFilters, clearPosts, getPostsByFilter, currentPage, setPostLoading])
 
     const addTagFilter = (tag: string) => {
         if (!tagFilters.includes(tag)) {
@@ -140,34 +146,35 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
             <hr/>
 
             <div className='is-size-3 title'>Filtered Posts:</div>
-            {
+            {postsLoading && <progress className="progress is-small is-info" max="100">50%</progress>}
+            {!postsLoading &&
                 posts.map((p: Post, i: number) => <div key={i}>
                     <PostCard showPreviewOnly={true} post={p} onClickCategory={addCategoryFilter} onClickTag={addTagFilter}/>
                     {i < posts.length - 1 ? <hr/> : ``}
                 </div>)
             }
-            <button className="button is-info pagination-button"
-                    disabled={currentPage === 1}
-                    onClick={() => {
-                        if (currentPage > 1) {
-                            setCurrentPage(currentPage - 1)
+            {!postsLoading && <button className="button is-info pagination-button"
+                     disabled={currentPage === 1}
+                     onClick={() => {
+                         if (currentPage > 1) {
+                             setCurrentPage(currentPage - 1)
 
-                            getPostsByFilter(currentPage - 1, categoryFilters, tagFilters)
-                        }
-                    }}>
+                             getPostsByFilter(currentPage - 1, categoryFilters, tagFilters)
+                         }
+                     }}>
                 Previous Page
-            </button>
-            <button className="button is-info pagination-button"
-                    disabled={posts.length === 0 || posts.length < 5}
-                    onClick={() => {
-                        if (posts.length !== 0) {
-                            setCurrentPage(currentPage + 1)
+            </button>}
+            {!postsLoading && <button className="button is-info pagination-button"
+                     disabled={posts.length === 0 || posts.length < 5}
+                     onClick={() => {
+                         if (posts.length !== 0) {
+                             setCurrentPage(currentPage + 1)
 
-                            getPostsByFilter(currentPage + 1, categoryFilters, tagFilters)
-                        }
-                    }}>
+                             getPostsByFilter(currentPage + 1, categoryFilters, tagFilters)
+                         }
+                     }}>
                 Next Page
-            </button>
+            </button>}
         </div>
     )
 }
