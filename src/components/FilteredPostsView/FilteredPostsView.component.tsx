@@ -73,7 +73,9 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
             await getPostsByFilter(currentPage, categoryFilters, tagFilters)
         }
 
-        fetchData()
+        if (categoryFilters.length > 0 || tagFilters.length > 0) {
+            fetchData()
+        }
     }, [tagFilters, categoryFilters, clearPosts, getPostsByFilter, currentPage])
 
     const addTagFilter = (tag: string) => {
