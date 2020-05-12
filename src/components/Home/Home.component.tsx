@@ -65,12 +65,12 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
 
     const fetchData = useCallback(async () => {
         setPostLoading(true)
-        await getPosts(currentPage)
+        await getPosts(1)
         await getCategories()
         await getTags()
         await getWordOfTheDayPosts()
         setPostLoading(false)
-    }, [currentPage, getCategories, getPosts, getTags, getWordOfTheDayPosts, setPostLoading])
+    }, [getCategories, getPosts, getTags, getWordOfTheDayPosts, setPostLoading])
 
     useEffect(() => {
         fetchData()
@@ -99,21 +99,18 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
                     {!postsLoading && <button className="button is-info pagination-button"
                             disabled={currentPage === 1}
                             onClick={() => {
-                                if (currentPage >= 1) {
-                                    getPosts(currentPage-1)
-                                    setCurrentPage(currentPage-1)
-                                }
+                                window.scrollTo(0, 0)
+                                getPosts(currentPage-1)
+                                setCurrentPage(currentPage-1)
                             }}>
                         Previous Page
                     </button>}
                     {!postsLoading && <button className="button is-info pagination-button"
                             disabled={posts.length === 0 || posts.length < 5}
                             onClick={() => {
-                                if (posts.length !== 0) {
-                                    window.scrollTo(0, 0)
-                                    getPosts(currentPage+1)
-                                    setCurrentPage(currentPage+1)
-                                }
+                                window.scrollTo(0, 0)
+                                getPosts(currentPage+1)
+                                setCurrentPage(currentPage+1)
                             }}>
                         Next Page
                     </button>}
