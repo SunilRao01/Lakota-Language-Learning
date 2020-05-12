@@ -248,10 +248,7 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = pr
             </button>
 
             {updatePostLoading &&
-            <div className='notification is-warning'>
-                <button className='delete'/>
-                Creating post...
-            </div>
+            <progress className="progress is-small is-info" max="100">50%</progress>
             }
 
             {!updatePostLoading && showUpdateStatus &&

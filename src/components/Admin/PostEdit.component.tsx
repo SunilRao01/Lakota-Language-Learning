@@ -73,7 +73,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
         }
 
         fetchData()
-    }, [getPost, history.location.pathname, props, updatedPost])
+    }, [getPost, history.location.pathname, updatedPost])
 
     useEffect(() => {
         if (currentPost && currentPost.title) {
