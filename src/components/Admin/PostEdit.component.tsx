@@ -65,11 +65,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
         const postId = parseInt(urlParams[urlParams.length - 1])
 
         await getPost(postId)
-        setUpdatedPost({
-            ...updatedPost,
-            id: postId
-        })
-    }, [getPost, history.location.pathname, updatedPost])
+    }, [getPost, history.location.pathname])
 
     useEffect(() => {
         fetchData()
@@ -81,7 +77,6 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
             const postId = parseInt(urlParams[urlParams.length - 1])
 
             setUpdatedPost({
-                ...updatedPost,
                 id: postId,
                 postTitle: currentPost.title,
                 postContent: currentPost.content,
@@ -104,7 +99,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
                 setEditorState(editor.getValue())
             })
         }
-    }, [currentPost, history.location.pathname, updatedPost])
+    }, [currentPost, history.location.pathname])
 
     if (!jwt || jwt.length === 0) {
         return <Redirect to={'/admin/login'} />
