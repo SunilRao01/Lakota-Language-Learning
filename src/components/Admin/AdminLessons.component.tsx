@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useEffect} from 'react'
+import React, {ChangeEvent, FC, useCallback, useEffect} from 'react'
 import {connect} from 'react-redux'
 import {RootState} from '../../store'
 import {
@@ -55,21 +55,17 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): AdminLessonAc
 const AdminLessonsComponent: FC<AdminLessonProps & AdminLessonActions> = props => {
     const { jwt, getCategories, categories, lessons, getLessons, addLesson, deleteLesson, postsLoading, setPostLoading } = props;
 
+    const fetchData = useCallback(async () => {
+        setPostLoading(true);
+        await getLessons()
+
+        await getCategories()
+        setPostLoading(false);
+    }, [getCategories, getLessons, setPostLoading])
+
     useEffect(() => {
-        const fetchData = async () => {
-            setPostLoading(true);
-            if (!lessons || lessons.length === 0) {
-                await getLessons()
-            }
-
-            if (!categories || categories.length === 0) {
-                await getCategories()
-            }
-            setPostLoading(false);
-        }
-
         fetchData()
-    }, [categories, getCategories, getLessons, lessons])
+    }, [fetchData]);
 
     return <div>
         <h3 className='title is-3'>Lessons:</h3>

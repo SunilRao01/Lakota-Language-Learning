@@ -1,4 +1,4 @@
-import React, {FC, Fragment, useEffect} from 'react';
+import React, {FC, Fragment, useCallback, useEffect} from 'react';
 import {RootState} from '../../store'
 import {backendGetLessons, backendGetPostsByLessons, Post} from '../../redux/Posts/Posts.reducer'
 import {ThunkDispatch} from 'redux-thunk'
@@ -48,17 +48,17 @@ export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): Lesson
 const LessonsComponent: FC<LessonsPropsAndActions> = props => {
     const { clearPosts, posts, getLessons, getPostsForLessons, lessons, postsLoading, setPostLoading } = props
 
-    useEffect(() => {
-       const fetchData = async () => {
-           setPostLoading(true)
-           const lessons: {id: number, lesson: string}[] = await getLessons()
-           clearPosts()
-           await getPostsForLessons(lessons.map((l: {id: number, lesson: string}) => l.lesson))
-           setPostLoading(false)
-       }
-
-       fetchData()
+    const fetchData = useCallback(async () => {
+        setPostLoading(true)
+        const lessons: {id: number, lesson: string}[] = await getLessons()
+        clearPosts()
+        await getPostsForLessons(lessons.map((l: {id: number, lesson: string}) => l.lesson))
+        setPostLoading(false)
     }, [clearPosts, getLessons, getPostsForLessons, setPostLoading])
+
+    useEffect(() => {
+       fetchData()
+    }, [fetchData])
 
     return (
         <div className='container'>

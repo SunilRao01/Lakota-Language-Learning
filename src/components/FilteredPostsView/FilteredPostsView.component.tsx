@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react'
+import React, {FC, useCallback, useEffect, useState} from 'react'
 import {RootState} from '../../store'
 import {connect} from 'react-redux'
 import {backendGetPostsByFilters, Post} from '../../redux/Posts/Posts.reducer'
@@ -49,6 +49,13 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
     const [categoryFilters, setCategoryFilters] = useState<string[]>([])
     const [tagFilters, setTagFilters] = useState<string[]>([])
 
+    const fetchData = useCallback(async () => {
+        setPostLoading(true);
+        clearPosts()
+        await getPostsByFilter(currentPage, categoryFilters, tagFilters)
+        setPostLoading(false);
+    }, [categoryFilters, clearPosts, currentPage, getPostsByFilter, setPostLoading, tagFilters])
+
     useEffect(() => {
         const queryStrings = qs.parse(location.search)
 
@@ -72,17 +79,10 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = props => {
     }, [location.search]) // Call hook when any filter url query params change
 
     useEffect(() => {
-        const fetchData = async () => {
-            setPostLoading(true);
-            clearPosts()
-            await getPostsByFilter(currentPage, categoryFilters, tagFilters)
-            setPostLoading(false);
-        }
-
         if (categoryFilters.length > 0 || tagFilters.length > 0) {
             fetchData()
         }
-    }, [tagFilters, categoryFilters, clearPosts, getPostsByFilter, currentPage, setPostLoading])
+    }, [categoryFilters.length, fetchData, tagFilters.length])
 
     const addTagFilter = (tag: string) => {
         if (!tagFilters.includes(tag)) {

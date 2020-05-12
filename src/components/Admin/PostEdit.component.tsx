@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useEffect, useState} from 'react';
+import React, {ChangeEvent, FC, useCallback, useEffect, useState} from 'react';
 import {backendGetPost, backendUpdatePost, IQuiz, Post} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {ThunkDispatch} from 'redux-thunk'
@@ -60,20 +60,20 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
 
     const [editorState, setEditorState] = useState()
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const urlParams = history.location.pathname.split('/')
-            const postId = parseInt(urlParams[urlParams.length - 1])
+    const fetchData = useCallback(async () => {
+        const urlParams = history.location.pathname.split('/')
+        const postId = parseInt(urlParams[urlParams.length - 1])
 
-            await getPost(postId)
-            setUpdatedPost({
-                ...updatedPost,
-                id: postId
-            })
-        }
-
-        fetchData()
+        await getPost(postId)
+        setUpdatedPost({
+            ...updatedPost,
+            id: postId
+        })
     }, [getPost, history.location.pathname, updatedPost])
+
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
 
     useEffect(() => {
         if (currentPost && currentPost.title) {

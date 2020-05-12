@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {backendDeletePost, backendGetPosts, Post} from '../../redux/Posts/Posts.reducer';
 import {connect} from 'react-redux';
 import {RootState} from '../../store'
@@ -25,13 +25,13 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = props => {
 
     const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            await getPosts(1)
-        }
-
-        fetchData()
+    const fetchData = useCallback(async () => {
+        await getPosts(1)
     }, [getPosts])
+
+    useEffect(() => {
+        fetchData()
+    }, [fetchData])
 
     if (!jwt || jwt.length === 0) {
         return <Redirect to={'/admin/login'} />

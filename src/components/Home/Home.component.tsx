@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import './Home.css'
 import {
     backendGetCategories,
@@ -63,18 +63,18 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
     const { posts, categories, getCategories, getPosts, getTags, getWordOfTheDayPosts, tags, wordOfTheDayPosts, setPostLoading, postsLoading } = props;
     const [currentPage, setCurrentPage] = useState(1);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setPostLoading(true)
-            await getPosts(currentPage)
-            await getCategories()
-            await getTags()
-            await getWordOfTheDayPosts()
-            setPostLoading(false)
-        }
+    const fetchData = useCallback(async () => {
+        setPostLoading(true)
+        await getPosts(currentPage)
+        await getCategories()
+        await getTags()
+        await getWordOfTheDayPosts()
+        setPostLoading(false)
+    }, [currentPage, getCategories, getPosts, getTags, getWordOfTheDayPosts, setPostLoading])
 
+    useEffect(() => {
         fetchData()
-    }, [currentPage, getCategories, getPosts, getTags, getWordOfTheDayPosts, setPostLoading]);
+    }, [fetchData]);
 
     return (
         <div className='container'>
