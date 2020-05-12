@@ -16,14 +16,14 @@ export const NavBar: FC = () => {
                     </div>
                 </Link>
 
-                <button className="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                <div className={`navbar-burger burger ${showHamburger ? 'is-active' : ''}`} aria-label="menu" aria-expanded="false"
                    data-target="navbar-target" onClick={() => {
                     setShowHamburger(!showHamburger)
                 }}>
                     <span aria-hidden="true"/>
                     <span aria-hidden="true"/>
                     <span aria-hidden="true"/>
-                </button>
+                </div>
             </div>
             <div id="navbar-target"
                  className={`navbar-menu ${showHamburger ? 'is-active' : ''}`}>
