@@ -15,22 +15,12 @@ import {AdminLogin} from '../Admin/AdminLogin.component'
 import {PostCreate} from '../Admin/PostCreate.component'
 import {AdminLessons} from '../Admin/AdminLessons.component'
 import ScrollToTop from '../ScrollToTop.component'
-import { Helmet } from 'react-helmet';
 
 export const App: FC = () => {
     return (
         <Router>
             <ScrollToTop />
             <div className="App">
-                <Helmet>
-                    <meta charSet="utf-8"/>
-                    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-                    <meta name="theme-color" content="#000000"/>
-
-                    <title>Lakota Language Learning</title>
-                    <meta name="description" content="Lakota lessons and language tools" />
-                </Helmet>
-
                 <header className="App-header">
                     <NavBar/>
                 </header>
