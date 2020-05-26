@@ -10,6 +10,11 @@
     display: flex;
     align-items: center;
     margin-bottom: 12px;
+    word-break: break-all;
+}
+
+.possible-answer-row > .button {
+    min-width: 64px;
 }
 
 .possible-answer-row button {
@@ -35,7 +40,6 @@
 .tui-editor-contents table {
     border: 1px solid #aaa;
 }
-
 
 
 
