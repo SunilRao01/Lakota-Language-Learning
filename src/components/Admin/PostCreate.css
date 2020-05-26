@@ -27,6 +27,8 @@
 
 .created-quizzes-container {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap
 }
 
 .tui-editor-contents table th {
