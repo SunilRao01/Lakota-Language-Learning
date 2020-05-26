@@ -1,7 +1,3 @@
-.quiz-card {
-    max-width: 240px;
-}
-
 .quiz-card-cross {
     width: 32px;
     height: 32px;
@@ -9,17 +5,20 @@
     justify-content: center;
 }
 
-.card-content > .content > .field > .control {
+.quiz-card {
     display: flex;
     flex-direction: column;
     margin: 0;
+    max-width: 240px;
 }
 
-.card-content > .content > .field > .control > .radio {
+.quiz-card .radio {
     margin: 0 0 5px;
+    display: flex;
+    word-break: break-all;
 }
 
-.card-content > .content > .field > .control > .radio > input {
+.quiz-card .radio > input {
     margin-right: 5px;
 }
 
@@ -31,4 +30,18 @@
 .error-message {
     color: darkred;
     margin-bottom: 15px;
+}
+
+.quiz-card .card-header-title {
+    word-break: break-all;
+}
+
+.quiz-card .button.is-danger {
+    min-width: 64px;
+    margin: 10px
+}
+
+.quiz-card hr {
+    border: 1px solid #f0f0f0;
+    margin: 10px 10px;
 }

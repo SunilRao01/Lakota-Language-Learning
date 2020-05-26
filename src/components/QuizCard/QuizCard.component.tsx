@@ -9,7 +9,7 @@ interface QuizCardProps {
 }
 
 export const QuizCard: FC<QuizCardProps> = props => {
-    const { onCross, quiz } = props;
+    const {onCross, quiz} = props;
 
     const [selectedAnswer, setSelectedAnswer] = useState('')
     const [quizState, setQuizState] = useState(-1) // -1 = no answer, 0 = incorrect answer, 1 = correct answer
@@ -27,7 +27,7 @@ export const QuizCard: FC<QuizCardProps> = props => {
 
     return (
         <div data-testid='QuizCard'
-             className='column swing-in-top-bck is-full quiz-card'>
+             className='column swing-in-top-bck quiz-card'>
             <form onSubmit={(e: FormEvent) => {
                 e.preventDefault()
 
@@ -57,15 +57,18 @@ export const QuizCard: FC<QuizCardProps> = props => {
                                     {quiz.possibleAnswers &&
                                     quiz.possibleAnswers.map((pa: string, index: number) => {
                                         return (
-                                            <label key={index} className='radio'>
-                                                <input type="radio" name='quiz-answer'
-                                                       onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                                           setSelectedAnswer(e.target.value)
-                                                       }}
-                                                       value={pa}
-                                                />
-                                                {pa}
-                                            </label>
+                                            <>
+                                                <label key={index} className='radio'>
+                                                    <input type="radio" name='quiz-answer'
+                                                           onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                                                               setSelectedAnswer(e.target.value)
+                                                           }}
+                                                           value={pa}
+                                                    />
+                                                    {pa}
+                                                </label>
+                                                {index !== quiz.possibleAnswers.length - 1 && <hr/>}
+                                            </>
                                         )
                                     })}
                                 </div>
