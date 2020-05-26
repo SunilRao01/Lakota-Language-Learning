@@ -34,7 +34,9 @@
 }
 
 .quiz-card .card-header-title {
-    word-break: break-all;
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
 }
 
 .quiz-card .button.is-danger {
