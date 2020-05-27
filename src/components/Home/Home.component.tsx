@@ -87,7 +87,7 @@ const HomeComponent: FC<HomePropsWithActions> = props => {
             <div className='columns is-variable is-4'>
                 <div className='column is-two-thirds'>
                     <h3 className='title is-3'>Recent Posts:</h3>
-                    {postsLoading && <progress className="progress is-small is-info" max="100">50%</progress>}
+                    {postsLoading && <progress data-testid={'progress-bar'} className="progress is-small is-info" max="100">50%</progress>}
                     {
                         !postsLoading &&
                         posts.map((p: Post, i: number) =>

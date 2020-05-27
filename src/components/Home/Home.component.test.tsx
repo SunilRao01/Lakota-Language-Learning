@@ -67,12 +67,12 @@ describe('Home', () => {
             }
         }
 
-        it('should render posts on start', () => {
+        it('should progress bar on start until request is complete', () => {
             const {getAllByTestId} = renderWithReduxAndRouter(<Home/>, {
                 store: createStore(rootReducer, initialStore, applyMiddleware(thunk))
             });
 
-            expect(getAllByTestId('postcard-large').length).toEqual(3);
+            expect(getAllByTestId('progress-bar').length).toEqual(1);
         });
 
         it('should parse and show posts under "Word of the Day" section', () => {
