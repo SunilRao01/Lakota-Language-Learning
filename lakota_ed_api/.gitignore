@@ -32,4 +32,4 @@ priv/repo/prod_seeds.exs
 
 .dev_env_file
 .db_dev_env_file
-db_data
+/db_data/
