@@ -40,6 +40,6 @@ defmodule LakotaEdApiWeb.Endpoint do
     key: "_lakota_ed_api_key",
     signing_salt: "SkzoCZ5J"
 
-  plug CORSPlug
+  plug CORSPlug, origin: "lakotalanguagelearning.com"
   plug LakotaEdApiWeb.Router
 end
