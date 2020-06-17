@@ -37,5 +37,8 @@ config :lakota_ed_api,
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
+config :cors_plug,
+       origin: ["https://lakotalanguagelearning.com"]
+
 # Configure bcrypt for passwords
 config :comeonin, :bcrypt_log_rounds, 4

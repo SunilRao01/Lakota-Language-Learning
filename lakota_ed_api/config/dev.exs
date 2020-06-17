@@ -73,5 +73,8 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
+config :cors_plug,
+       origin: ["*"]
+
 # Configure bcrypt for passwords
 config :comeonin, :bcrypt_log_rounds, 4
