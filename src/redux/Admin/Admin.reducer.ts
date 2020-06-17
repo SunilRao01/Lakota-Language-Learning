@@ -13,7 +13,7 @@ export const initialAdminState: AdminState = {
     currentPage: 1
 };
 
-const apiUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:4000' : 'https://sleepy-sierra-08774.herokuapp.com'
+const apiUrl = process.env.API_URL ? process.env.API_URL : 'http://localhost:4000'
 
 export const backendLogin = (username: string, password: string): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {

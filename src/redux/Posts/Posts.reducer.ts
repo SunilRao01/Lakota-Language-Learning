@@ -16,8 +16,6 @@ import {AnyAction, Dispatch} from 'redux'
 import {ThunkAction} from 'redux-thunk'
 import {RootState} from '../../store'
 
-const apiUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:4000' : 'https://sleepy-sierra-08774.herokuapp.com'
-
 export interface IQuiz {
     question: string,
     possibleAnswers: string[],
@@ -54,6 +52,8 @@ export const initialPostState: PostState = {
     lessons: [],
     loadingPosts: false
 };
+
+const apiUrl = process.env.API_URL ? process.env.API_URL : 'http://localhost:4000'
 
 export const backendGetPosts = (pageNumber: number): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {

@@ -60,4 +60,5 @@ lakota_ed_api/priv/repo/prod_seeds.exs
 .db_dev_env_file
 db_data
 
-
+.env.staging
+.env.prod
