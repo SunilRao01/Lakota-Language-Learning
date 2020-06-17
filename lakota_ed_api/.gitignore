@@ -29,3 +29,7 @@ lakota_ed_api-*.tar
 
 # Ignore the file that contains sensitive prod info
 priv/repo/prod_seeds.exs
+
+.dev_env_file
+.db_dev_env_file
+db_data

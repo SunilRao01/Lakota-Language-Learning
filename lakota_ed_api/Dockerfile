@@ -1,22 +1,19 @@
-# ./Dockerfile
-FROM elixir:alpine
+# Use an official Elixir runtime as a parent image
+FROM elixir:1.9.4
 
-RUN apk update && apk --no-cache --update add build-base bash dumb-init postgresql-client
+RUN apt-get update && \
+  apt-get install -y postgresql-client
 
 # Create app directory and copy the Elixir projects into it
 RUN mkdir /app
+COPY . /app
 WORKDIR /app
 
-RUN mix local.hex --force && mix local.rebar --force
+# Install hex package manager
+RUN mix local.hex --force
+RUN mix local.rebar --force
 
-COPY config/* config/
-COPY mix.exs ./
-RUN mix deps.get
-RUN mix deps.compile
+# Compile the project
+RUN mix do compile
 
-COPY . ./
-RUN mix compile
-
-ENTRYPOINT ["/app/bin/entrypoint.sh"]
-
-CMD ["mix", "phx.server"]
+CMD ["/app/bin/entrypoint.sh"]
