@@ -25,28 +25,28 @@ postgres-data
 
 .htaccess
 # The directory Mix will write compiled artifacts to.
-/_build/
+lakota_ed_api/_build/
 
 # If you run "mix test --cover", coverage assets end up here.
-/cover/
+lakota_ed_api/cover/
 
 # The directory Mix downloads your dependencies sources to.
-/deps/
+lakota_ed_api/deps/
 
 # Where 3rd-party dependencies like ExDoc output generated docs.
-/doc/
+lakota_ed_api/doc/
 
 # Ignore .fetch files in case you like to edit your project deps locally.
-/.fetch
+lakota_ed_api/.fetch
 
 # If the VM crashes, it generates a dump, let's ignore it too.
-erl_crash.dump
+lakota_ed_api/erl_crash.dump
 
 # Also ignore archive artifacts (built via "mix archive.build").
-*.ez
+lakota_ed_api/*.ez
 
 # Ignore package tarball (built via "mix hex.build").
-lakota_ed_api-*.tar
+lakota_ed_api/lakota_ed_api-*.tar
 
 # Since we are building assets from assets/,
 # we ignore priv/static. You may want to comment
@@ -59,3 +59,5 @@ priv/repo/prod_seeds.exs
 .dev_env_file
 .db_dev_env_file
 db_data
+
+
