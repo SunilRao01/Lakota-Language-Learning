@@ -86,7 +86,7 @@ describe('Home', () => {
     })
 
     describe('redux', () => {
-        it('should mapStateToProps', () => {
+        xit('should mapStateToProps', () => {
             const initialState: RootState = {
                 ...initialRootState,
                 filterState: initialFilterState,
