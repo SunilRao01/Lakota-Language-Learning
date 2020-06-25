@@ -3,15 +3,13 @@ resources:
     type: git
     source:
       uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
-      branch: dev
-      private_key: ((github-gpg-key))
+      branch: development
 
   - name: prod-lakota-ed
     type: git
     source:
       uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
       branch: master
-      private_key: ((github-gpg-key))
 
 jobs:
   - name: Unit Tests

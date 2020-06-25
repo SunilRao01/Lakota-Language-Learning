@@ -16,6 +16,7 @@
 .env.test.local
 .env.production.local
 .idea
+.env
 
 npm-debug.log*
 yarn-debug.log*
@@ -56,9 +57,17 @@ lakota_ed_api/lakota_ed_api-*.tar
 # Ignore the file that contains sensitive prod info
 lakota_ed_api/priv/repo/prod_seeds.exs
 
+# Phoenix Env Vars
 .dev_env_file
 .db_dev_env_file
-db_data
 
+
+# Reacct Env Vars
 .env.staging
 .env.prod
+
+# Concourse Env Vars
+concourse.env
+db.env
+credentials.yml
+db_data
