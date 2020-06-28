@@ -4,13 +4,16 @@ set -e -u -x
 
 {
   mkdir /root/.ssh
-  chmod 700 ~/.ssh
 
   rsa_public=${PUBLIC_RSA_KEY}
   rsa_private=${PRIVATE_RSA_KEY}
 
   echo "$rsa_private" > ~/.ssh/id_rsa
   echo "$rsa_public" > ~/.ssh/id_rsa.pub
+
+  chmod 700 ~/.ssh
+  chmod 600 ~/.ssh/id_rsa
+  chmod 644 ~/.ssh/id_rsa.pub
 
   ls ~/.ssh
 
