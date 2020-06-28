@@ -5,8 +5,8 @@ set -e -u -x
 {
   mkdir /root/.ssh
 
-  rsa_public=${PUBLIC_RSA_KEY}
   rsa_private=${PRIVATE_RSA_KEY}
+  rsa_public=${PUBLIC_RSA_KEY}
 
   echo "$rsa_private" > ~/.ssh/id_rsa
   echo "$rsa_public" > ~/.ssh/id_rsa.pub
@@ -30,7 +30,7 @@ cd dev-lakota-ed
 #npm install
 #npm run build
 
-ssh -R12345:localhost:22 root@skeletonpraxis.net
+ssh -R12345:localhost:22 root@skeletonpraxis.net -N ''
 
 scp -P12345 -u public/* 127.0.0.1:/var/www/lakota.skeletonpraxis.net
 #scp -r public/* root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
