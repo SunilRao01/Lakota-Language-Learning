@@ -33,7 +33,7 @@ cd dev-lakota-ed
 
 #! /usr/bin/expect
 scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -rp public/ root@134.122.124.158:/var/www/lakota.skeletonpraxis.net
-expect "Enter passphrase for key '/root/.ssh/id_rsa':"
+expect "Enter passphrase for key '/root/.ssh/id_rsa': "
 send "\n"
 
 rm ~/.ssh/id_rsa
