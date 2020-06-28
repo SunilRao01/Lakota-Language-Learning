@@ -22,7 +22,7 @@ jobs:
 
   - name: Deploy to Dev
     plan:
-      - in_parallel:
+      - aggregate:
           - get: dev-lakota-ed
 #            passed:
 #              - Unit Tests
@@ -35,7 +35,7 @@ jobs:
 
   - name: Integration Tests
     plan:
-      - in_parallel:
+      - aggregate:
           - get: dev-lakota-ed
             passed:
               - Deploy to Dev
@@ -45,7 +45,7 @@ jobs:
 
   - name: Deploy to Prod
     plan:
-      - in_parallel:
+      - aggregate:
           - get: prod-lakota-ed
             trigger: false
       - task: deploy-to-prod
