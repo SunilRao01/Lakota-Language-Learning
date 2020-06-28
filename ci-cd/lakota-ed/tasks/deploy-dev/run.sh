@@ -3,17 +3,13 @@
 set -e -u -x
 
 {
-    mkdir ~/.ssh
-    touch ~/.ssh/id_rsa
-
-    chmod 700 ~/.ssh
-    chmod 600 ~/.ssh/id_rsa
-
     rsa=${RSA_KEY}
-    echo "$rsa" > ~/.ssh/id_rsa
-
-
-    ssh-keygen -q -b 4096 -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+    ssh-keygen -t rsa -N "" -f rsa.key
+    echo "$rsa" > ./rsa.key
+    mkdir /root/.ssh
+    cp ./rsa.key ~/.ssh/id_rsa
+    rm rsa.key
+    rm rsa.key.pub
 
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
     ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
