@@ -18,11 +18,11 @@ set -e -u -x
 
   ls ~/.ssh
 
-#  touch ~/.ssh/known_hosts
-#  chmod 644 ~/.ssh/known_hosts
+  touch /root/.ssh/known_hosts
+  chmod 644 ~/.ssh/known_hosts
 #
-#  ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
-#  ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
+  ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
+  ssh-keyscan -H 134.122.124.158 >> /root/.ssh/known_hosts
 #
 #  cat ~/.ssh/known_hosts
 }
