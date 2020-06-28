@@ -8,12 +8,12 @@ set -e -u -x
 
   ln -s /run/secrets/private_rsa_key ~/.ssh/id_rsa
   ln -s /run/secrets/public_rsa_key ~/.ssh/id_rsa.pub
-
-  touch /root/.ssh/known_hosts
-  chmod 644 ~/.ssh/known_hosts
-
-  ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
-  ssh-keyscan -H 134.122.124.158 >> /root/.ssh/known_hosts
+#
+#  touch /root/.ssh/known_hosts
+#  chmod 644 ~/.ssh/known_hosts
+#
+#  ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
+#  ssh-keyscan -H 134.122.124.158 >> /root/.ssh/known_hosts
 }
 
 cd dev-lakota-ed
