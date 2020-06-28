@@ -5,7 +5,7 @@ set -e -u -x
 {
     rsa=${RSA_KEY}
     echo "$rsa" > ./rsa_key
-    ssh-keygen -f ./rsa_key -t rsa -N ""
+    ssh-keygen -f ./rsa_key -y > ~/.ssh/id_rsa.pub
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
     ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
     pwd
