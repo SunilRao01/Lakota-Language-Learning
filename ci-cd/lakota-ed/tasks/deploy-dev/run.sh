@@ -2,7 +2,13 @@
 
 set -e -u -x
 
-#{
+{
+  private_rsa_key=${PRIVATE_RSA_KEY}
+  public_rsa_key=${PUBLIC_RSA_KEY}
+
+  ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+  echo "$private_rsa_key" > ~/.ssh/id_rsa
+  echo "$public_rsa_key" > ~/.ssh/id_rsa.pub
 #  mkdir -p /root/.ssh
 #  chmod 0700 ~/.ssh
 #
@@ -15,19 +21,19 @@ set -e -u -x
 #  cat ~/.ssh/id_rsa
 #  cat ~/.ssh/id_rsa.pub
 #
-#  touch /root/.ssh/known_hosts
-#  chmod 644 ~/.ssh/known_hosts
+  touch /root/.ssh/known_hosts
+  chmod 644 ~/.ssh/known_hosts
 
 #
-#  ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
+  ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
 #  ssh-keyscan -H 134.122.124.158 >> /root/.ssh/known_hosts
 
 #  cat /run/secrets/private_rsa_key
 #  cat /run/secrets/public_rsa_key
-#}
-ls -la ./
-ls -la ~/
+}
+#ls -la ./
 printenv
+ls -la ~/.ssh
 cd dev-lakota-ed
 #npm install
 #npm run build
