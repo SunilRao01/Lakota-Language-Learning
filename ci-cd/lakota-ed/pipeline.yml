@@ -2,13 +2,13 @@ resources:
   - name: dev-lakota-ed
     type: git
     source:
-      uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
+      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
       branch: development
 
   - name: prod-lakota-ed
     type: git
     source:
-      uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
+      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
       branch: master
 
 jobs:
@@ -56,8 +56,8 @@ groups:
   - name: Development
     jobs:
       - Unit Tests
-      - Integration Tests
       - Deploy to Dev
+      - Integration Tests
   - name: Production
     jobs:
       - Deploy to Prod
