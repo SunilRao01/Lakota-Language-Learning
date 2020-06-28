@@ -1,4 +1,4 @@
-version: '3'
+version: '3.1'
 
 services:
   concourse-db:
@@ -14,3 +14,9 @@ services:
     ports: ["8080:8080"]
     env_file:
       - concourse.env
+    secrets:
+      - host_ssh_key
+
+secrets:
+  host_ssh_key:
+    file: ~/.ssh/id_rsa
