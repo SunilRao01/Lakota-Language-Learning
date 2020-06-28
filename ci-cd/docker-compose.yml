@@ -14,18 +14,9 @@ services:
     ports: ["8080:8080"]
     env_file:
       - concourse.env
-    secrets:
-      - private_rsa_key
-      - public_rsa_key
     volumes:
       - type: bind
         source: /run/host-services/ssh-auth.sock
         target: /run/host-services/ssh-auth.sock
     environment:
       - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
-
-secrets:
-  private_rsa_key:
-    file: ~/.ssh/id_rsa
-  public_rsa_key:
-    file: ~/.ssh/id_rsa.pub

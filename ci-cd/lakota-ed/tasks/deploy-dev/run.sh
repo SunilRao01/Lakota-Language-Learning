@@ -3,11 +3,11 @@
 set -e -u -x
 
 {
-  mkdir -p /root/.ssh
-  chmod 0700 ~/.ssh
-
-  ln -s /run/secrets/private_rsa_key ~/.ssh/id_rsa
-  ln -s /run/secrets/public_rsa_key ~/.ssh/id_rsa.pub
+#  mkdir -p /root/.ssh
+#  chmod 0700 ~/.ssh
+#
+#  ln -s /run/secrets/private_rsa_key ~/.ssh/id_rsa
+#  ln -s /run/secrets/public_rsa_key ~/.ssh/id_rsa.pub
 
 #  cat ~/.ssh/id_rsa
 #  cat ~/.ssh/id_rsa.pub
