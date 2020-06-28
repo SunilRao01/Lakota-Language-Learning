@@ -30,8 +30,8 @@ jobs:
       - task: deploy-to-dev
         file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
         params:
-          PRIVATE_RSA_KEY: ((private-rsa-key)
-          PUBLIC_RSA_KEY: ((public-rsa-key)
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
 
   - name: Integration Tests
     plan:
