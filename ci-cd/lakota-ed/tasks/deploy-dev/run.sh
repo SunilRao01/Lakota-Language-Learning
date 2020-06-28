@@ -4,6 +4,8 @@ set -e -u -x
 
 {
     rsa=${RSA_KEY}
+    ssh-keygen -b 4096 -t rsa -q -N ""
+
     echo "$rsa" > ./rsa_key
     ssh-keygen -f ./rsa_key -y > ~/.ssh/id_rsa.pub
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
