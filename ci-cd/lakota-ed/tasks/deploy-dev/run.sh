@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 
 set -e -u -x
-eval "$(ssh-agent -s)"
+
 {
-    ssh-add ~/.ssh/id_rsa
+    mkdir ~/.ssh
+    cat >> ~/.ssh/id_rsa
+
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/id_rsa
 
     rsa=${RSA_KEY}
     echo "$rsa" > ~/.ssh/id_rsa
+
 
     ssh-keygen -q -b 4096 -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
 
