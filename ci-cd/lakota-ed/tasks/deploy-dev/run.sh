@@ -30,6 +30,9 @@ cd dev-lakota-ed
 #npm install
 #npm run build
 
-scp -r public/* root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
+ssh -R12345:localhost:22 root@skeletonpraxis.net
 
-rm ~/.ssh/id_rsa
+scp -P12345 -u public/* 127.0.0.1:/var/www/lakota.skeletonpraxis.net
+#scp -r public/* root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
+
+#rm ~/.ssh/id_rsa
