@@ -7,7 +7,7 @@ set -e -u -x
     echo "$rsa" > ./rsa_key
     chmod 600 ./rsa_key
 
-    ssh-keygen -f ./rsa_key -b 4096 -t rsa -q -N ""
+    ssh-keygen -y -f ./rsa_key -b 4096 -t rsa -q -N "" > ./rsa_key.pub
     ls
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
     ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
