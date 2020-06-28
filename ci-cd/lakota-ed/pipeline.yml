@@ -29,11 +29,11 @@ jobs:
 
   - name: Deploy to Dev
     plan:
-      - in_parallel:
-          - get: dev-lakota-ed
-#            passed:
-#              - Unit Tests
-            trigger: true
+#      - in_parallel:
+#          - get: dev-lakota-ed
+##            passed:
+##              - Unit Tests
+#            trigger: true
       - put: dev-server
         params:
           command: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/run.sh
@@ -69,8 +69,6 @@ groups:
     jobs:
       - Deploy to Prod
 
-
----
 resource_types:
   - name: concourse-ssh-resource
     type: docker-image
