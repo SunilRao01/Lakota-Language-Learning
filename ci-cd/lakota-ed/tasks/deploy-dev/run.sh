@@ -18,7 +18,7 @@ set -e -u -x
 
 cd dev-lakota-ed
 npm install
-npm run build
+npm run build:staging
 
 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@skeletonpraxis.net "rm -rfv /var/www/lakota.skeletonpraxis.net/*"
 scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r build/* root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
