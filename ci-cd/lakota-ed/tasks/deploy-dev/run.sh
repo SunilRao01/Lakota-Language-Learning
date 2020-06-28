@@ -14,6 +14,8 @@ set -e -u -x
 #
   touch /root/.ssh/known_hosts
   chmod 644 ~/.ssh/known_hosts
+  chmod 600 ~/.ssh/id_rsa
+  chmod 644 ~/.ssh/id_rsa.pub
 #
   ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
 #  ssh-keyscan -H 134.122.124.158 >> /root/.ssh/known_hosts
@@ -21,7 +23,7 @@ set -e -u -x
 #  cat /run/secrets/private_rsa_key
 #  cat /run/secrets/public_rsa_key
 }
-ls ~/.ssh
+ls -la ~/.ssh
 cd dev-lakota-ed
 #npm install
 #npm run build
