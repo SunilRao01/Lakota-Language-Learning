@@ -11,6 +11,6 @@ ls -la
 echo "Running integration tests against QA..."
 
 npm install cypress --save-dev
-CYPRESS_BASE_URL=http://lakota.skeletonpraxis.net/ cypress run
+CYPRESS_BASE_URL=http://lakota.skeletonpraxis.net/ node_modules/.bin/cypress run
 
 echo "Finished running unit tests."
