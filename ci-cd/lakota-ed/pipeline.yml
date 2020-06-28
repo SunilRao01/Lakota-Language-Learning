@@ -1,3 +1,9 @@
+resource_types:
+  - name: concourse-ssh-resource
+    type: docker-image
+    source:
+      repository: edtan1/concourse-ssh-resource
+
 resources:
   - name: dev-lakota-ed
     type: git
@@ -69,8 +75,4 @@ groups:
     jobs:
       - Deploy to Prod
 
-resource_types:
-  - name: concourse-ssh-resource
-    type: docker-image
-    source:
-      repository: edtan1/concourse-ssh-resource
+
