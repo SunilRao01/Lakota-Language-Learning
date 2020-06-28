@@ -26,6 +26,7 @@ set -e -u -x
 #  cat /run/secrets/public_rsa_key
 #}
 ls -la ./
+printenv
 cd dev-lakota-ed
 #npm install
 #npm run build
