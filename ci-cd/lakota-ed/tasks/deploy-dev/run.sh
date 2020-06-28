@@ -2,7 +2,7 @@
 
 set -e -u -x
 
-{
+#{
 #  mkdir -p /root/.ssh
 #  chmod 0700 ~/.ssh
 #
@@ -17,7 +17,7 @@ set -e -u -x
 #
 #  ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
 #  ssh-keyscan -H 134.122.124.158 >> /root/.ssh/known_hosts
-}
+#}
 
 cd dev-lakota-ed
 #npm install
