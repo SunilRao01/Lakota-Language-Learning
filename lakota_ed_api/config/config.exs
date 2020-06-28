@@ -15,7 +15,7 @@ config :lakota_ed_api, LakotaEdApiWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "JEshUOjGYI2IuTJmFjGQzftRba7y8BgjaeGzzvqiuJjhTIvNGm/9Zd4VUlRHTfoJ",
   render_errors: [view: LakotaEdApiWeb.ErrorView, accepts: ~w(json)],
-  pubsub: [name: LakotaEdApi.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: LakotaEdApi.PubSub
 
 # Configures Elixir's Logger
 config :logger, :console,
