@@ -6,6 +6,9 @@ set -e -u -x
   mkdir -p /root/.ssh
   chmod 0700 ~/.ssh
 #
+  chmod 600 /run/secrets/private_rsa_key
+  chmod 644 /run/secrets/public_rsa_key
+
   ln -s /run/secrets/private_rsa_key /root/.ssh/id_rsa
   ln -s /run/secrets/public_rsa_key /root/.ssh/id_rsa.pub
 
@@ -14,8 +17,7 @@ set -e -u -x
 #
   touch /root/.ssh/known_hosts
   chmod 644 ~/.ssh/known_hosts
-  chmod 600 ~/.ssh/id_rsa
-  chmod 644 ~/.ssh/id_rsa.pub
+
 #
   ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
 #  ssh-keyscan -H 134.122.124.158 >> /root/.ssh/known_hosts
