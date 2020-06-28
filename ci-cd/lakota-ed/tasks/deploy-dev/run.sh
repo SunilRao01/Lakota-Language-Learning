@@ -10,7 +10,7 @@ set -e -u -x
 
     ssh-keygen -l -f ~/.ssh/id_rsa
 
-    ssh-keygen -f ~/.ssh/id_rsa -b 4096 -t rsa -q -N "" > ~/.ssh/id_rsa.pub
+    ssh-keygen -q -b 4096 -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
     ls
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
     ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
