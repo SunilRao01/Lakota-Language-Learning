@@ -3,11 +3,11 @@
 set -e -u -x
 
 {
-    rsa=${RSA_KEY}
-    echo "$rsa" > ./rsa_key
-    chmod 600 ./rsa_key
+    ssh-keygen -q -b 4096 -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
 
-    ssh-keygen -l -f ./rsa_key
+    rsa=${RSA_KEY}
+    echo "$rsa" > ~/.ssh/id_rsa
+
     ssh-keygen -y -f ./rsa_key -b 4096 -t rsa -q -N "" > ./rsa_key.pub
     ls
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts

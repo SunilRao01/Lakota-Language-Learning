@@ -12,20 +12,20 @@ resources:
       branch: master
 
 jobs:
-  - name: Unit Tests
-    plan:
-      - in_parallel:
-          - get: dev-lakota-ed
-            trigger: true
-      - task: run-unit-tests
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test/task.yml
+#  - name: Unit Tests
+#    plan:
+#      - in_parallel:
+#          - get: dev-lakota-ed
+#            trigger: true
+#      - task: run-unit-tests
+#        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test/task.yml
 
   - name: Deploy to Dev
     plan:
       - in_parallel:
           - get: dev-lakota-ed
-            passed:
-              - Unit Tests
+#            passed:
+#              - Unit Tests
             trigger: true
       - task: deploy-to-dev
         file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
@@ -55,7 +55,7 @@ jobs:
 groups:
   - name: Development
     jobs:
-      - Unit Tests
+#      - Unit Tests
       - Deploy to Dev
       - Integration Tests
   - name: Production
