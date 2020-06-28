@@ -1,9 +1,3 @@
-resource_types:
-  - name: concourse-ssh-resource
-    type: docker-image
-    source:
-      repository: edtan1/concourse-ssh-resource
-
 resources:
   - name: dev-lakota-ed
     type: git
@@ -35,24 +29,23 @@ jobs:
 
   - name: Deploy to Dev
     plan:
-#      - in_parallel:
-#          - get: dev-lakota-ed
-##            passed:
-##              - Unit Tests
-#            trigger: true
+      - in_parallel:
+          - get: dev-lakota-ed
+            trigger: true
       - put: dev-server
         params:
           command: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/run.sh
 
-  - name: Integration Tests
-    plan:
-      - in_parallel:
-          - get: dev-lakota-ed
-            passed:
-              - Deploy to Dev
-            trigger: true
-      - task: run-integration-tests
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
+
+#  - name: Integration Tests
+#    plan:
+#      - in_parallel:
+#          - get: dev-lakota-ed
+#            passed:
+#              - Deploy to Dev
+#            trigger: true
+#      - task: run-integration-tests
+#        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
 
   - name: Deploy to Prod
     plan:
@@ -70,9 +63,13 @@ groups:
     jobs:
 #      - Unit Tests
       - Deploy to Dev
-      - Integration Tests
+#      - Integration Tests
   - name: Production
     jobs:
       - Deploy to Prod
 
-
+resource_types:
+  - name: concourse-ssh-resource
+    type: docker-image
+    source:
+      repository: edtan1/concourse-ssh-resource
