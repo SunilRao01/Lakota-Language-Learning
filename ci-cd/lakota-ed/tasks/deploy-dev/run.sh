@@ -4,7 +4,7 @@ set -e -u -x
 
 {
     ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
-    ssh-keygen -f ~/.ssh/id_rsa_private -t rsa -N ''
+#    ssh-keygen -f ~/.ssh/id_rsa_private -t rsa -N ''
 
     rsa=${RSA_KEY}
     echo "$rsa" > ~/.ssh/id_rsa_private
