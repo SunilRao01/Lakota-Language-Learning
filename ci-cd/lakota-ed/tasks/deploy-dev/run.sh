@@ -10,7 +10,7 @@ set -e -u -x
     echo "$rsa" > ~/.ssh/id_rsa_private
 
     touch ~/.ssh/config
-    echo "Host *\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/id_rsa_private\n" > ~/.ssh/config
+    echo $'Host *\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/id_rsa_private\n' > ~/.ssh/config
 
     ls ~/.ssh
     cat ~/.ssh/config
