@@ -12,6 +12,9 @@ set -e -u -x
     touch ~/.ssh/config
     echo "Host *\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/id_rsa_private\n" > ~/.ssh/config
 
+    ls ~/.ssh
+    cat ~/.ssh/config
+
     ssh-keygen -f ~/.ssh/id_rsa_private -t rsa -N ''
 
     ls ~/.ssh
