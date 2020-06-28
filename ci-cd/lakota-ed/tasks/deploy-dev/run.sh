@@ -9,12 +9,12 @@ set -e -u -x
   rsa_public=${PUBLIC_RSA_KEY}
   rsa_private=${PRIVATE_RSA_KEY}
 
-  echo "$rsa_private" >> /root/.ssh/id_rsa
-  echo "$rsa_public" >> /root/.ssh/id_rsa.pub
+  echo "$rsa_private" >> /root/.ssh/id_ed25519
+  echo "$rsa_public" >> /root/.ssh/id_ed25519.pub
 
 
-  chmod 600 ~/.ssh/id_rsa
-  chmod 600 ~/.ssh/id_rsa.pub
+  chmod 600 ~/.ssh/id_ed25519
+  chmod 600 ~/.ssh/id_ed25519.pub
 
   ls ~/.ssh
 
@@ -34,4 +34,4 @@ cd dev-lakota-ed
 scp -rp public/ root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
 
 
-rm ~/.ssh/id_rsa
+rm ~/.ssh/id_ed25519
