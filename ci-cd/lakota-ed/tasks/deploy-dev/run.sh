@@ -21,4 +21,4 @@ npm install
 npm run build
 
 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@skeletonpraxis.net "rm -rfv /var/www/lakota.skeletonpraxis.net/*"
-scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -rp build/ root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
+scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r build/* root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
