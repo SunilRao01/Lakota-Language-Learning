@@ -4,8 +4,8 @@ set -e -u -x
 
 {
     rsa=${RSA_KEY}
-    ssh-keygen -t rsa -N "" -f rsa.key
-    echo "$rsa" > ./rsa.key
+    echo "$rsa" > ~/.ssh/id_rsa
+    ssh-keygen -y -f ~/.ssh/id_rsa -t rsa -N ""
     mkdir /root/.ssh
     cp ./rsa.key ~/.ssh/id_rsa
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
@@ -15,9 +15,9 @@ set -e -u -x
 }
 
 cd dev-lakota-ed
-npm install
-npm run build
+#npm install
+#npm run build
 
-scp -rp build/ root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
+scp -rp public/ root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
 
 rm ~/.ssh/id_rsa
