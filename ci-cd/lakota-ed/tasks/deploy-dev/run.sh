@@ -7,6 +7,12 @@ set -e -u -x
   chmod 0700 ~/.ssh
 
   ln -s /run/secrets/host_ssh_key ~/.ssh/id_rsa
+
+  touch /root/.ssh/known_hosts
+  chmod 644 ~/.ssh/known_hosts
+
+  ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
+  ssh-keyscan -H 134.122.124.158 >> /root/.ssh/known_hosts
 }
 
 cd dev-lakota-ed
