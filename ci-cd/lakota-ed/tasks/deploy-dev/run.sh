@@ -24,12 +24,14 @@ set -e -u -x
   ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
 
   cat ~/.ssh/known_hosts
+
+  ssh-copy-id -i ~/.ssh/id_rsa.pub root@skeletonpraxis.net
 }
 
 cd dev-lakota-ed
 #npm install
 #npm run build
 
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -rp public/ root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -rp build/ root@159.203.88.10:/var/www/ed-for-bernie
 
 rm ~/.ssh/id_rsa
