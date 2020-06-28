@@ -25,7 +25,7 @@ set -e -u -x
 #  cat /run/secrets/private_rsa_key
 #  cat /run/secrets/public_rsa_key
 #}
-ls -la ~/.ssh
+ls -la ./
 cd dev-lakota-ed
 #npm install
 #npm run build
