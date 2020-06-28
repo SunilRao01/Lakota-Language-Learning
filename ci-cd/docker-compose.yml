@@ -17,10 +17,12 @@ services:
     secrets:
       - private_rsa_key
       - public_rsa_key
-    environment:
-      SSH_AUTH_SOCK: $SSH_AUTH_SOCK
     volumes:
-      - $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
+      - type: bind
+          source: /run/host-services/ssh-auth.sock
+          target: /run/host-services/ssh-auth.sock
+    environment:
+      - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
 
 secrets:
   private_rsa_key:
