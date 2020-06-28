@@ -14,37 +14,37 @@ resources:
 jobs:
   - name: Unit Tests
     plan:
-      - aggregate:
+      - in_parallel:
           - get: dev-lakota-ed
             trigger: true
       - task: run-unit-tests
         file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test/task.yml
 
-  - name: Integration Tests
+  - name: Deploy to Dev
     plan:
-      - aggregate:
+      - in_parallel:
           - get: dev-lakota-ed
             passed:
               - Unit Tests
-            trigger: true
-      - task: run-integration-tests
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
-
-  - name: Deploy to Dev
-    plan:
-      - aggregate:
-          - get: dev-lakota-ed
-            passed:
-              - Integration Tests
             trigger: true
       - task: deploy-to-dev
         file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
         params:
           RSA_KEY: ((deploy-ssh-key))
 
+  - name: Integration Tests
+    plan:
+      - in_parallel:
+          - get: dev-lakota-ed
+            passed:
+              - Deploy to Dev
+            trigger: true
+      - task: run-integration-tests
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
+
   - name: Deploy to Prod
     plan:
-      - aggregate:
+      - in_parallel:
           - get: prod-lakota-ed
             trigger: false
       - task: deploy-to-prod

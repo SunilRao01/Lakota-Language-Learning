@@ -5,9 +5,9 @@ set -e -u -x
 cd dev-lakota-ed
 
 # This is where you can run your unit test command, such as the ones below:
-echo "Running unit tests..."
+echo "Running integration tests against QA..."
 
 npm install
-npm test
+npm run integration-test:qa
 
 echo "Finished running unit tests."
