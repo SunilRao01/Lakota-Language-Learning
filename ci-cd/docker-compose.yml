@@ -17,6 +17,10 @@ services:
     secrets:
       - private_rsa_key
       - public_rsa_key
+    environment:
+      SSH_AUTH_SOCK: $SSH_AUTH_SOCK
+    volumes:
+      - $SSH_AUTH_SOCK:$SSH_AUTH_SOCK
 
 secrets:
   private_rsa_key:
