@@ -3,19 +3,15 @@
 set -e -u -x
 
 {
-    ssh-keygen -q -b 4096 -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+    ssh-add ~/.ssh/id_rsa
 
     rsa=${RSA_KEY}
     echo "$rsa" > ~/.ssh/id_rsa
 
-    ssh-keygen -l -f ~/.ssh/id_rsa
-
     ssh-keygen -q -b 4096 -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
-    ls
+
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
     ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
-    pwd
-    ls
 }
 
 cd dev-lakota-ed
