@@ -4,7 +4,7 @@ set -e -u -x
 
 {
     mkdir ~/.ssh
-    cat >> ~/.ssh/id_rsa
+    touch ~/.ssh/id_rsa
 
     chmod 700 ~/.ssh
     chmod 600 ~/.ssh/id_rsa
