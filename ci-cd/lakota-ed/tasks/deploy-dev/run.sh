@@ -6,7 +6,8 @@ set -e -u -x
   mkdir -p /root/.ssh
   chmod 0700 ~/.ssh
 
-  ln -s /run/secrets/host_ssh_key ~/.ssh/id_rsa
+  ln -s /run/secrets/private_rsa_key ~/.ssh/id_rsa
+  ln -s /run/secrets/public_rsa_key ~/.ssh/id_rsa.pub
 
   touch /root/.ssh/known_hosts
   chmod 644 ~/.ssh/known_hosts

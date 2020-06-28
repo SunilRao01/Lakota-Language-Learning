@@ -15,8 +15,11 @@ services:
     env_file:
       - concourse.env
     secrets:
-      - host_ssh_key
+      - private_rsa_key
+      - public_rsa_key
 
 secrets:
-  host_ssh_key:
+  private_rsa_key:
     file: ~/.ssh/id_rsa
+  public_rsa_key:
+    file: ~/.ssh/id_rsa.pub
