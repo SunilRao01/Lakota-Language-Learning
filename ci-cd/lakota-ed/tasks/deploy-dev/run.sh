@@ -20,6 +20,6 @@ cd dev-lakota-ed
 #npm install
 #npm run build
 
-scp -rp public/ root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
+scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -rp public/ root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
 
 rm ~/.ssh/id_ed25519
