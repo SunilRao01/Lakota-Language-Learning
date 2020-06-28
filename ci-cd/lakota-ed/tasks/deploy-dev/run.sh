@@ -24,8 +24,6 @@ set -e -u -x
   ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
 
   cat ~/.ssh/known_hosts
-
-  echo | ssh-copy-id -i ~/.ssh/id_rsa.pub root@skeletonpraxis.net
 }
 
 cd dev-lakota-ed
