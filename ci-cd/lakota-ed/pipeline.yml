@@ -11,13 +11,6 @@ resources:
       uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
       branch: master
 
-  - name: dev-server
-    type: concourse-ssh-resource
-    source:
-      hostname: skeletonpraxis.net
-      username: root
-      private_key: ((private-rsa-key))
-
 jobs:
 #  - name: Unit Tests
 #    plan:
@@ -31,21 +24,24 @@ jobs:
     plan:
       - in_parallel:
           - get: dev-lakota-ed
-            trigger: true
-      - put: dev-server
-        params:
-          command: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/run.sh
-
-
-#  - name: Integration Tests
-#    plan:
-#      - in_parallel:
-#          - get: dev-lakota-ed
 #            passed:
-#              - Deploy to Dev
-#            trigger: true
-#      - task: run-integration-tests
-#        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
+#              - Unit Tests
+            trigger: true
+      - task: deploy-to-dev
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
+        params:
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
+
+  - name: Integration Tests
+    plan:
+      - in_parallel:
+          - get: dev-lakota-ed
+            passed:
+              - Deploy to Dev
+            trigger: true
+      - task: run-integration-tests
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
 
   - name: Deploy to Prod
     plan:
@@ -63,13 +59,7 @@ groups:
     jobs:
 #      - Unit Tests
       - Deploy to Dev
-#      - Integration Tests
+      - Integration Tests
   - name: Production
     jobs:
       - Deploy to Prod
-
-resource_types:
-  - name: concourse-ssh-resource
-    type: docker-image
-    source:
-      repository: edtan1/concourse-ssh-resource
