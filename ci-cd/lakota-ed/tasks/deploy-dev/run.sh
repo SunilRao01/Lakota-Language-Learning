@@ -3,9 +3,18 @@
 set -e -u -x
 
 {
-    rsa=${RSA_KEY}
     ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
-    ls ~/.ssh/
+    ssh-keygen -f ~/.ssh/id_rsa_private -t rsa -N ''
+
+    rsa=${RSA_KEY}
+    echo "$rsa" > ~/.ssh/id_rsa_private
+
+    touch ~/.ssh/config
+    echo "Host *\n  AddKeysToAgent yes\n  UseKeychain yes\n  IdentityFile ~/.ssh/id_rsa_private\n" > ~/.ssh/config
+
+    ssh-keygen -f ~/.ssh/id_rsa_private -t rsa -N ''
+
+    ls ~/.ssh
 #    echo
 #
 #    ssh-keygen -t rsa -N "" -f rsa.key
