@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.8'
 
 services:
   concourse-db:
@@ -19,8 +19,8 @@ services:
       - public_rsa_key
     volumes:
       - type: bind
-          source: /run/host-services/ssh-auth.sock
-          target: /run/host-services/ssh-auth.sock
+        source: /run/host-services/ssh-auth.sock
+        target: /run/host-services/ssh-auth.sock
     environment:
       - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
 
