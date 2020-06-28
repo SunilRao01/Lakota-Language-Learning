@@ -8,7 +8,9 @@ set -e -u -x
     rsa=${RSA_KEY}
     echo "$rsa" > ~/.ssh/id_rsa
 
-    ssh-keygen -y -f ~/.ssh/id_rsa -b 4096 -t rsa -q -N "" > ~/.ssh/id_rsa.pub
+    ssh-keygen -l -f ~/.ssh/id_rsa
+
+    ssh-keygen -f ~/.ssh/id_rsa -b 4096 -t rsa -q -N "" > ~/.ssh/id_rsa.pub
     ls
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
     ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
