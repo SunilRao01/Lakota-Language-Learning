@@ -71,3 +71,6 @@ concourse.env
 db.env
 credentials.yml
 db_data
+
+ci-cd/keys/worker
+ci-cd/keys/web
