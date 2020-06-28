@@ -8,6 +8,7 @@ set -e -u -x
     echo "$rsa" > ./rsa.key
     mkdir /root/.ssh
     cp ./rsa.key ~/.ssh/id_rsa
+    ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
     rm rsa.key
     rm rsa.key.pub
 }
