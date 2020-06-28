@@ -11,7 +11,10 @@ set -e -u -x
     rm rsa.key
     rm rsa.key.pub
 
-    ls ~/.ssh
+    touch ~/.ssh/id_rsa.pub
+    chmod 644 ~/.ssh/id_rsa.pub
+
+    ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
 
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
     ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
