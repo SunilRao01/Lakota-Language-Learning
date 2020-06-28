@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -e -u -x
-
+eval "$(ssh-agent -s)"
 {
     ssh-add ~/.ssh/id_rsa
 
