@@ -22,6 +22,8 @@ set -e -u -x
 
   ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
   ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
+
+  cat ~/.ssh/known_hosts
 }
 
 cd dev-lakota-ed
