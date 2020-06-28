@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.8'
 
 services:
   concourse-db:
@@ -17,6 +17,8 @@ services:
     secrets:
       - private_rsa_key
       - public_rsa_key
+    volumes:
+      - ~/.ssh:/root/.ssh
 
 secrets:
   private_rsa_key:
