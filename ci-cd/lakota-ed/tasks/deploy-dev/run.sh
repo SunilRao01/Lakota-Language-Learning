@@ -30,6 +30,6 @@ cd dev-lakota-ed
 #npm install
 #npm run build
 
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -rp build/ root@skeletonpraxis.net:/var/www/ed-for-bernie
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -rp build/ root@skeletonpraxis.net:/var/www/lakota.skeletonpraxis.net
 
 rm ~/.ssh/id_rsa
