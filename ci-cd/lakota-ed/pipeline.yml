@@ -14,7 +14,7 @@ resources:
 jobs:
   - name: Unit Tests
     plan:
-      - in_parallel:
+      - aggregate:
           - get: dev-lakota-ed
             trigger: true
       - task: run-unit-tests
@@ -57,7 +57,7 @@ jobs:
 groups:
   - name: Development
     jobs:
-#      - Unit Tests
+      - Unit Tests
       - Deploy to Dev
       - Integration Tests
   - name: Production
