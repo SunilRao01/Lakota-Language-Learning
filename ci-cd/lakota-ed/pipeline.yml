@@ -32,6 +32,7 @@ jobs:
         params:
           PRIVATE_RSA_KEY: ((private-rsa-key))
           PUBLIC_RSA_KEY: ((public-rsa-key))
+          ENV_STAGING: ((env-staging))
 
   - name: Integration Tests
     plan:
