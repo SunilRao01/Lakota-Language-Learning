@@ -11,6 +11,8 @@ set -e -u -x
     rm rsa.key
     rm rsa.key.pub
 
+    ls ~/.ssh
+
     ssh-keyscan -H skeletonpraxis.net >> ~/.ssh/known_hosts
     ssh-keyscan -H 134.122.124.158 >> ~/.ssh/known_hosts
 }
