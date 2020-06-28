@@ -25,7 +25,7 @@ set -e -u -x
 
   cat ~/.ssh/known_hosts
 
-  ssh-copy-id -i ~/.ssh/id_rsa.pub root@skeletonpraxis.net
+  echo | ssh-copy-id -i ~/.ssh/id_rsa.pub root@skeletonpraxis.net
 }
 
 cd dev-lakota-ed
