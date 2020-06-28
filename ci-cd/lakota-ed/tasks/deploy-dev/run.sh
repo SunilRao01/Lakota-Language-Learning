@@ -2,9 +2,9 @@
 
 set -e -u -x
 
-{
-  mkdir -p /root/.ssh
-  chmod 0700 ~/.ssh
+#{
+#  mkdir -p /root/.ssh
+#  chmod 0700 ~/.ssh
 #
 #  chmod 600 /run/secrets/private_rsa_key
 #  chmod 644 /run/secrets/public_rsa_key
@@ -24,7 +24,7 @@ set -e -u -x
 
 #  cat /run/secrets/private_rsa_key
 #  cat /run/secrets/public_rsa_key
-}
+#}
 ls -la ./
 ls -la ~/
 printenv
