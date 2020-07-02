@@ -4,7 +4,7 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: cypress/base:10
+    repository: cypress/base:12
 
 inputs:
   - name: dev-lakota-ed
