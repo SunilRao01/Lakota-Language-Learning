@@ -22,8 +22,8 @@
     "build:staging": "env-cmd -f .env.staging npm run build",
     "test": "CI=true react-scripts test",
     "eject": "react-scripts eject",
-    "integration-test:local": "CYPRESS_BASE_URL=http://lakota.skeletonpraxis.net/ cypress run",
-    "integration-test:qa": "CYPRESS_BASE_URL=http://localhost:3000/ cypress run",
+    "integration-test:local": "CYPRESS_BASE_URL=http://localhost:3000/ cypress run",
+    "integration-test:qa": "CYPRESS_BASE_URL=http://lakota.skeletonpraxis.net/ cypress run",
     "lint-fix": "node_modules/.bin/eslint './src/**/*.{ts,tsx}' './src/**/*.*.{ts,tsx}' --ext .js,.jsx,.ts,.tsx --fix"
   },
   "eslintConfig": {
