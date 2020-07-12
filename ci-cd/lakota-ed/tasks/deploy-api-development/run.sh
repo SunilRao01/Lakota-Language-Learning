@@ -18,11 +18,11 @@ set -e -u -x
 
 #cd dev-lakota-ed
 
-ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@skeletonpraxis.net "
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@skeletonpraxis.net << EOF
   cd /root/src/Lakota-Language-Learning/
-  && git pull origin development
-  && cd lakota_ed_api
-  && docker-compose down
-  && docker-compose build
-  && docker-compose up -d
-"
+  git pull origin development
+  cd lakota_ed_api
+  docker-compose down
+  docker-compose build
+  docker-compose up -d
+EOF
