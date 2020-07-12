@@ -14,4 +14,4 @@ caches:
   - path: prod-lakota-ed/node_modules
 
 run:
-  path: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-development/run.sh
+  path: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-production/run.sh
