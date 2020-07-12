@@ -19,8 +19,8 @@ set -e -u -x
 
 cd prod-lakota-ed
 
-touch .env.prod
-echo "$env_prod" > .env.prod
+touch .env.production
+echo "$env_prod" > .env.production
 npm install
 npm run build
 
