@@ -20,49 +20,78 @@ jobs:
       - task: run-unit-tests
         file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-development/task.yml
 
-  - name: Deploy to QA
+  - name: Deploy API to QA
     plan:
       - aggregate:
           - get: dev-lakota-ed
             passed:
               - Unit Tests (development)
             trigger: true
-      - task: deploy-to-qa
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-development/task.yml
+      - task: deploy-api-to-qa
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-api-development/task.yml
+        params:
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
+
+  - name: Deploy Frontend to QA
+    plan:
+      - aggregate:
+          - get: dev-lakota-ed
+            passed:
+              - Unit Tests (development)
+            trigger: true
+      - task: deploy-frontend-to-qa
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-frontend-development/task.yml
         params:
           PRIVATE_RSA_KEY: ((private-rsa-key))
           PUBLIC_RSA_KEY: ((public-rsa-key))
           ENV_STAGING: ((env-staging))
+
+
 
   - name: Integration Tests QA
     plan:
       - aggregate:
           - get: dev-lakota-ed
             passed:
-              - Deploy to QA
+              - Deploy Frontend to QA
+              - Deploy API to QA
             trigger: true
       - task: run-integration-tests
         file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-qa/task.yml
 
-######################################################################################
+  ######################################################################################
 
   - name: Unit Tests (master)
     plan:
       - aggregate:
-        - get: prod-lakota-ed
-          trigger: true
+          - get: prod-lakota-ed
+            trigger: false
       - task: run-unit-tests
         file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
 
-  - name: Deploy to Production
+  - name: Deploy API to Production
     plan:
       - aggregate:
           - get: prod-lakota-ed
             trigger: true
             passed:
               - Unit Tests (master)
-      - task: deploy-to-production
-        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-production/task.yml
+      - task: deploy-api-to-production
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-api-production/task.yml
+        params:
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
+
+  - name: Deploy Frontend to Production
+    plan:
+      - aggregate:
+          - get: prod-lakota-ed
+            trigger: true
+            passed:
+              - Unit Tests (master)
+      - task: deploy-frontend-to-production
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-frontend-production/task.yml
         params:
           PRIVATE_RSA_KEY: ((private-rsa-key))
           PUBLIC_RSA_KEY: ((public-rsa-key))
@@ -73,7 +102,8 @@ jobs:
       - aggregate:
           - get: prod-lakota-ed
             passed:
-              - Deploy to Production
+              - Deploy API to Production
+              - Deploy Frontend to Production
             trigger: true
       - task: run-integration-tests
         file: prod-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-production/task.yml
@@ -82,10 +112,12 @@ groups:
   - name: Development
     jobs:
       - Unit Tests (development)
-      - Deploy to QA
+      - Deploy API to QA
+      - Deploy Frontend to QA
       - Integration Tests QA
   - name: Production
     jobs:
       - Unit Tests (master)
-      - Deploy to Production
+      - Deploy API to Production
+      - Deploy Frontend to Production
       - Integration Tests Production
