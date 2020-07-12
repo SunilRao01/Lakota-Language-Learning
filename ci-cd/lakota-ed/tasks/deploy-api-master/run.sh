@@ -2,5 +2,12 @@
 
 set -e -u -x
 
-pwd
-ls
+# Install the Heroku CLI
+sudo snap install --classic heroku --yes
+
+heroku_key=${HEROKU_KEY}
+
+echo "$heroku_key" > ~/.netrc
+
+cd prod-lakota-ed
+git subtree push --prefix lakota_ed_api heroku master

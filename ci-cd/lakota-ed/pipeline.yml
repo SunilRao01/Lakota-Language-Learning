@@ -82,6 +82,7 @@ jobs:
         params:
           PRIVATE_RSA_KEY: ((private-rsa-key))
           PUBLIC_RSA_KEY: ((public-rsa-key))
+          HEROKU_KEY: ((heroku-key))
 
   - name: Deploy Frontend to Production
     plan:

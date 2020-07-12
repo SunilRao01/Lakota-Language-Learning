@@ -16,7 +16,6 @@ set -e -u -x
   ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
 }
 
-
 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no root@skeletonpraxis.net << EOF
   cd /root/src/Lakota-Language-Learning/
   git pull origin development
