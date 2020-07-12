@@ -36,7 +36,7 @@ interface PostCreatePayload {
 const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = props => {
     const { jwt, updatePostLoading, createPost } = props;
 
-    const [editorState, setEditorState] = useState()
+    const [editorState, setEditorState] = useState<any>()
     const [updatedPost, setUpdatedPost] = useState<PostCreatePayload>({
         postTitle: '',
         postContent: '',

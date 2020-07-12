@@ -28,4 +28,6 @@ defmodule LakotaEdApi.Application do
     LakotaEdApiWeb.Endpoint.config_change(changed, removed)
     :ok
   end
+
+  {Phoenix.PubSub, [name: LakotaEdApi.PubSub, adapter: Phoenix.PubSub.PG2]}
 end

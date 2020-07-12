@@ -2,64 +2,90 @@ resources:
   - name: dev-lakota-ed
     type: git
     source:
-      uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
-      branch: dev
-      private_key: ((github-gpg-key))
+      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
+      branch: development
 
   - name: prod-lakota-ed
     type: git
     source:
-      uri: git@github.com:SunilRao01/Lakota-Language-Learning.git
+      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
       branch: master
-      private_key: ((github-gpg-key))
 
 jobs:
-  - name: Unit Tests
+  - name: Unit Tests (development)
     plan:
       - aggregate:
           - get: dev-lakota-ed
             trigger: true
       - task: run-unit-tests
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test/task.yml
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-development/task.yml
 
-  - name: Integration Tests
+  - name: Deploy to QA
     plan:
       - aggregate:
           - get: dev-lakota-ed
             passed:
-              - Unit Tests
+              - Unit Tests (development)
+            trigger: true
+      - task: deploy-to-qa
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-development/task.yml
+        params:
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
+          ENV_STAGING: ((env-staging))
+
+  - name: Integration Tests QA
+    plan:
+      - aggregate:
+          - get: dev-lakota-ed
+            passed:
+              - Deploy to QA
             trigger: true
       - task: run-integration-tests
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-qa/task.yml
 
-  - name: Deploy to Dev
+######################################################################################
+
+  - name: Unit Tests (master)
     plan:
       - aggregate:
-          - get: dev-lakota-ed
-            passed:
-              - Integration Tests
-            trigger: true
-      - task: deploy-to-dev
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
-        params:
-          RSA_KEY: ((deploy-ssh-key))
+        - get: prod-lakota-ed
+          trigger: false
+      - task: run-unit-tests
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
 
-  - name: Deploy to Prod
+  - name: Deploy to Production
     plan:
       - aggregate:
           - get: prod-lakota-ed
             trigger: false
-      - task: deploy-to-prod
-        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-prod/task.yml
+            passed:
+              - Unit Tests (master)
+      - task: deploy-to-production
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-production/task.yml
         params:
-          RSA_KEY: ((deploy-ssh-key))
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
+          ENV_PROD: ((env-prod))
+
+  - name: Integration Tests Production
+    plan:
+      - aggregate:
+        - get: prod-lakota-ed
+          trigger: false
+          passed:
+            - Deploy to Production
+        - task: run-integration-tests
+          file: prod-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-production/task.yml
 
 groups:
   - name: Development
     jobs:
-      - Unit Tests
-      - Integration Tests
-      - Deploy to Dev
+      - Unit Tests (development)
+      - Deploy to QA
+      - Integration Tests QA
   - name: Production
     jobs:
-      - Deploy to Prod
+      - Unit Tests (master)
+      - Deploy to Production
+      - Integration Tests Production

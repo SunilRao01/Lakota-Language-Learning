@@ -5,7 +5,7 @@ image_resource:
   type: docker-image
   source:
     repository: node
-    tag: 8.12-jessie
+    tag: 12-stretch
 
 inputs:
   - name: prod-lakota-ed
@@ -14,4 +14,4 @@ caches:
   - path: prod-lakota-ed/node_modules
 
 run:
-  path: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/run.sh
+  path: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-development/run.sh

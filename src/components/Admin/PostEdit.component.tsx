@@ -58,7 +58,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = props 
         successMessage: ''
     })
 
-    const [editorState, setEditorState] = useState()
+    const [editorState, setEditorState] = useState<any>()
 
     const fetchData = useCallback(async () => {
         const urlParams = history.location.pathname.split('/')
