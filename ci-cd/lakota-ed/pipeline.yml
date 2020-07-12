@@ -50,7 +50,7 @@ jobs:
     plan:
       - aggregate:
         - get: prod-lakota-ed
-          trigger: false
+          trigger: true
       - task: run-unit-tests
         file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
 
@@ -58,7 +58,7 @@ jobs:
     plan:
       - aggregate:
           - get: prod-lakota-ed
-            trigger: false
+            trigger: true
             passed:
               - Unit Tests (master)
       - task: deploy-to-production
@@ -71,12 +71,12 @@ jobs:
   - name: Integration Tests Production
     plan:
       - aggregate:
-        - get: prod-lakota-ed
-          trigger: false
-          passed:
-            - Deploy to Production
-        - task: run-integration-tests
-          file: prod-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-production/task.yml
+          - get: prod-lakota-ed
+            passed:
+              - Deploy to Production
+            trigger: true
+      - task: run-integration-tests
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-production/task.yml
 
 groups:
   - name: Development
