@@ -1,0 +1,14 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: node
+    tag: 12-stretch
+
+inputs:
+  - name: dev-lakota-ed
+
+run:
+  path: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-api-development/run.sh
