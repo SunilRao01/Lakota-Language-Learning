@@ -4,8 +4,8 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: node
-    tag: 12-stretch
+    repository: cypress/base
+    tag: 12
 
 inputs:
   - name: dev-lakota-ed
@@ -14,4 +14,4 @@ caches:
   - path: dev-lakota-ed/node_modules
 
 run:
-  path: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test/run.sh
+  path: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-qa/run.sh

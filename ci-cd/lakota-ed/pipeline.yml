@@ -12,20 +12,20 @@ resources:
       branch: master
 
 jobs:
-  - name: Unit Tests
+  - name: Unit Tests (development)
     plan:
       - aggregate:
           - get: dev-lakota-ed
             trigger: true
       - task: run-unit-tests
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test/task.yml
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-development/task.yml
 
-  - name: Deploy to Dev
+  - name: Deploy to QA
     plan:
       - aggregate:
           - get: dev-lakota-ed
             passed:
-              - Unit Tests
+              - Unit Tests (development)
             trigger: true
       - task: deploy-to-dev
         file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
@@ -34,33 +34,58 @@ jobs:
           PUBLIC_RSA_KEY: ((public-rsa-key))
           ENV_STAGING: ((env-staging))
 
-  - name: Integration Tests
+  - name: Integration Tests QA
     plan:
       - aggregate:
           - get: dev-lakota-ed
             passed:
-              - Deploy to Dev
+              - Deploy to QA
             trigger: true
       - task: run-integration-tests
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test/task.yml
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-qa/task.yml
 
-  - name: Deploy to Prod
+######################################################################################
+
+  - name: Unit Tests (master)
+    plan:
+        - aggregate:
+          - get: prod-lakota-ed
+            trigger: false
+        - task: run-unit-tests
+          file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
+
+  - name: Deploy to Production
     plan:
       - aggregate:
           - get: prod-lakota-ed
             trigger: false
-      - task: deploy-to-prod
-        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-prod/task.yml
+            passed:
+              - Unit Tests (master)
+      - task: deploy-to-production
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-production/task.yml
         params:
           PRIVATE_RSA_KEY: ((private-rsa-key))
           PUBLIC_RSA_KEY: ((public-rsa-key))
+          ENV_PROD: ((env-prod))
+
+  - name: Integration Tests Production
+    plan:
+        - aggregate:
+          - get: prod-lakota-ed
+            passed:
+              - Deploy to Production
+            trigger: true
+          - task: run-integration-tests
+            file: prod-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-production/task.yml
 
 groups:
   - name: Development
     jobs:
-      - Unit Tests
-      - Deploy to Dev
-      - Integration Tests
+      - Unit Tests (development)
+      - Deploy to QA
+      - Integration Tests QA
   - name: Production
     jobs:
-      - Deploy to Prod
+      - Unit Tests (master)
+      - Deploy to Production
+      - Integration Tests Production

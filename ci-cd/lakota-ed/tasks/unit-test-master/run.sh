@@ -2,18 +2,12 @@
 
 set -e -u -x
 
-cd dev-lakota-ed
-
-pwd
-ls -la
+cd prod-lakota-ed
 
 # This is where you can run your unit test command, such as the ones below:
-echo "Running integration tests against QA..."
-
+echo "Running unit tests..."
 
 npm install
-npm install cypress
-
-npm run integration-test:qa
+npm test
 
 echo "Finished running unit tests."
