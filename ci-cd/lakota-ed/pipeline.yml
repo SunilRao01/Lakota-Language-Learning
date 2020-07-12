@@ -27,8 +27,8 @@ jobs:
             passed:
               - Unit Tests (development)
             trigger: true
-      - task: deploy-to-dev
-        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-dev/task.yml
+      - task: deploy-to-qa
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-development/task.yml
         params:
           PRIVATE_RSA_KEY: ((private-rsa-key))
           PUBLIC_RSA_KEY: ((public-rsa-key))
@@ -48,11 +48,11 @@ jobs:
 
   - name: Unit Tests (master)
     plan:
-        - aggregate:
-          - get: prod-lakota-ed
-            trigger: false
-        - task: run-unit-tests
-          file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
+      - aggregate:
+        - get: prod-lakota-ed
+          trigger: false
+      - task: run-unit-tests
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
 
   - name: Deploy to Production
     plan:
@@ -70,13 +70,13 @@ jobs:
 
   - name: Integration Tests Production
     plan:
-        - aggregate:
-          - get: prod-lakota-ed
-            passed:
-              - Deploy to Production
-            trigger: true
-          - task: run-integration-tests
-            file: prod-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-production/task.yml
+      - aggregate:
+        - get: prod-lakota-ed
+          trigger: false
+          passed:
+            - Deploy to Production
+        - task: run-integration-tests
+          file: prod-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-production/task.yml
 
 groups:
   - name: Development
