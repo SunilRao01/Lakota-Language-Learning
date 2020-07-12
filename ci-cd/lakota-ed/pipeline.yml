@@ -58,7 +58,7 @@ jobs:
     plan:
       - aggregate:
           - get: prod-lakota-ed
-            trigger: false
+            trigger: true
             passed:
               - Unit Tests (master)
       - task: deploy-to-production
@@ -72,7 +72,7 @@ jobs:
     plan:
       - aggregate:
         - get: prod-lakota-ed
-          trigger: false
+          trigger: true
           passed:
             - Deploy to Production
         - task: run-integration-tests
