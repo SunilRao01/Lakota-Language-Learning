@@ -5,6 +5,7 @@ services:
     image: postgres
     env_file:
       - ./db.env
+    ports: ["4321:4321"]
     logging:
       driver: "json-file"
       options:
