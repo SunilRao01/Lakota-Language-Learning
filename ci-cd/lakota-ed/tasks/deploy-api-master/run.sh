@@ -4,16 +4,23 @@ set -e -u -x
 
 apt-get update
 
-export DEBIAN_FRONTEND="noninteractive"
-apt-get -y install tzdata
+#export DEBIAN_FRONTEND="noninteractive"
+#apt-get -y install tzdata
+#
+#apt-get -y install snapd
+#
+#systemctl status snapd
+#systemctl start snapd
 
-apt-get -y install snapd
+apt-get -y install ca-certificates
+apt-get -y install curl
 
-systemctl status snapd
-systemctl start snapd
+wget -q "https://toolbelt.heroku.com/install-ubuntu.sh"
+chmod +x install-ubuntu.sh
+./install-ubuntu.sh
 
 # Install the Heroku CLI
-snap install --classic heroku
+#snap install --classic heroku
 
 heroku_key=${HEROKU_KEY}
 
