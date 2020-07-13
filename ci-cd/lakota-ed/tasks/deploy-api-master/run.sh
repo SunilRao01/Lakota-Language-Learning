@@ -15,10 +15,11 @@ apt-get update
 apt-get -y install ca-certificates
 apt-get -y install curl
 apt-get -y install wget
+apt-get -y install sudo
 
 wget -q "https://toolbelt.heroku.com/install-ubuntu.sh"
 chmod +x install-ubuntu.sh
-./install-ubuntu.sh
+sudo ./install-ubuntu.sh
 
 # Install the Heroku CLI
 #snap install --classic heroku
