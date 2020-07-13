@@ -3,6 +3,9 @@
 set -e -u -x
 
 apt-get update
+
+export DEBIAN_FRONTEND="noninteractive"
+apt-get -y install tzdata
 apt-get -y install openssh-server
 {
   private_rsa_key=${PRIVATE_RSA_KEY}
