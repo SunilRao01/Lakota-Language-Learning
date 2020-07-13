@@ -3,7 +3,7 @@
 set -e -u -x
 
 # Install the Heroku CLI
-sudo snap install --classic heroku --yes
+snap install --classic heroku --yes
 
 heroku_key=${HEROKU_KEY}
 
