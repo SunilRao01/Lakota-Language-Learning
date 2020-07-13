@@ -3,7 +3,6 @@
 set -e -u -x
 
 apt-get update
-apt-get -y install ssh-keygen
 
 {
   private_rsa_key=${PRIVATE_RSA_KEY}
