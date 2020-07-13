@@ -10,7 +10,7 @@ apt-get -y install tzdata
 apt-get -y install snapd
 
 # Install the Heroku CLI
-snap install --classic heroku --yes
+snap install --yes --classic heroku
 
 heroku_key=${HEROKU_KEY}
 
