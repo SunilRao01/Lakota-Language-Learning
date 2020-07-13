@@ -8,14 +8,9 @@ apt-get update
   private_rsa_key=${PRIVATE_RSA_KEY}
   public_rsa_key=${PUBLIC_RSA_KEY}
 
-  ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+  ssh-keygen -t rsa -f /tmp/sshkey -q -N ""
   echo "$private_rsa_key" > ~/.ssh/id_rsa
   echo "$public_rsa_key" > ~/.ssh/id_rsa.pub
-
-  touch /root/.ssh/known_hosts
-  chmod 644 ~/.ssh/known_hosts
-
-  ssh-keyscan -H skeletonpraxis.net >> /root/.ssh/known_hosts
 }
 
 apt-get -y install ca-certificates
