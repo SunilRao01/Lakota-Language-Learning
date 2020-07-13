@@ -8,7 +8,7 @@ apt-get update
   private_rsa_key=${PRIVATE_RSA_KEY}
   public_rsa_key=${PUBLIC_RSA_KEY}
 
-  ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
+  ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa
   echo "$private_rsa_key" > ~/.ssh/id_rsa
   echo "$public_rsa_key" > ~/.ssh/id_rsa.pub
 }
