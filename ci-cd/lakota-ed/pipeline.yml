@@ -67,7 +67,7 @@ jobs:
       - aggregate:
           - get: prod-lakota-ed
             trigger: false
-      - task: run-unit-tests-master
+      - task: run-unit-tests
         file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
 
   - name: Deploy API to Production
@@ -78,7 +78,7 @@ jobs:
             passed:
               - Unit Tests (master)
       - task: deploy-api-to-production
-        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-api-production/task.yml
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-api-master/task.yml
         params:
           PRIVATE_RSA_KEY: ((private-rsa-key))
           PUBLIC_RSA_KEY: ((public-rsa-key))
