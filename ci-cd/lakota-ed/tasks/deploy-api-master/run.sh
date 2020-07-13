@@ -9,6 +9,9 @@ apt-get -y install tzdata
 
 apt-get -y install snapd
 
+systemctl status snapd
+systemctl start snapd
+
 # Install the Heroku CLI
 snap install --classic heroku
 
