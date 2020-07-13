@@ -67,7 +67,7 @@ jobs:
       - aggregate:
           - get: prod-lakota-ed
             trigger: false
-      - task: run-unit-tests
+      - task: run-unit-tests-master
         file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
 
   - name: Deploy API to Production
