@@ -14,6 +14,7 @@ apt-get update
 
 apt-get -y install ca-certificates
 apt-get -y install curl
+apt-get -y install wget
 
 wget -q "https://toolbelt.heroku.com/install-ubuntu.sh"
 chmod +x install-ubuntu.sh
