@@ -3,7 +3,7 @@
 set -e -u -x
 
 apt-get update
-
+apt-get -y install openssh-server
 {
   private_rsa_key=${PRIVATE_RSA_KEY}
   public_rsa_key=${PUBLIC_RSA_KEY}
