@@ -2,6 +2,8 @@
 
 set -e -u -x
 
+apt-get install snapd
+
 # Install the Heroku CLI
 snap install --classic heroku --yes
 
