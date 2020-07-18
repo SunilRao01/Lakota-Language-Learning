@@ -66,7 +66,7 @@ jobs:
     plan:
       - aggregate:
           - get: prod-lakota-ed
-            trigger: true
+            trigger: false
       - task: run-unit-tests
         file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
 
