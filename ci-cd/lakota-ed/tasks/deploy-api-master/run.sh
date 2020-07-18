@@ -1,3 +1,7 @@
+#!/usr/bin/env bash
+
+set -e -u -x
+
 apt-get update
 #
 #export DEBIAN_FRONTEND="noninteractive"
@@ -28,6 +32,7 @@ apt-get -y install git
 #heroku_key=${HEROKU_KEY}
 #
 #echo "$heroku_key" > ~/.netrc
+curl https://cli-assets.heroku.com/install.sh | sh
 
 cd prod-lakota-ed
 
