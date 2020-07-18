@@ -21,6 +21,7 @@ apt-get update
 #apt-get -y install wget
 #apt-get -y install sudo
 apt-get -y install git
+apt-get -y install curl
 #
 #wget -q "https://toolbelt.heroku.com/install-ubuntu.sh"
 #chmod +x install-ubuntu.sh
