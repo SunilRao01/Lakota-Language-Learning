@@ -22,24 +22,17 @@ apt-get update
 #apt-get -y install sudo
 apt-get -y install git
 apt-get -y install curl
-#
-#wget -q "https://toolbelt.heroku.com/install-ubuntu.sh"
-#chmod +x install-ubuntu.sh
-#sudo ./install-ubuntu.sh
-#
-## Install the Heroku CLI
-##snap install --classic heroku
-#
-#heroku_key=${HEROKU_KEY}
-#
-#echo "$heroku_key" > ~/.netrc
+
+
 curl https://cli-assets.heroku.com/install.sh | sh
+heroku_key=${HEROKU_KEY}
+echo "$heroku_key" > ~/.netrc
 
 cd prod-lakota-ed
 
 #heroku auth:token
 echo "Deploying API to Production via git through heroku remote server..."
 git status
-git fetch origin
+heroku git:remote -a sleepy-sierra-08774
 #git fetch heroku
 git subtree push --prefix lakota_ed_api heroku master
