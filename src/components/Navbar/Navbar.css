@@ -1,0 +1,7 @@
+.link {
+    display: flex;
+}
+
+.navbar {
+    z-index: 1000;
+}
