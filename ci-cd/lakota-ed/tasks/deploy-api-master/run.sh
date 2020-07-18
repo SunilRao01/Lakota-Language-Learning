@@ -39,5 +39,5 @@ cd prod-lakota-ed
 echo "Deploying API to Production via git through heroku remote server..."
 git status
 git fetch origin
-git fetch heroku
+#git fetch heroku
 git subtree push --prefix lakota_ed_api heroku master

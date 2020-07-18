@@ -19,10 +19,10 @@ set -e -u -x
 
 cd prod-lakota-ed
 
-touch .env.production
-echo "$env_prod" > .env.production
-npm install
-npm run build
-
-ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no srao_lakota-ed@ssh.phx.nearlyfreespeech.net "rm -rfv /home/public/*"
-scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r build/* srao_lakota-ed@ssh.phx.nearlyfreespeech.net:/home/public
+#touch .env.production
+#echo "$env_prod" > .env.production
+#npm install
+#npm run build
+#
+#ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no srao_lakota-ed@ssh.phx.nearlyfreespeech.net "rm -rfv /home/public/*"
+#scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r build/* srao_lakota-ed@ssh.phx.nearlyfreespeech.net:/home/public
