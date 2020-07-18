@@ -16,7 +16,7 @@ jobs:
     plan:
       - aggregate:
           - get: dev-lakota-ed
-            trigger: true
+            trigger: false
       - task: run-unit-tests
         file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-development/task.yml
 
