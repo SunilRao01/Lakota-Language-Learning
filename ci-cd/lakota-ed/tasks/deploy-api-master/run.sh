@@ -1,7 +1,3 @@
-#!/usr/bin/env bash
-
-set -e -u -x
-
 apt-get update
 #
 #export DEBIAN_FRONTEND="noninteractive"
