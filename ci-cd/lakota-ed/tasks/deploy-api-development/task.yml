@@ -7,5 +7,8 @@ image_resource:
     repository: node
     tag: 12-stretch
 
+inputs:
+  - name: dev-lakota-ed
+
 run:
   path: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-api-development/run.sh
