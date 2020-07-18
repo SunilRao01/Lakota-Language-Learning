@@ -10,19 +10,14 @@ set -e -u -x
   ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa 2>/dev/null <<< y >/dev/null
   echo "$private_rsa_key" > ~/.ssh/id_rsa
   echo "$public_rsa_key" > ~/.ssh/id_rsa.pub
-
-  touch /root/.ssh/known_hosts
-  chmod 644 ~/.ssh/known_hosts
-
-  ssh-keyscan -H herokuapp.com >> /root/.ssh/known_hosts
 }
 
 cd prod-lakota-ed
 
-#touch .env.production
-#echo "$env_prod" > .env.production
-#npm install
-#npm run build
-#
-#ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no srao_lakota-ed@ssh.phx.nearlyfreespeech.net "rm -rfv /home/public/*"
-#scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r build/* srao_lakota-ed@ssh.phx.nearlyfreespeech.net:/home/public
+touch .env.production
+echo "$env_prod" > .env.production
+npm install
+npm run build
+
+ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no srao_lakota-ed@ssh.phx.nearlyfreespeech.net "rm -rfv /home/public/*"
+scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -r build/* srao_lakota-ed@ssh.phx.nearlyfreespeech.net:/home/public
