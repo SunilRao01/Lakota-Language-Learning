@@ -1,0 +1,124 @@
+resources:
+  - name: dev-lakota-ed
+    type: git
+    source:
+      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
+      branch: development
+
+  - name: prod-lakota-ed
+    type: git
+    source:
+      uri: https://github.com/SunilRao01/Lakota-Language-Learning.git
+      branch: master
+
+jobs:
+  - name: Unit Tests (development)
+    plan:
+      - aggregate:
+          - get: dev-lakota-ed
+            trigger: true
+      - task: run-unit-tests
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-development/task.yml
+
+  - name: Deploy API to QA
+    plan:
+      - aggregate:
+          - get: dev-lakota-ed
+            passed:
+              - Unit Tests (development)
+            trigger: true
+      - task: deploy-api-to-qa
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-api-development/task.yml
+        params:
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
+
+  - name: Deploy Frontend to QA
+    plan:
+      - aggregate:
+          - get: dev-lakota-ed
+            passed:
+              - Unit Tests (development)
+            trigger: true
+      - task: deploy-frontend-to-qa
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/deploy-frontend-development/task.yml
+        params:
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
+          ENV_STAGING: ((env-staging))
+
+
+
+  - name: Integration Tests QA
+    plan:
+      - aggregate:
+          - get: dev-lakota-ed
+            passed:
+              - Deploy Frontend to QA
+              - Deploy API to QA
+            trigger: true
+      - task: run-integration-tests
+        file: dev-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-qa/task.yml
+
+  ######################################################################################
+
+  - name: Unit Tests (master)
+    plan:
+      - aggregate:
+          - get: prod-lakota-ed
+            trigger: true
+      - task: run-unit-tests
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/unit-test-master/task.yml
+
+  - name: Deploy API to Production
+    plan:
+      - aggregate:
+          - get: prod-lakota-ed
+            trigger: true
+            passed:
+              - Unit Tests (master)
+      - task: deploy-api-to-production
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-api-master/task.yml
+        params:
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
+          HEROKU_KEY: ((heroku-key))
+
+  - name: Deploy Frontend to Production
+    plan:
+      - aggregate:
+          - get: prod-lakota-ed
+            trigger: true
+            passed:
+              - Unit Tests (master)
+      - task: deploy-frontend-to-production
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/deploy-frontend-production/task.yml
+        params:
+          PRIVATE_RSA_KEY: ((private-rsa-key))
+          PUBLIC_RSA_KEY: ((public-rsa-key))
+          ENV_PROD: ((env-prod))
+
+  - name: Integration Tests Production
+    plan:
+      - aggregate:
+          - get: prod-lakota-ed
+            passed:
+              - Deploy API to Production
+              - Deploy Frontend to Production
+            trigger: true
+      - task: run-integration-tests
+        file: prod-lakota-ed/ci-cd/lakota-ed/tasks/integration-test-production/task.yml
+
+groups:
+  - name: Development
+    jobs:
+      - Unit Tests (development)
+      - Deploy API to QA
+      - Deploy Frontend to QA
+      - Integration Tests QA
+  - name: Production
+    jobs:
+      - Unit Tests (master)
+      - Deploy API to Production
+      - Deploy Frontend to Production
+      - Integration Tests Production
