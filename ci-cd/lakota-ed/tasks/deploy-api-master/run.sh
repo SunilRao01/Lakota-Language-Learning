@@ -13,7 +13,5 @@ echo "$heroku_key" > ~/.netrc
 
 echo "Deploying API to Production via git through heroku remote server..."
 cd prod-lakota-ed
-git checkout master
-git pull origin master
 heroku git:remote -a sleepy-sierra-08774
 git subtree push --prefix lakota_ed_api heroku master
