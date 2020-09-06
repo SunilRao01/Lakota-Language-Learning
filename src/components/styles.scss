@@ -6,18 +6,18 @@
  */
 
 // Colors
-$beige-lighter: #EFF0EB;
+$beige-lighter: #eff0eb;
 
 // Global
 $body-background-color: $beige-lighter;
-$info: #2AC8DA;
+$info: #2ac8da;
 
 // Navbar
-$navbar-background-color: #2AC8DA;
+$navbar-background-color: #2ac8da;
 $navbar-item-color: white;
 
 // Cards
 $card-content-padding: 0.75em;
 $card-footer-padding: 1em;
 
-@import "~bulma/bulma.sass";
+@import '~bulma/bulma.sass';
