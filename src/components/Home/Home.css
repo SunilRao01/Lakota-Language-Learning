@@ -40,12 +40,10 @@ hr {
     }
 }
 
-
 .word-of-the-day-section {
     margin-bottom: 40px;
     min-height: 260px;
 }
-
 
 .categories-section {
     margin-bottom: 40px;
@@ -68,7 +66,7 @@ hr {
 
 .field.is-grouped > .control:not(:last-child) {
     margin-bottom: 0.5rem;
-    margin-right: .5rem;
+    margin-right: 0.5rem;
 }
 
 .control {
@@ -78,4 +76,3 @@ hr {
 .pagination-button {
     margin: 10px;
 }
-
