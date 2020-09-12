@@ -156,7 +156,7 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = (
                 </div>
 
                 <div className="field">
-                    <label className="label">Tags (Comma seperated)</label>
+                    <label className="label">Tags (Comma separated)</label>
                     <div className="control">
                         <input
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
