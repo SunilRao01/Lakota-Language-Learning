@@ -1,5 +1,5 @@
-import { mapStateToProps } from './FilteredPostsView.component';
 import { initialRootState } from 'redux/store';
+import { mapStateToProps } from './FilteredPostsView.types';
 
 describe('FilteredPostsView Component', () => {
     describe('redux', () => {
