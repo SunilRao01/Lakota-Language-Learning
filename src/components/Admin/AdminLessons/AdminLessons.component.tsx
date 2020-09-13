@@ -1,64 +1,8 @@
 import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { RootState } from 'redux/store';
-import {
-    backendAddLesson,
-    backendDeleteLesson,
-    backendGetCategories,
-    backendGetLessons,
-} from 'redux/Posts/Posts.reducer';
-import { ThunkDispatch } from 'redux-thunk';
-import { setPostLoading } from 'redux/Posts/Posts.action';
+import {AdminLessonsPropsAndActions, mapDispatchToProps, mapStateToProps} from './AdminLessons.types';
 
-interface AdminLessonProps {
-    lessons: { id: number; lesson: string }[];
-    categories: string[];
-    jwt: string;
-    postsLoading: boolean;
-}
-
-interface AdminLessonActions {
-    getLessons: () => void;
-    getCategories: () => void;
-    addLesson: (lesson: string, jwt: string) => void;
-    deleteLesson: (lessonId: number, jwt: string) => void;
-    setPostLoading: (loading: boolean) => void;
-}
-
-const mapStateToProps = (state: RootState): AdminLessonProps => {
-    return {
-        lessons: state.postState.lessons,
-        categories: state.postState.categories
-            ? state.postState.categories
-            : [],
-        jwt: state.adminState.jwt,
-        postsLoading: state.postState.loadingPosts,
-    };
-};
-
-const mapDispatchToProps = (
-    dispatch: ThunkDispatch<{}, {}, any>
-): AdminLessonActions => {
-    return {
-        getLessons: async () => {
-            await dispatch(backendGetLessons());
-        },
-        getCategories: async () => {
-            await dispatch(backendGetCategories());
-        },
-        addLesson: async (lesson: string, jwt: string) => {
-            await dispatch(backendAddLesson(lesson, jwt));
-        },
-        deleteLesson: async (lessonId: number, jwt: string) => {
-            await dispatch(backendDeleteLesson(lessonId, jwt));
-        },
-        setPostLoading: (loading: boolean) => dispatch(setPostLoading(loading)),
-    };
-};
-
-const AdminLessonsComponent: FC<AdminLessonProps & AdminLessonActions> = (
-    props
-) => {
+const AdminLessons: FC<AdminLessonsPropsAndActions> = (props) => {
     const {
         jwt,
         getCategories,
@@ -142,7 +86,7 @@ const AdminLessonsComponent: FC<AdminLessonProps & AdminLessonActions> = (
     );
 };
 
-export const AdminLessons = connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(AdminLessonsComponent);
+)(AdminLessons);

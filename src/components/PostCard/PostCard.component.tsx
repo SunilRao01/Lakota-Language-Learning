@@ -1,18 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Post } from 'redux/Posts/Posts.reducer';
 import { Link } from 'react-router-dom';
 import './PostCard.css';
 import { Tag } from 'components/Tag/Tag.component';
 import Viewer from 'tui-editor/dist/tui-editor-Viewer';
 import 'tui-editor/dist/tui-editor-contents.css';
-
-interface PostCardProps {
-    post: Post;
-    onClickTag?: (e: any) => void;
-    onClickCategory?: (e: string) => void;
-    showTitleOnly?: boolean;
-    showPreviewOnly?: boolean;
-}
+import { PostCardProps } from './PostCard.types';
 
 export const PostCard: FC<PostCardProps> = (props) => {
     const {

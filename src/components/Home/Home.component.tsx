@@ -1,69 +1,17 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import './Home.css';
-import {
-    backendGetCategories,
-    backendGetPosts,
-    backendGetTags,
-    backendGetWordOfTheDayPosts,
-    Post,
-} from 'redux/Posts/Posts.reducer';
+import { Post } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
-import { RootState } from 'redux/store';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import { Tag } from 'components/Tag/Tag.component';
 import { Link } from 'react-router-dom';
-import { ThunkDispatch } from 'redux-thunk';
-import { setPostLoading } from 'redux/Posts/Posts.action';
+import {
+    HomePropsWithActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './Home.types';
 
-interface HomeActions {
-    getPosts: (pageNumber: number) => void;
-    getCategories: () => void;
-    getTags: () => void;
-    getWordOfTheDayPosts: () => void;
-    setPostLoading: (loading: boolean) => void;
-}
-
-interface HomeProps {
-    posts: Post[];
-    wordOfTheDayPosts: Post[];
-    categories: string[];
-    tags: string[];
-    postsLoading: boolean;
-}
-
-type HomePropsWithActions = HomeProps & HomeActions;
-
-export const mapStateToProps = (state: RootState): HomeProps => ({
-    posts: state.postState.posts,
-    wordOfTheDayPosts: state.postState.wordOfTheDayPosts
-        ? state.postState.wordOfTheDayPosts
-        : [],
-    categories: state.postState.categories ? state.postState.categories : [],
-    tags: state.postState.tags ? state.postState.tags : [],
-    postsLoading: state.postState.loadingPosts,
-});
-
-export const mapDispatchToProps = (
-    dispatch: ThunkDispatch<{}, {}, any>
-): HomeActions => {
-    return {
-        getPosts: async (pageNumber: number) => {
-            await dispatch(backendGetPosts(pageNumber));
-        },
-        getCategories: async () => {
-            await dispatch(backendGetCategories());
-        },
-        getTags: async () => {
-            await dispatch(backendGetTags());
-        },
-        getWordOfTheDayPosts: async () => {
-            await dispatch(backendGetWordOfTheDayPosts(1));
-        },
-        setPostLoading: (loading: boolean) => dispatch(setPostLoading(loading)),
-    };
-};
-
-const HomeComponent: FC<HomePropsWithActions> = (props) => {
+const Home: FC<HomePropsWithActions> = (props) => {
     const {
         posts,
         categories,
@@ -209,4 +157,4 @@ const HomeComponent: FC<HomePropsWithActions> = (props) => {
     );
 };
 
-export const Home = connect(mapStateToProps, mapDispatchToProps)(HomeComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

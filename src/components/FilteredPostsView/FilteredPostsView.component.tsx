@@ -1,65 +1,13 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import { RootState } from 'redux/store';
 import { connect } from 'react-redux';
-import { backendGetPostsByFilters, Post } from 'redux/Posts/Posts.reducer';
+import { Post } from 'redux/Posts/Posts.reducer';
 import qs from 'query-string';
 import { Tag } from 'components/Tag/Tag.component';
 import { PostCard } from 'components/PostCard/PostCard.component';
-import { Link, RouteComponentProps } from 'react-router-dom';
-import { ThunkDispatch } from 'redux-thunk';
-import { clearPosts, setPostLoading } from 'redux/Posts/Posts.action';
+import { Link } from 'react-router-dom';
+import {FilteredPostsViewPropsAndActions, mapDispatchToProps, mapStateToProps} from "./FilteredPostsView.types";
 
-interface FilteredPostsViewOwnProps {
-    posts: Post[];
-    postsLoading: boolean;
-}
-
-interface FilteredPostsViewActions {
-    getPostsByFilter: (
-        pageNumber: number,
-        categories?: string[],
-        tags?: string[]
-    ) => void;
-    clearPosts: () => void;
-    setPostLoading: (loading: boolean) => void;
-}
-
-type FilteredPostsViewProps = RouteComponentProps &
-    FilteredPostsViewOwnProps &
-    FilteredPostsViewActions;
-
-export const mapStateToProps = (
-    state: RootState
-): FilteredPostsViewOwnProps => {
-    return {
-        posts: state.postState.posts,
-        postsLoading: state.postState.loadingPosts,
-    };
-};
-
-export const mapDispatchToProps = (
-    dispatch: ThunkDispatch<{}, {}, any>
-): FilteredPostsViewActions => {
-    return {
-        getPostsByFilter: async (
-            pageNumber: number,
-            categories?: string[],
-            tags?: string[]
-        ) => {
-            await dispatch(
-                backendGetPostsByFilters(
-                    pageNumber,
-                    categories ? categories : [],
-                    tags ? tags : []
-                )
-            );
-        },
-        clearPosts: () => dispatch(clearPosts()),
-        setPostLoading: (loading: boolean) => dispatch(setPostLoading(loading)),
-    };
-};
-
-export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = (
+export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
     props
 ) => {
     const {
@@ -241,7 +189,7 @@ export const FilteredPostsViewComponent: FC<FilteredPostsViewProps> = (
     );
 };
 
-export const FilteredPostsView = connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(FilteredPostsViewComponent);
+)(FilteredPostsView);

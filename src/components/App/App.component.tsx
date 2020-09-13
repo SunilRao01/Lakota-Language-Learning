@@ -1,25 +1,27 @@
 import React, { FC } from 'react';
 import '../styles.scss';
-import { NavBar } from 'components/Navbar/Navbar.component';
+import { NavBar } from 'components/Navbar';
 import {
     BrowserRouter as Router,
     Redirect,
     Route,
     Switch,
 } from 'react-router-dom';
-import { Home } from 'components/Home/Home.component';
-import { About } from 'components/About/About.component';
-import { Lessons } from 'components/Lessons/Lessons.component';
-import { FAQ } from 'components/FAQ/FAQ.component';
+import Home from 'components/Home';
+import About from 'components/About';
+import Lessons from 'components/Lessons';
+import { FAQ } from 'components/FAQ';
 import './App.css';
-import { Posts } from 'components/Posts/Posts.component';
-import { FilteredPostsView } from 'components/FilteredPostsView/FilteredPostsView.component';
-import { PostsView } from 'components/Admin/PostsView.component';
-import { PostEdit } from 'components/Admin/PostEdit.component';
-import { AdminLogin } from 'components/Admin/AdminLogin.component';
-import { PostCreate } from 'components/Admin/PostCreate.component';
-import { AdminLessons } from 'components/Admin/AdminLessons.component';
-import ScrollToTop from 'components/ScrollToTop.component';
+import Posts from 'components/Posts';
+import FilteredPostsView from 'components/FilteredPostsView';
+import {
+    AdminHome,
+    AdminLessons,
+    AdminLogin,
+    AdminPostCreate,
+    AdminPostEdit,
+} from 'components/Admin';
+import ScrollToTop from 'components/ScrollToTop';
 
 export const App: FC = () => {
     return (
@@ -50,7 +52,7 @@ export const App: FC = () => {
                             <Route
                                 path="/admin/posts"
                                 exact
-                                component={PostsView}
+                                component={AdminHome}
                             />
                             <Route
                                 path="/admin/login"
@@ -60,12 +62,12 @@ export const App: FC = () => {
                             <Route
                                 path="/admin/post/:postId/"
                                 exact
-                                component={PostEdit}
+                                component={AdminPostEdit}
                             />
                             <Route
                                 path="/admin/posts/new"
                                 exact
-                                component={PostCreate}
+                                component={AdminPostCreate}
                             />
                             <Route
                                 path="/admin/lessons"

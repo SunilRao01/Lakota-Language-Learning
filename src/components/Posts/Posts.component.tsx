@@ -1,33 +1,18 @@
 import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { RootState } from 'redux/store';
-import { backendGetPost, IQuiz, Post } from 'redux/Posts/Posts.reducer';
+import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { Tag } from 'components/Tag/Tag.component';
-import { RouteComponentProps } from 'react-router';
-import { ThunkDispatch } from 'redux-thunk';
 import Viewer from 'tui-editor/dist/tui-editor-Viewer';
 import { QuizCard } from 'components/QuizCard/QuizCard.component';
 import { Link } from 'react-router-dom';
 import './Posts.css';
-import { setCurrentPost, setPostLoading } from 'redux/Posts/Posts.action';
+import {
+    mapDispatchToProps,
+    mapStateToProps,
+    PostsPropsAndActions,
+} from './Posts.types';
 
-interface PostsOwnProps {
-    post: Post | undefined;
-    posts: Post[];
-    postsLoading: boolean;
-}
-
-interface PostActions {
-    getPost: (postId: number) => void;
-    setCurrentPost: (post: Post) => void;
-    setPostLoading: (loading: boolean) => void;
-}
-
-type PostsProps = PostsOwnProps &
-    RouteComponentProps<{ postId: string }> &
-    PostActions;
-
-export const PostsComponent: FC<PostsProps> = (props) => {
+export const Posts: FC<PostsPropsAndActions> = (props) => {
     const {
         posts,
         getPost,
@@ -145,25 +130,7 @@ export const PostsComponent: FC<PostsProps> = (props) => {
     );
 };
 
-export const mapStateToProps = (state: RootState): PostsOwnProps => ({
-    post: state.postState.currentPost,
-    posts: state.postState.posts,
-    postsLoading: state.postState.loadingPosts,
-});
-
-export const mapDispatchToProps = (
-    dispatch: ThunkDispatch<{}, {}, any>
-): PostActions => {
-    return {
-        getPost: async (postId: number) => {
-            return await dispatch(backendGetPost(postId));
-        },
-        setCurrentPost: (post: Post) => dispatch(setCurrentPost(post)),
-        setPostLoading: (loading: boolean) => dispatch(setPostLoading(loading)),
-    };
-};
-
-export const Posts = connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(PostsComponent);
+)(Posts);
