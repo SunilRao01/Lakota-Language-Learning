@@ -1,30 +1,17 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import {
-    backendDeletePost,
-    backendGetPosts,
-    Post,
-} from 'redux/Posts/Posts.reducer';
+import { Post } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
-import { RootState } from 'redux/store';
 import { PostCard } from 'components/PostCard/PostCard.component';
-import { ThunkDispatch } from 'redux-thunk';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import './PostView.css';
+import './AdminHome.css';
+import {
+    AdminHomePropsWithActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './AdminHome.types';
 
-interface PostsViewActions {
-    getPosts: (pageNum: number) => void;
-    deletePost: (postId: number, jwt: string) => void;
-}
-
-interface PostsViewProps {
-    posts: Post[];
-    jwt: string;
-}
-
-type PostsViewPropsWithActions = PostsViewProps & PostsViewActions;
-
-const PostsViewComponent: FC<PostsViewPropsWithActions> = (props) => {
+const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
     const { jwt, posts, getPosts, deletePost } = props;
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -101,25 +88,7 @@ const PostsViewComponent: FC<PostsViewPropsWithActions> = (props) => {
     );
 };
 
-export const mapStateToProps = (state: RootState): PostsViewProps => ({
-    posts: state.postState.posts,
-    jwt: state.adminState.jwt,
-});
-
-export const mapDispatchToProps = (
-    dispatch: ThunkDispatch<{}, {}, any>
-): PostsViewActions => {
-    return {
-        getPosts: async (pageNumber: number) => {
-            await dispatch(backendGetPosts(pageNumber));
-        },
-        deletePost: async (postId: number, jwt: string) => {
-            await dispatch(backendDeletePost(postId, jwt));
-        },
-    };
-};
-
-export const PostsView = connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(PostsViewComponent);
+)(AdminHome);

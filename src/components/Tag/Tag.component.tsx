@@ -1,10 +1,6 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-
-interface TagProps {
-    text: string;
-    onClick?: (e: string) => void;
-}
+import {TagProps} from "./Tag.types";
 
 export const Tag: FC<TagProps> = (props) => {
     const { onClick, text } = props;

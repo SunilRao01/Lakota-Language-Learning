@@ -1,9 +1,7 @@
 import React, { ChangeEvent, FC, useEffect, useState } from 'react';
-import { backendCreatePost, Post, IQuiz } from 'redux/Posts/Posts.reducer';
+import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { RootState } from 'redux/store';
-import { Redirect, RouterProps } from 'react-router';
+import { Redirect } from 'react-router';
 import PlusSvg from 'assets/plus.svg';
 import CrossSvg from 'assets/x.svg';
 import { QuizCard } from 'components/QuizCard/QuizCard.component';
@@ -11,32 +9,16 @@ import Editor from 'tui-editor';
 import 'tui-editor/dist/tui-editor-contents.css';
 import 'tui-editor/dist/tui-editor.css';
 
-import './PostCreate.css';
-import './PostEdit.css';
+import './AdminPostCreate.css';
+import '../AdminPostEdit/AdminPostEdit.css';
+import {
+    AdminPostCreateComponentPropsWithActions,
+    mapDispatchToProps,
+    mapStateToProps,
+    PostCreatePayload,
+} from './AdminPostCreate.types';
 
-interface PostCreateProps {
-    jwt: string;
-    updatePostLoading: boolean;
-}
-
-interface PostCreateActions {
-    createPost: (newPost: any, jwt: string) => void;
-}
-
-type PostCreateComponentPropsWithActions = PostCreateActions &
-    PostCreateProps &
-    RouterProps;
-
-interface PostCreatePayload {
-    postTitle: string;
-    postContent: string;
-    tags: string[];
-    categories: string[];
-    quizzes: IQuiz[];
-    podcastLink: string;
-}
-
-const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = (
+const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
     props
 ) => {
     const { jwt, updatePostLoading, createPost } = props;
@@ -314,24 +296,9 @@ const PostCreateComponentComponent: FC<PostCreateComponentPropsWithActions> = (
     );
 };
 
-export const mapStateToProps = (state: RootState): PostCreateProps => {
-    return {
-        jwt: state.adminState.jwt,
-        updatePostLoading: state.postState.updatingPostLoading,
-    };
-};
 
-export const mapDispatchToProps = (
-    dispatch: ThunkDispatch<{}, {}, any>
-): PostCreateActions => {
-    return {
-        createPost: async (post: Post, jwt: string) => {
-            await dispatch(backendCreatePost(post, jwt));
-        },
-    };
-};
 
-export const PostCreate = connect(
+export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(PostCreateComponentComponent);
+)(AdminPostCreate);

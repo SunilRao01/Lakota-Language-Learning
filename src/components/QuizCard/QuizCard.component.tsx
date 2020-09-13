@@ -1,12 +1,7 @@
 import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
-import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { CrossSVG } from 'assets';
 import './QuizCard.css';
-
-interface QuizCardProps {
-    onCross?: () => void;
-    quiz: IQuiz;
-}
+import { QuizCardProps } from './QuizCard.types';
 
 export const QuizCard: FC<QuizCardProps> = (props) => {
     const { onCross, quiz } = props;

@@ -5,52 +5,24 @@ import React, {
     useEffect,
     useState,
 } from 'react';
-import {
-    backendGetPost,
-    backendUpdatePost,
-    IQuiz,
-    Post,
-} from 'redux/Posts/Posts.reducer';
+import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
-import { RootState } from 'redux/store';
-import { Redirect, RouterProps } from 'react-router';
-import './PostEdit.css';
+import { Redirect } from 'react-router';
+import './AdminPostEdit.css';
 import Editor from 'tui-editor';
 import { QuizCard } from 'components/QuizCard/QuizCard.component';
 import CrossSvg from 'assets/x.svg';
 import PlusSvg from 'assets/plus.svg';
+import {
+    AdminPostEditComponentPropsWithActions,
+    mapDispatchToProps,
+    mapStateToProps,
+    PostUpdatePayload,
+} from './AdminPostEdit.types';
 
 // TODO: Add typing for api payloads
 
-interface PostEditProps {
-    jwt: string;
-    updatePostLoading: boolean;
-    currentPost?: any;
-}
-
-interface PostEditActions {
-    updatePost: (postId: number, updatedPost: any, jwt: string) => void;
-    getPost: (postId: number) => void;
-}
-
-type PostEditComponentPropsWithActions = PostEditActions &
-    PostEditProps &
-    RouterProps;
-
-interface PostUpdatePayload {
-    id: number;
-    postTitle: string;
-    postContent: string;
-    tags: string[];
-    categories: string[];
-    quizzes: IQuiz[];
-    podcastLink: string;
-}
-
-const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = (
-    props
-) => {
+const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
     const {
         getPost,
         currentPost,
@@ -409,31 +381,4 @@ const PostEditComponentComponent: FC<PostEditComponentPropsWithActions> = (
     }
 };
 
-export const mapStateToProps = (state: RootState): PostEditProps => {
-    let newProps: PostEditProps = {
-        jwt: state.adminState.jwt,
-        updatePostLoading: state.postState.updatingPostLoading,
-    };
-    if (state.postState.currentPost) {
-        newProps.currentPost = state.postState.currentPost;
-    }
-    return newProps;
-};
-
-export const mapDispatchToProps = (
-    dispatch: ThunkDispatch<{}, {}, any>
-): PostEditActions => {
-    return {
-        updatePost: async (postId: number, post: Post, jwt: string) => {
-            await dispatch(backendUpdatePost(postId, post, jwt));
-        },
-        getPost: async (postId: number) => {
-            return await dispatch(backendGetPost(postId));
-        },
-    };
-};
-
-export const PostEdit = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PostEditComponentComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPostEdit);
