@@ -1,5 +1,4 @@
 import React from 'react';
-import { Home, mapStateToProps } from './Home.component';
 import { initialRootState, rootReducer, RootState } from 'redux/store';
 import { initialFilterState } from 'redux/Filter/Filter.reducer';
 import { render, within } from '@testing-library/react';
@@ -10,6 +9,8 @@ import { Router } from 'react-router';
 import '@testing-library/jest-dom/extend-expect';
 import thunk from 'redux-thunk';
 import { initialPostState } from 'redux/Posts/Posts.reducer';
+import {mapStateToProps} from "./Home.types";
+import Home from "./Home.component";
 
 const renderWithReduxAndRouter = (
     ui: any,
