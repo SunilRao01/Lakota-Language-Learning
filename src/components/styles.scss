@@ -20,4 +20,8 @@ $navbar-item-color: white;
 $card-content-padding: 0.75em;
 $card-footer-padding: 1em;
 
+// Tabs
+$tabs-toggle-link-active-background-color: $info;
+$tabs-toggle-link-active-border-color: $info;
+
 @import '~bulma/bulma.sass';

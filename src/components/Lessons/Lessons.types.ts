@@ -1,4 +1,8 @@
-import {backendGetLessons, backendGetPostsByLessons, Post} from "../../redux/Posts/Posts.reducer";
+import {
+    backendGetLessons,
+    backendGetPostsByFilters,
+    Post
+} from "../../redux/Posts/Posts.reducer";
 import {RouteComponentProps} from "react-router";
 import {RootState} from "../../redux/store";
 import {ThunkDispatch} from "redux-thunk";
@@ -11,7 +15,7 @@ export interface LessonsProps {
 }
 
 export interface LessonsActions {
-    getPostsForLessons: (lessons: string[]) => void;
+    getPostsForLesson: (lesson: string, pageNumber: number) => any;
     clearPosts: () => void;
     getLessons: () => any;
     setPostLoading: (loading: boolean) => void;
@@ -31,12 +35,11 @@ export const mapDispatchToProps = (
     dispatch: ThunkDispatch<{}, {}, any>
 ): LessonsActions => {
     return {
-        getPostsForLessons: async (lessons: string[]) => {
-            let output = [];
-            for (const l of lessons) {
-                output.push(await dispatch(backendGetPostsByLessons([l])));
-            }
-            return output;
+        getPostsForLesson: async (lesson: string, pageNumber: number) => {
+            return await dispatch(backendGetPostsByFilters(
+                pageNumber,
+                [lesson]
+            ));
         },
         clearPosts: () => dispatch(clearPosts()),
         getLessons: async () => {
