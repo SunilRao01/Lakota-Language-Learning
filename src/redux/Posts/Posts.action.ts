@@ -78,6 +78,21 @@ export interface SetPostLoading {
     payload: boolean;
 }
 
+export interface SetGrammar {
+    type: 'SET_GRAMMAR';
+    payload: { id: number; grammar: string }[];
+}
+
+export interface AddGrammar {
+    type: 'ADD_GRAMMAR';
+    payload: { id: number; grammar: string };
+}
+
+export interface DeleteGrammar {
+    type: 'DELETE_GRAMMAR';
+    payload: number;
+}
+
 export type PostActionTypes =
     | GetPosts
     | SetPosts
@@ -93,7 +108,10 @@ export type PostActionTypes =
     | SetLessons
     | AddLesson
     | DeleteLesson
-    | SetPostLoading;
+    | SetPostLoading
+    | SetGrammar
+    | AddGrammar
+    | DeleteGrammar;
 
 export const getPosts = (): PostActionTypes => {
     return {
@@ -179,6 +197,32 @@ export const deleteLesson = (lessonId: number): PostActionTypes => {
     return {
         type: 'DELETE_LESSON',
         payload: lessonId,
+    };
+};
+
+export const setGrammar = (
+    grammar: { id: number; grammar: string }[]
+): PostActionTypes => {
+    return {
+        type: 'SET_GRAMMAR',
+        payload: grammar,
+    };
+};
+
+export const addGrammar = (grammar: {
+    id: number;
+    grammar: string;
+}): PostActionTypes => {
+    return {
+        type: 'ADD_GRAMMAR',
+        payload: grammar,
+    };
+};
+
+export const deleteGrammar = (grammarId: number): PostActionTypes => {
+    return {
+        type: 'DELETE_GRAMMAR',
+        payload: grammarId,
     };
 };
 
