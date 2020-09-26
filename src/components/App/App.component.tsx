@@ -17,11 +17,13 @@ import FilteredPostsView from 'components/FilteredPostsView';
 import {
     AdminHome,
     AdminLessons,
+    AdminGrammar,
     AdminLogin,
     AdminPostCreate,
     AdminPostEdit,
 } from 'components/Admin';
 import ScrollToTop from 'components/ScrollToTop';
+import Grammar from "../Grammar";
 
 export const App: FC = () => {
     return (
@@ -38,6 +40,7 @@ export const App: FC = () => {
                             <Route path="/" exact component={Home} />
                             <Route path="/about" exact component={About} />
                             <Route path="/lessons" exact component={Lessons} />
+                            <Route path="/grammar" exact component={Grammar} />
                             <Route path="/faq" exact component={FAQ} />
                             <Route
                                 path="/post/:postId"
@@ -73,6 +76,11 @@ export const App: FC = () => {
                                 path="/admin/lessons"
                                 exact
                                 component={AdminLessons}
+                            />
+                            <Route
+                                path="/admin/grammar"
+                                exact
+                                component={AdminGrammar}
                             />
                             <Redirect from="/admin" to="/admin/login" />
                         </Switch>
