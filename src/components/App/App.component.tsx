@@ -15,15 +15,17 @@ import './App.css';
 import Posts from 'components/Posts';
 import FilteredPostsView from 'components/FilteredPostsView';
 import {
+    AdminGrammar,
     AdminHome,
     AdminLessons,
-    AdminGrammar,
     AdminLogin,
     AdminPostCreate,
     AdminPostEdit,
 } from 'components/Admin';
 import ScrollToTop from 'components/ScrollToTop';
-import Grammar from "../Grammar";
+import Grammar from '../Grammar';
+import Vocabulary from '../Vocabulary';
+import AdminVocabulary from '../Admin/AdminVocabulary';
 
 export const App: FC = () => {
     return (
@@ -41,6 +43,11 @@ export const App: FC = () => {
                             <Route path="/about" exact component={About} />
                             <Route path="/lessons" exact component={Lessons} />
                             <Route path="/grammar" exact component={Grammar} />
+                            <Route
+                                path="/vocabulary"
+                                exact
+                                component={Vocabulary}
+                            />
                             <Route path="/faq" exact component={FAQ} />
                             <Route
                                 path="/post/:postId"
@@ -81,6 +88,11 @@ export const App: FC = () => {
                                 path="/admin/grammar"
                                 exact
                                 component={AdminGrammar}
+                            />
+                            <Route
+                                path="/admin/vocabulary"
+                                exact
+                                component={AdminVocabulary}
                             />
                             <Redirect from="/admin" to="/admin/login" />
                         </Switch>

@@ -10,7 +10,7 @@ import {
     setTags,
     setUpdatingPostLoading,
     setWordOfTheDayPosts,
-    deleteLesson, setGrammar, addGrammar, deleteGrammar,
+    deleteLesson, setGrammar, addGrammar, deleteGrammar, setVocabulary, addVocab, deleteVocab,
 } from './Posts.action';
 import axios, { AxiosResponse } from 'axios';
 import { AnyAction, Dispatch } from 'redux';
@@ -42,6 +42,7 @@ export interface PostState {
     currentPost?: Post;
     lessons: { id: number; lesson: string }[];
     grammar: { id: number; grammar: string }[];
+    vocabulary: { id: number; vocab: string }[];
     categories?: string[];
     tags?: string[];
     wordOfTheDayPosts?: Post[];
@@ -53,6 +54,7 @@ export const initialPostState: PostState = {
     updatingPostLoading: false,
     lessons: [],
     grammar: [],
+    vocabulary: [],
     loadingPosts: false,
 };
 
@@ -213,6 +215,78 @@ export const backendDeleteGrammar = (
             })
             .then((res: AxiosResponse) => {
                 dispatch(deleteGrammar(grammarId));
+                Promise.resolve(res.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                Promise.reject(err);
+            });
+    };
+};
+
+export const backendGetVocabulary = (): ThunkAction<
+    Promise<any>,
+    RootState,
+    {},
+    AnyAction
+    > => {
+    return async (dispatch: Dispatch) => {
+        return axios
+            .get(`${apiUrl}/vocabulary`)
+            .then((res: any) => {
+                dispatch(setVocabulary(res.data.data));
+                return Promise.resolve(res.data.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                return Promise.reject(err);
+            });
+    };
+};
+
+export const backendAddVocab = (
+    vocab: string,
+    jwt: string
+): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios
+            .post(
+                `${apiUrl}/vocabulary`,
+                {
+                    vocab: {
+                        vocab: vocab,
+                    },
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                }
+            )
+            .then((res: AxiosResponse) => {
+                dispatch(addVocab(res.data.data));
+                Promise.resolve(res.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                Promise.reject(err);
+            });
+    };
+};
+
+export const backendDeleteVocab = (
+    vocabId: number,
+    jwt: string
+): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios
+            .delete(`${apiUrl}/vocabulary/${vocabId}`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                },
+            })
+            .then((res: AxiosResponse) => {
+                dispatch(deleteVocab(vocabId));
                 Promise.resolve(res.data);
             })
             .catch((err) => {
@@ -491,6 +565,28 @@ export const postReducer = (
             return {
                 ...state,
                 grammar: newGrammar,
+            };
+        }
+        case 'SET_VOCABULARY': {
+            return {
+                ...state,
+                vocabulary: action.payload,
+            };
+        }
+        case 'ADD_VOCAB': {
+            return {
+                ...state,
+                vocabulary: [...state.vocabulary, action.payload],
+            };
+        }
+        case 'DELETE_VOCAB': {
+            let newVocabulary = state.vocabulary.filter(
+                (v) => v.id !== action.payload
+            );
+
+            return {
+                ...state,
+                vocabulary: newVocabulary,
             };
         }
         case 'SET_CATEGORIES': {

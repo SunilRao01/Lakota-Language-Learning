@@ -93,6 +93,21 @@ export interface DeleteGrammar {
     payload: number;
 }
 
+export interface SetVocabulary {
+    type: 'SET_VOCABULARY';
+    payload: { id: number; vocab: string }[];
+}
+
+export interface AddVocab {
+    type: 'ADD_VOCAB';
+    payload: { id: number; vocab: string };
+}
+
+export interface DeleteVocab {
+    type: 'DELETE_VOCAB';
+    payload: number;
+}
+
 export type PostActionTypes =
     | GetPosts
     | SetPosts
@@ -111,7 +126,10 @@ export type PostActionTypes =
     | SetPostLoading
     | SetGrammar
     | AddGrammar
-    | DeleteGrammar;
+    | DeleteGrammar
+    | SetVocabulary
+    | AddVocab
+    | DeleteVocab;
 
 export const getPosts = (): PostActionTypes => {
     return {
@@ -223,6 +241,32 @@ export const deleteGrammar = (grammarId: number): PostActionTypes => {
     return {
         type: 'DELETE_GRAMMAR',
         payload: grammarId,
+    };
+};
+
+export const setVocabulary = (
+    vocabulary: { id: number; vocab: string }[]
+): PostActionTypes => {
+    return {
+        type: 'SET_VOCABULARY',
+        payload: vocabulary,
+    };
+};
+
+export const addVocab = (vocab: {
+    id: number;
+    vocab: string;
+}): PostActionTypes => {
+    return {
+        type: 'ADD_VOCAB',
+        payload: vocab,
+    };
+};
+
+export const deleteVocab = (vocabId: number): PostActionTypes => {
+    return {
+        type: 'DELETE_VOCAB',
+        payload: vocabId,
     };
 };
 
