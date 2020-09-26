@@ -21,11 +21,11 @@ import {
     AdminLogin,
     AdminPostCreate,
     AdminPostEdit,
+    AdminVocabulary
 } from 'components/Admin';
 import ScrollToTop from 'components/ScrollToTop';
 import Grammar from '../Grammar';
 import Vocabulary from '../Vocabulary';
-import AdminVocabulary from '../Admin/AdminVocabulary';
 
 export const App: FC = () => {
     return (
