@@ -12,6 +12,6 @@ defmodule LakotaEdApiWeb.VocabView do
 
   def render("vocab.json", %{vocab: vocab}) do
     %{id: vocab.id,
-      lesson: vocab.vocab}
+      vocab: vocab.vocab}
   end
 end
