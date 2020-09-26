@@ -10,7 +10,7 @@ import {
     setTags,
     setUpdatingPostLoading,
     setWordOfTheDayPosts,
-    deleteLesson,
+    deleteLesson, setGrammar, addGrammar, deleteGrammar,
 } from './Posts.action';
 import axios, { AxiosResponse } from 'axios';
 import { AnyAction, Dispatch } from 'redux';
@@ -41,6 +41,7 @@ export interface PostState {
     updatingPostLoading: boolean;
     currentPost?: Post;
     lessons: { id: number; lesson: string }[];
+    grammar: { id: number; grammar: string }[];
     categories?: string[];
     tags?: string[];
     wordOfTheDayPosts?: Post[];
@@ -51,6 +52,7 @@ export const initialPostState: PostState = {
     posts: [],
     updatingPostLoading: false,
     lessons: [],
+    grammar: [],
     loadingPosts: false,
 };
 
@@ -148,6 +150,78 @@ export const backendDeleteLesson = (
     };
 };
 
+export const backendGetGrammar = (): ThunkAction<
+    Promise<any>,
+    RootState,
+    {},
+    AnyAction
+    > => {
+    return async (dispatch: Dispatch) => {
+        return axios
+            .get(`${apiUrl}/grammar`)
+            .then((res: any) => {
+                dispatch(setGrammar(res.data.data));
+                return Promise.resolve(res.data.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                return Promise.reject(err);
+            });
+    };
+};
+
+export const backendAddGrammar = (
+    grammar: string,
+    jwt: string
+): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios
+            .post(
+                `${apiUrl}/grammar`,
+                {
+                    grammar: {
+                        grammar: grammar,
+                    },
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                }
+            )
+            .then((res: AxiosResponse) => {
+                dispatch(addGrammar(res.data.data));
+                Promise.resolve(res.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                Promise.reject(err);
+            });
+    };
+};
+
+export const backendDeleteGrammar = (
+    grammarId: number,
+    jwt: string
+): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios
+            .delete(`${apiUrl}/grammar/${grammarId}`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                },
+            })
+            .then((res: AxiosResponse) => {
+                dispatch(deleteGrammar(grammarId));
+                Promise.resolve(res.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                Promise.reject(err);
+            });
+    };
+};
+
 export const backendGetCategories = (): ThunkAction<
     Promise<any>,
     RootState,
@@ -188,7 +262,7 @@ export const backendGetTags = (): ThunkAction<
     };
 };
 
-export const backendGetPostsByLessons = (
+export const backendGetPostsByCategories = (
     lessons: string[]
 ): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
     return async (dispatch: Dispatch) => {
@@ -395,6 +469,28 @@ export const postReducer = (
             return {
                 ...state,
                 lessons: newLessons,
+            };
+        }
+        case 'SET_GRAMMAR': {
+            return {
+                ...state,
+                grammar: action.payload,
+            };
+        }
+        case 'ADD_GRAMMAR': {
+            return {
+                ...state,
+                grammar: [...state.grammar, action.payload],
+            };
+        }
+        case 'DELETE_GRAMMAR': {
+            let newGrammar = state.grammar.filter(
+                (g) => g.id !== action.payload
+            );
+
+            return {
+                ...state,
+                grammar: newGrammar,
             };
         }
         case 'SET_CATEGORIES': {
