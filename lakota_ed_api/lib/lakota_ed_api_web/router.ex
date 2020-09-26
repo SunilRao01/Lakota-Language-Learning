@@ -33,5 +33,6 @@ defmodule LakotaEdApiWeb.Router do
     resources "/post", PostController, only: [:create, :update, :delete]
     resources "/lessons", LessonController, except: [:new, :edit]
     resources "/grammar", GrammarController, except: [:new, :edit]
+    resources "/vocabulary", VocabController, except: [:new, :edit]
   end
 end
