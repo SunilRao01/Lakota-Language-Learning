@@ -26,6 +26,7 @@ import {
 import ScrollToTop from 'components/ScrollToTop';
 import Grammar from '../Grammar';
 import Vocabulary from '../Vocabulary';
+import Podcasts from "../Podcasts";
 
 export const App: FC = () => {
     return (
@@ -43,6 +44,7 @@ export const App: FC = () => {
                             <Route path="/about" exact component={About} />
                             <Route path="/lessons" exact component={Lessons} />
                             <Route path="/grammar" exact component={Grammar} />
+                            <Route path="/podcasts" exact component={Podcasts} />
                             <Route
                                 path="/vocabulary"
                                 exact

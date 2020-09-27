@@ -10,7 +10,16 @@ import {
     setTags,
     setUpdatingPostLoading,
     setWordOfTheDayPosts,
-    deleteLesson, setGrammar, addGrammar, deleteGrammar, setVocabulary, addVocab, deleteVocab,
+    deleteLesson,
+    setGrammar,
+    addGrammar,
+    deleteGrammar,
+    setVocabulary,
+    addVocab,
+    deleteVocab,
+    setPodcasts,
+    addPodcast,
+    deletePodcast,
 } from './Posts.action';
 import axios, { AxiosResponse } from 'axios';
 import { AnyAction, Dispatch } from 'redux';
@@ -43,6 +52,7 @@ export interface PostState {
     lessons: { id: number; lesson: string }[];
     grammar: { id: number; grammar: string }[];
     vocabulary: { id: number; vocab: string }[];
+    podcasts: { id: number; podcast: string }[];
     categories?: string[];
     tags?: string[];
     wordOfTheDayPosts?: Post[];
@@ -55,6 +65,7 @@ export const initialPostState: PostState = {
     lessons: [],
     grammar: [],
     vocabulary: [],
+    podcasts: [],
     loadingPosts: false,
 };
 
@@ -143,6 +154,78 @@ export const backendDeleteLesson = (
             })
             .then((res: AxiosResponse) => {
                 dispatch(deleteLesson(lessonId));
+                Promise.resolve(res.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                Promise.reject(err);
+            });
+    };
+};
+
+export const backendGetPodcasts = (): ThunkAction<
+    Promise<any>,
+    RootState,
+    {},
+    AnyAction
+    > => {
+    return async (dispatch: Dispatch) => {
+        return axios
+            .get(`${apiUrl}/podcasts`)
+            .then((res: any) => {
+                dispatch(setPodcasts(res.data.data));
+                return Promise.resolve(res.data.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                return Promise.reject(err);
+            });
+    };
+};
+
+export const backendAddPodcast = (
+    podcast: string,
+    jwt: string
+): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios
+            .post(
+                `${apiUrl}/podcasts`,
+                {
+                    podcast: {
+                        podcast: podcast,
+                    },
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                }
+            )
+            .then((res: AxiosResponse) => {
+                dispatch(addPodcast(res.data.data));
+                Promise.resolve(res.data);
+            })
+            .catch((err) => {
+                console.error(err);
+                Promise.reject(err);
+            });
+    };
+};
+
+export const backendDeletePodcast = (
+    podcastId: number,
+    jwt: string
+): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        axios
+            .delete(`${apiUrl}/podcasts/${podcastId}`, {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                },
+            })
+            .then((res: AxiosResponse) => {
+                dispatch(deletePodcast(podcastId));
                 Promise.resolve(res.data);
             })
             .catch((err) => {

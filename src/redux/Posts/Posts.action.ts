@@ -108,6 +108,21 @@ export interface DeleteVocab {
     payload: number;
 }
 
+export interface SetPodcasts {
+    type: 'SET_PODCASTS';
+    payload: { id: number; podcast: string }[];
+}
+
+export interface AddPodcast {
+    type: 'ADD_PODCAST';
+    payload: { id: number; podcast: string };
+}
+
+export interface DeletePodcast {
+    type: 'DELETE_PODCAST';
+    payload: number;
+}
+
 export type PostActionTypes =
     | GetPosts
     | SetPosts
@@ -129,7 +144,10 @@ export type PostActionTypes =
     | DeleteGrammar
     | SetVocabulary
     | AddVocab
-    | DeleteVocab;
+    | DeleteVocab
+    | SetPodcasts
+    | AddPodcast
+    | DeletePodcast;
 
 export const getPosts = (): PostActionTypes => {
     return {
@@ -215,6 +233,32 @@ export const deleteLesson = (lessonId: number): PostActionTypes => {
     return {
         type: 'DELETE_LESSON',
         payload: lessonId,
+    };
+};
+
+export const setPodcasts = (
+    podcasts: { id: number; podcast: string }[]
+): PostActionTypes => {
+    return {
+        type: 'SET_PODCASTS',
+        payload: podcasts,
+    };
+};
+
+export const addPodcast = (podcast: {
+    id: number;
+    podcast: string;
+}): PostActionTypes => {
+    return {
+        type: 'ADD_PODCAST',
+        payload: podcast,
+    };
+};
+
+export const deletePodcast = (podcastId: number): PostActionTypes => {
+    return {
+        type: 'DELETE_PODCAST',
+        payload: podcastId,
     };
 };
 
