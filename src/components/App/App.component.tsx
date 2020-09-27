@@ -18,7 +18,7 @@ import {
     AdminGrammar,
     AdminHome,
     AdminLessons,
-    AdminLogin,
+    AdminLogin, AdminPodcasts,
     AdminPostCreate,
     AdminPostEdit,
     AdminVocabulary
@@ -95,6 +95,11 @@ export const App: FC = () => {
                                 path="/admin/vocabulary"
                                 exact
                                 component={AdminVocabulary}
+                            />
+                            <Route
+                                path="/admin/podcasts"
+                                exact
+                                component={AdminPodcasts}
                             />
                             <Redirect from="/admin" to="/admin/login" />
                         </Switch>

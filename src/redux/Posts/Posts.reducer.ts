@@ -628,6 +628,28 @@ export const postReducer = (
                 lessons: newLessons,
             };
         }
+        case 'SET_PODCASTS': {
+            return {
+                ...state,
+                podcasts: action.payload,
+            };
+        }
+        case 'ADD_PODCAST': {
+            return {
+                ...state,
+                podcasts: [...state.podcasts, action.payload],
+            };
+        }
+        case 'DELETE_PODCAST': {
+            let newPodcasts = state.podcasts.filter(
+                (l) => l.id !== action.payload
+            );
+
+            return {
+                ...state,
+                podcasts: newPodcasts,
+            };
+        }
         case 'SET_GRAMMAR': {
             return {
                 ...state,
