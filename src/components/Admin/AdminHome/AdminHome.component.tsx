@@ -44,6 +44,9 @@ const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
                 <Link to={'/admin/vocabulary'} className="button is-primary">
                     Change Vocabulary
                 </Link>
+                <Link to={'/admin/podcasts'} className="button is-primary">
+                    Change Podcasts
+                </Link>
             </div>
             <hr />
             {posts.map((p: Post, i: number) => (
