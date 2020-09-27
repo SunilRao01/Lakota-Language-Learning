@@ -27,7 +27,9 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
         clearPosts();
 
         const vocabulary: { id: number; vocab: string }[] = await getVocabulary();
-        setSelectedVocab(vocabulary[0].vocab);
+        if (vocabulary.length > 0) {
+            setSelectedVocab(vocabulary[0].vocab);
+        }
 
         setPostLoading(false);
     }, [clearPosts, getVocabulary, setPostLoading]);

@@ -27,7 +27,9 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
         clearPosts();
 
         const lessons: { id: number; lesson: string }[] = await getLessons();
-        setSelectedLesson(lessons[0].lesson);
+        if (lessons.length > 0) {
+            setSelectedLesson(lessons[0].lesson);
+        }
 
         setPostLoading(false);
     }, [clearPosts, getLessons, setPostLoading]);
