@@ -48,7 +48,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
     return (
         <div className="container">
             <div className="columns is-centered">
-                <div className={`column is-narrow ${styles.titleAnim}`}>
+                <div className={`column is-narrow ${styles.TitleAnim}`}>
                     <p className="title is-2">Lakota Language Learning</p>
                     <p className={`subtitle is-4 ${styles.swingInTopForward}`}>
                         Lakota lessons and language tools from Alex

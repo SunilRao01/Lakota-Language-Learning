@@ -1,13 +1,17 @@
-.titleAnim {
+.TitleAnim {
     margin-bottom: 60px;
     text-align: center;
+    -webkit-animation: swingInTopForward 0.6s
+    cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    animation: swingInTopForward 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+    both;
 }
 
 hr {
     border: 1px solid #ccc;
 }
 
-@-webkit-keyframes swinInTopForward {
+@-webkit-keyframes swingInTopForward {
     0% {
         -webkit-transform: rotateX(-100deg);
         transform: rotateX(-100deg);
@@ -23,7 +27,7 @@ hr {
         opacity: 1;
     }
 }
-@keyframes swinInTopForward {
+@keyframes swingInTopForward {
     0% {
         -webkit-transform: rotateX(-100deg);
         transform: rotateX(-100deg);
