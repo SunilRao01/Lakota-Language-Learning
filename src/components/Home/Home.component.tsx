@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import './Home.css';
+import styles from './Home.module.scss';
 import { Post } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
@@ -48,9 +48,9 @@ const Home: FC<HomePropsWithActions> = (props) => {
     return (
         <div className="container">
             <div className="columns is-centered">
-                <div className="column is-narrow title-anim">
+                <div className={`column is-narrow ${styles.titleAnim}`}>
                     <p className="title is-2">Lakota Language Learning</p>
-                    <p className="subtitle is-4 swing-in-top-bck">
+                    <p className={`subtitle is-4 ${styles.swingInTopForward}`}>
                         Lakota lessons and language tools from Alex
                     </p>
                 </div>
@@ -76,7 +76,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                         ))}
                     {!postsLoading && (
                         <button
-                            className="button is-info pagination-button"
+                            className={`button is-info ${styles.PaginationButton}`}
                             disabled={currentPage === 1}
                             onClick={() => {
                                 window.scrollTo(0, 0);
@@ -89,7 +89,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                     )}
                     {!postsLoading && (
                         <button
-                            className="button is-info pagination-button"
+                            className={`button is-info ${styles.PaginationButton}`}
                             disabled={posts.length === 0 || posts.length < 5}
                             onClick={() => {
                                 window.scrollTo(0, 0);
@@ -104,7 +104,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                 </div>
                 <div className="column">
                     <div
-                        className="word-of-the-day-section"
+                        className={styles.WordOfTheDaySection}
                         data-testid="word-of-the-day"
                     >
                         <h3 className="title is-3">Word of the Day:</h3>
@@ -115,7 +115,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                         ))}
                     </div>
 
-                    <div className="categories-section">
+                    <div className={styles.CategorySection}>
                         <h3 className="title is-3">Categories:</h3>
                         <div>
                             {categories.length > 0 &&
@@ -144,11 +144,15 @@ const Home: FC<HomePropsWithActions> = (props) => {
 
                     <div>
                         <h3 className="title is-3">Tags:</h3>
-                        <div className="field is-grouped tags-section">
+                        <div className={`${styles.TagSection}`}>
                             {tags.length > 0 &&
                                 Array.from(tags).map((t: string, i: number) => {
                                     return <Tag key={i} text={t} />;
                                 })}
+                            {tags.length > 0 &&
+                            Array.from(tags).map((t: string, i: number) => {
+                                return <Tag key={i} text={t} />;
+                            })}
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { FC, Fragment, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
@@ -41,8 +42,8 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
 
     // Whenever changing the podcast, reset the page number to 1
     useEffect(() => {
-        setCurrentPage(1)
-    }, [selectedPodcast])
+        setCurrentPage(1);
+    }, [selectedPodcast]);
 
     // Update posts when paginating or changing the podcasts
     useEffect(() => {
@@ -93,7 +94,9 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
                 podcasts.map((podcast, i) => (
                     <Fragment key={i}>
                         {posts
-                            .filter((p) => p.categories.includes(podcast.podcast))
+                            .filter((p) =>
+                                p.categories.includes(podcast.podcast)
+                            )
                             .map((p, i) => (
                                 <div key={i}>
                                     <PostCard post={p} showPreviewOnly />

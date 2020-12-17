@@ -74,3 +74,5 @@ db_data
 
 ci-cd/keys/worker
 ci-cd/keys/web
+
+.eslintcache

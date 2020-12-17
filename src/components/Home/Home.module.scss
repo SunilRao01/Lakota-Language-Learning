@@ -1,4 +1,4 @@
-.title-anim {
+.titleAnim {
     margin-bottom: 60px;
     text-align: center;
 }
@@ -7,7 +7,7 @@ hr {
     border: 1px solid #ccc;
 }
 
-@-webkit-keyframes swing-in-top-fwd {
+@-webkit-keyframes swinInTopForward {
     0% {
         -webkit-transform: rotateX(-100deg);
         transform: rotateX(-100deg);
@@ -23,7 +23,7 @@ hr {
         opacity: 1;
     }
 }
-@keyframes swing-in-top-fwd {
+@keyframes swinInTopForward {
     0% {
         -webkit-transform: rotateX(-100deg);
         transform: rotateX(-100deg);
@@ -40,39 +40,34 @@ hr {
     }
 }
 
-.word-of-the-day-section {
+.WordOfTheDaySection {
     margin-bottom: 40px;
     min-height: 260px;
 }
 
-.categories-section {
+.CategorySection {
     margin-bottom: 40px;
     min-height: 140px;
+
+    > div {
+        padding: 0.75rem;
+        display: flex;
+        flex-wrap: wrap;
+    }
 }
 
-.categories-section > div {
+.TagSection {
     padding: 0.75rem;
+    flex-wrap: wrap;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: flex-start;
+
+    > p:not(:last-child) {
+        margin-bottom: 0.5rem;
+        margin-right: 0.5rem;
+    }
 }
 
-.tags-section {
-    padding: 0.75rem;
-}
-
-.field.is-grouped {
-    flex-wrap: wrap;
-}
-
-.field.is-grouped > .control:not(:last-child) {
-    margin-bottom: 0.5rem;
-    margin-right: 0.5rem;
-}
-
-.control {
-    margin-bottom: 0;
-}
-
-.pagination-button {
+.PaginationButton {
     margin: 10px;
 }
