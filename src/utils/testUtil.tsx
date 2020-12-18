@@ -7,6 +7,7 @@ import thunk from 'redux-thunk';
 import { createMemoryHistory } from 'history';
 import { Router } from 'react-router-dom';
 
+// override render function to include redux store and react-router pathing
 function render(
     ui: any,
     startingReduxStore?: any,
