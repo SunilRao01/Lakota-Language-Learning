@@ -28,10 +28,12 @@ const Home: FC<HomePropsWithActions> = (props) => {
 
     const fetchData = useCallback(async () => {
         setPostLoading(true);
+
         await getPosts(1);
         await getCategories();
         await getTags();
         await getWordOfTheDayPosts();
+
         setPostLoading(false);
     }, [
         getCategories,
@@ -68,7 +70,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                         </progress>
                     )}
                     {!postsLoading &&
-                        posts.map((p: Post, i: number) => (
+                        posts.slice(0, 5).map((p: Post, i: number) => (
                             <div key={i}>
                                 <PostCard showPreviewOnly={true} post={p} />
                                 {i < posts.length - 1 ? <hr /> : ``}
@@ -150,9 +152,9 @@ const Home: FC<HomePropsWithActions> = (props) => {
                                     return <Tag key={i} text={t} />;
                                 })}
                             {tags.length > 0 &&
-                            Array.from(tags).map((t: string, i: number) => {
-                                return <Tag key={i} text={t} />;
-                            })}
+                                Array.from(tags).map((t: string, i: number) => {
+                                    return <Tag key={i} text={t} />;
+                                })}
                         </div>
                     </div>
                 </div>

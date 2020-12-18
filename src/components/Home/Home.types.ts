@@ -1,6 +1,6 @@
 import {
     backendGetCategories,
-    backendGetPosts,
+    apiGetPosts,
     backendGetTags,
     backendGetWordOfTheDayPosts,
     Post
@@ -42,7 +42,7 @@ export const mapDispatchToProps = (
 ): HomeActions => {
     return {
         getPosts: async (pageNumber: number) => {
-            await dispatch(backendGetPosts(pageNumber));
+            await dispatch(apiGetPosts(pageNumber));
         },
         getCategories: async () => {
             await dispatch(backendGetCategories());

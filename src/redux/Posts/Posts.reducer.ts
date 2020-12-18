@@ -73,42 +73,48 @@ const apiUrl = process.env.REACT_APP_API_URL
     ? process.env.REACT_APP_API_URL
     : 'http://localhost:4000';
 
-export const backendGetPosts = (
-    pageNumber: number
-): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
-    return async (dispatch: Dispatch) => {
-        return axios
-            .get(`${apiUrl}/posts?page=${pageNumber}`)
-            .then((res: any) => {
-                dispatch(setPosts(res.data.posts));
+export interface IGetPosts {
+    posts: Post[];
+}
 
-                Promise.resolve(res.data);
-            })
-            .catch((err) => {
-                console.error(err);
-                Promise.reject(err);
-            });
-    };
+export interface IGetLessons {
+    lessons: string[];
+}
+
+export const apiGetPosts = (
+    pageNumber: number
+): ThunkAction<Promise<IGetPosts>, RootState, null, PostActionTypes> => async (
+    dispatch
+) => {
+    return axios
+        .get(`${apiUrl}/posts?page=${pageNumber}`)
+        .then((res: AxiosResponse<IGetPosts>) => {
+            dispatch(setPosts(res.data.posts));
+
+            return Promise.resolve(res.data);
+        })
+        .catch((err) => {
+            console.error(err);
+            return Promise.reject(err);
+        });
 };
 
-export const backendGetLessons = (): ThunkAction<
-    Promise<any>,
+export const apiGetLessons = (): ThunkAction<
+    Promise<IGetLessons>,
     RootState,
-    {},
-    AnyAction
-> => {
-    return async (dispatch: Dispatch) => {
-        return axios
-            .get(`${apiUrl}/lessons`)
-            .then((res: any) => {
-                dispatch(setLessons(res.data.data));
-                return Promise.resolve(res.data.data);
-            })
-            .catch((err) => {
-                console.error(err);
-                return Promise.reject(err);
-            });
-    };
+    null,
+    PostActionTypes
+> => async (dispatch) => {
+    return axios
+        .get(`${apiUrl}/lessons`)
+        .then((res: any) => {
+            dispatch(setLessons(res.data.lessons));
+            return Promise.resolve(res.data.lessons);
+        })
+        .catch((err) => {
+            console.error(err);
+            return Promise.reject(err);
+        });
 };
 
 export const backendAddLesson = (
@@ -168,7 +174,7 @@ export const backendGetPodcasts = (): ThunkAction<
     RootState,
     {},
     AnyAction
-    > => {
+> => {
     return async (dispatch: Dispatch) => {
         return axios
             .get(`${apiUrl}/podcasts`)
@@ -240,7 +246,7 @@ export const backendGetGrammar = (): ThunkAction<
     RootState,
     {},
     AnyAction
-    > => {
+> => {
     return async (dispatch: Dispatch) => {
         return axios
             .get(`${apiUrl}/grammar`)
@@ -312,7 +318,7 @@ export const backendGetVocabulary = (): ThunkAction<
     RootState,
     {},
     AnyAction
-    > => {
+> => {
     return async (dispatch: Dispatch) => {
         return axios
             .get(`${apiUrl}/vocabulary`)

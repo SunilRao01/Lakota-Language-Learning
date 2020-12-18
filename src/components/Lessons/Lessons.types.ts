@@ -1,5 +1,5 @@
 import {
-    backendGetLessons,
+    apiGetLessons,
     backendGetPostsByFilters,
     Post
 } from "../../redux/Posts/Posts.reducer";
@@ -43,7 +43,7 @@ export const mapDispatchToProps = (
         },
         clearPosts: () => dispatch(clearPosts()),
         getLessons: async () => {
-            return await dispatch(backendGetLessons());
+            return await dispatch(apiGetLessons());
         },
         setPostLoading: (loading: boolean) => dispatch(setPostLoading(loading)),
     };

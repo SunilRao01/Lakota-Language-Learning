@@ -1,6 +1,6 @@
 import {
     backendDeletePost,
-    backendGetPosts,
+    apiGetPosts,
     Post,
 } from '../../../redux/Posts/Posts.reducer';
 import { RootState } from '../../../redux/store';
@@ -28,7 +28,7 @@ export const mapDispatchToProps = (
 ): AdminHomeActions => {
     return {
         getPosts: async (pageNumber: number) => {
-            await dispatch(backendGetPosts(pageNumber));
+            await dispatch(apiGetPosts(pageNumber));
         },
         deletePost: async (postId: number, jwt: string) => {
             await dispatch(backendDeletePost(postId, jwt));

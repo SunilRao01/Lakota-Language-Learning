@@ -4,7 +4,7 @@ import {
     backendAddLesson,
     backendDeleteLesson,
     backendGetCategories,
-    backendGetLessons
+    apiGetLessons
 } from "../../../redux/Posts/Posts.reducer";
 import {setPostLoading} from "../../../redux/Posts/Posts.action";
 
@@ -41,7 +41,7 @@ export const mapDispatchToProps = (
 ): AdminLessonActions => {
     return {
         getLessons: async () => {
-            await dispatch(backendGetLessons());
+            await dispatch(apiGetLessons());
         },
         getCategories: async () => {
             await dispatch(backendGetCategories());

@@ -1,39 +1,68 @@
-import { initialPostState, Post, postReducer } from './Posts.reducer';
-import { addPost} from './Posts.action';
+import {
+    apiGetPosts,
+    initialPostState,
+    Post,
+    postReducer,
+} from './Posts.reducer';
+import thunk, { ThunkDispatch } from 'redux-thunk';
+import { addPost, PostActionTypes } from './Posts.action';
+import configureMockStore from 'redux-mock-store';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
+import { initialRootState, RootState } from '../store';
 
-describe('postReducer', () => {
-    // it('should get posts for GET_POST action', () => {
-    //     const actualState = postReducer(
-    //         {
-    //             posts: [
-    //                 {
-    //                     id: 3,
-    //                     title: 'test post title',
-    //                     content: 'test post',
-    //                     creationDate: '',
-    //                     categories: ['test category', 'test category 2'],
-    //                     tags: ['test tag', 'test tag 2'],
-    //                 },
-    //             ],
-    //             lessons: [],
-    //             updatingPostLoading: false,
-    //         },
-    //         getPosts()
-    //     );
-    //
-    //     // Verify posts
-    //     expect(actualState.posts.length).toEqual(1);
-    //     expect(actualState.posts[0]).toEqual({
-    //         id: 3,
-    //         title: 'test post title',
-    //         content: 'test post',
-    //         creationDate: '',
-    //         categories: ['test category', 'test category 2'],
-    //         tags: ['test tag', 'test tag 2'],
-    //     });
-    // });
+const middlewares = [thunk];
 
-    it('should add post for ADD_POST action', () => {
+const mockStore = configureMockStore<
+    RootState,
+    ThunkDispatch<RootState, null, PostActionTypes>
+>(middlewares);
+let mockAxios = new MockAdapter(axios);
+
+const apiUrl = process.env.REACT_APP_API_URL
+    ? process.env.REACT_APP_API_URL
+    : 'http://localhost:4000';
+
+describe('Asynchronous Actions', () => {
+    afterEach(() => {
+        mockAxios.restore();
+    });
+
+    it('[apiGetPosts] should dispatch setPosts action on apiGetPosts success', () => {
+        let mockPostsFromBackend = [
+            {
+                categories: ['cat1'],
+                content: 'post content',
+                creationDate: '2020-09-21T20:48:23',
+                id: 9,
+                podcastLink: '',
+                quizzes: [],
+                tags: ['tag91'],
+                title: 'Post Number 123',
+            },
+        ];
+        mockAxios.onGet(`${apiUrl}/posts?page=1`).reply(200, {
+            posts: mockPostsFromBackend,
+        });
+
+        const expectedActions = [
+            { type: 'SET_POSTS', payload: mockPostsFromBackend }, // Set posts after retrieval
+        ];
+        const store = mockStore(initialRootState);
+
+        return store.dispatch(apiGetPosts(1)).then(() => {
+            expect(store.getActions()).toEqual(expectedActions);
+        });
+    });
+
+    // TODO: Finish async unit tests
+    it('[apiGetLessons] should dispatch setLessons action on success', function () {
+
+    });
+});
+
+describe('Synchronous Actions', () => {
+    it('[addPost] should add post for ADD_POST action', () => {
         const newPost: Post = {
             id: 3,
             title: 'test post title',
