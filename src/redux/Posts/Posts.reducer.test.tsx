@@ -1,4 +1,5 @@
 import {
+    apiGetLessons,
     apiGetPosts,
     initialPostState,
     Post,
@@ -56,7 +57,19 @@ describe('Asynchronous Actions', () => {
     });
 
     it('[apiGetLessons] should dispatch setLessons action on success', function () {
+        let mockLessonsFromBackend = ['geography', 'history'];
+        mockAxios.onGet(`${apiUrl}/lessons`).reply(200, {
+            lessons: mockLessonsFromBackend,
+        })
 
+        const expectedActions = [
+            { type: 'SET_LESSONS', payload: mockLessonsFromBackend },
+        ];
+        const store = mockStore(initialRootState);
+
+        return store.dispatch(apiGetLessons()).then(() => {
+            expect(store.getActions()).toEqual(expectedActions);
+        })
     });
 });
 
