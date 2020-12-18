@@ -14,7 +14,6 @@ const apiUrl = process.env.REACT_APP_API_URL
     ? process.env.REACT_APP_API_URL
     : 'http://localhost:4000';
 
-
 const dummyPost = {
     categories: ['cat1'],
     content: 'post content',
@@ -57,7 +56,7 @@ test('disable "Next Page" button on last page', async () => {
     let mockAxios = new MockAdapter(axios);
     let mockPostsFromBackend = [];
     // NOTE: when the current page consists of less than 5 posts, the app
-    //  interpret that as the last page
+    //  interprets that as the last page
     for (let i = 0; i < 3; i++) {
         mockPostsFromBackend.push(dummyPost)
     }

@@ -1,7 +1,7 @@
 import {RootState} from "../../../redux/store";
 import {ThunkDispatch} from "redux-thunk";
 import {
-    backendAddLesson,
+    apiAddLesson,
     backendDeleteLesson,
     backendGetCategories,
     apiGetLessons
@@ -47,7 +47,7 @@ export const mapDispatchToProps = (
             await dispatch(backendGetCategories());
         },
         addLesson: async (lesson: string, jwt: string) => {
-            await dispatch(backendAddLesson(lesson, jwt));
+            await dispatch(apiAddLesson(lesson, jwt));
         },
         deleteLesson: async (lessonId: number, jwt: string) => {
             await dispatch(backendDeleteLesson(lessonId, jwt));

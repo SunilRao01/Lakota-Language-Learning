@@ -7,7 +7,7 @@ defmodule LakotaEdApiWeb.LessonView do
   end
 
   def render("show.json", %{lesson: lesson}) do
-    %{lessons: render_one(lesson, LessonView, "lesson.json")}
+    %{lesson: render_one(lesson, LessonView, "lesson.json")}
   end
 
   def render("lesson.json", %{lesson: lesson}) do

@@ -81,6 +81,13 @@ export interface IGetLessons {
     lessons: string[];
 }
 
+export interface IAddLesson {
+    lesson: {
+        id: number;
+        lesson: string;
+    };
+}
+
 export const apiGetPosts = (
     pageNumber: number
 ): ThunkAction<Promise<IGetPosts>, RootState, null, PostActionTypes> => async (
@@ -117,34 +124,34 @@ export const apiGetLessons = (): ThunkAction<
         });
 };
 
-export const backendAddLesson = (
+export const apiAddLesson = (
     lesson: string,
     jwt: string
-): ThunkAction<Promise<any>, RootState, {}, AnyAction> => {
-    return async (dispatch: Dispatch) => {
-        axios
-            .post(
-                `${apiUrl}/lessons`,
-                {
-                    lesson: {
-                        lesson: lesson,
-                    },
+): ThunkAction<Promise<IAddLesson>, RootState, null, PostActionTypes> => async (
+    dispatch: Dispatch
+) => {
+    return axios
+        .post(
+            `${apiUrl}/lessons`,
+            {
+                lesson: {
+                    lesson: lesson,
                 },
-                {
-                    headers: {
-                        Authorization: `Bearer ${jwt}`,
-                    },
-                }
-            )
-            .then((res: AxiosResponse) => {
-                dispatch(addLesson(res.data.data));
-                Promise.resolve(res.data);
-            })
-            .catch((err) => {
-                console.error(err);
-                Promise.reject(err);
-            });
-    };
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${jwt}`,
+                },
+            }
+        )
+        .then((res: AxiosResponse) => {
+            dispatch(addLesson(res.data.lesson));
+            return Promise.resolve(res.data);
+        })
+        .catch((err) => {
+            console.error(err);
+            return Promise.reject(err);
+        });
 };
 
 export const backendDeleteLesson = (
