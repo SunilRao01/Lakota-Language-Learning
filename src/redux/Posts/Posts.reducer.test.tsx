@@ -18,18 +18,14 @@ const mockStore = configureMockStore<
     RootState,
     ThunkDispatch<RootState, null, PostActionTypes>
 >(middlewares);
-let mockAxios = new MockAdapter(axios);
 
 const apiUrl = process.env.REACT_APP_API_URL
     ? process.env.REACT_APP_API_URL
     : 'http://localhost:4000';
 
 describe('Asynchronous Actions', () => {
-    afterEach(() => {
-        mockAxios.restore();
-    });
-
-    it('[apiGetPosts] should dispatch setPosts action on apiGetPosts success', () => {
+    test('[apiGetPosts] should dispatch setPosts action on apiGetPosts success', () => {
+        let mockAxios = new MockAdapter(axios);
         let mockPostsFromBackend = [
             {
                 categories: ['cat1'],
@@ -56,7 +52,8 @@ describe('Asynchronous Actions', () => {
         });
     });
 
-    it('[apiGetLessons] should dispatch setLessons action on success', function () {
+    test('[apiGetLessons] should dispatch setLessons action on success', function () {
+        let mockAxios = new MockAdapter(axios);
         let mockLessonsFromBackend = ['geography', 'history'];
         mockAxios.onGet(`${apiUrl}/lessons`).reply(200, {
             lessons: mockLessonsFromBackend,
