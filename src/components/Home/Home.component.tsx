@@ -28,13 +28,12 @@ const Home: FC<HomePropsWithActions> = (props) => {
 
     const fetchData = useCallback(async () => {
         setPostLoading(true);
-
         await getPosts(1);
+        setPostLoading(false);
+
         await getCategories();
         await getTags();
         await getWordOfTheDayPosts();
-
-        setPostLoading(false);
     }, [
         getCategories,
         getPosts,
@@ -58,18 +57,18 @@ const Home: FC<HomePropsWithActions> = (props) => {
                 </div>
             </div>
             <div className="columns is-variable is-4">
-                <div className="column is-two-thirds">
+                <div className="column is-two-thirds" data-testid='post-container'>
                     <h3 className="title is-3">Recent Posts:</h3>
                     {postsLoading && (
                         <progress
-                            data-testid={'progress-bar'}
+                            data-testid='progress-bar'
                             className="progress is-small is-info"
                             max="100"
                         >
                             50%
                         </progress>
                     )}
-                    {!postsLoading &&
+                    {!postsLoading && posts && posts.length > 0 &&
                         posts.slice(0, 5).map((p: Post, i: number) => (
                             <div key={i}>
                                 <PostCard showPreviewOnly={true} post={p} />
@@ -85,11 +84,12 @@ const Home: FC<HomePropsWithActions> = (props) => {
                                 getPosts(currentPage - 1);
                                 setCurrentPage(currentPage - 1);
                             }}
+                            data-testid='previous-page'
                         >
                             Previous Page
                         </button>
                     )}
-                    {!postsLoading && (
+                    {!postsLoading && posts && (
                         <button
                             className={`button is-info ${styles.PaginationButton}`}
                             disabled={posts.length === 0 || posts.length < 5}
@@ -98,6 +98,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                                 getPosts(currentPage + 1);
                                 setCurrentPage(currentPage + 1);
                             }}
+                            data-testid='next-page'
                         >
                             Next Page
                         </button>

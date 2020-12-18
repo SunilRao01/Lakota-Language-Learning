@@ -10,7 +10,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {setPostLoading} from "../../redux/Posts/Posts.action";
 
 interface HomeActions {
-    getPosts: (pageNumber: number) => void;
+    getPosts: (pageNumber: number) => Promise<any>;
     getCategories: () => void;
     getTags: () => void;
     getWordOfTheDayPosts: () => void;

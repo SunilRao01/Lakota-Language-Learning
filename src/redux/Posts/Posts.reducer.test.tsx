@@ -55,7 +55,6 @@ describe('Asynchronous Actions', () => {
         });
     });
 
-    // TODO: Finish async unit tests
     it('[apiGetLessons] should dispatch setLessons action on success', function () {
 
     });
