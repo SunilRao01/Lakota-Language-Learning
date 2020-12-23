@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { FC, Fragment, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import {
-    VocabularyPropsAndActions,
     mapDispatchToProps,
     mapStateToProps,
+    VocabularyPropsAndActions,
 } from './Vocabulary.types';
 
 const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
@@ -27,7 +27,10 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
         setPostLoading(true);
         clearPosts();
 
-        const vocabulary: { id: number; vocab: string }[] = await getVocabulary();
+        const vocabulary: {
+            id: number;
+            vocab: string;
+        }[] = await getVocabulary();
         if (vocabulary.length > 0) {
             setSelectedVocab(vocabulary[0].vocab);
         }
@@ -42,8 +45,8 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
 
     // Whenever changing the vocab, reset the page number to 1
     useEffect(() => {
-        setCurrentPage(1)
-    }, [selectedVocab])
+        setCurrentPage(1);
+    }, [selectedVocab]);
 
     // Update posts when paginating or changing the vocabulary
     useEffect(() => {
@@ -91,17 +94,14 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
                 </progress>
             )}
             {!postsLoading &&
-                vocabulary.map((vocab, i) => (
-                    <Fragment key={i}>
-                        {posts
-                            .filter((p) => p.categories.includes(vocab.vocab))
-                            .map((p, i) => (
-                                <div key={i}>
-                                    <PostCard post={p} showPreviewOnly />
-                                </div>
-                            ))}
-                    </Fragment>
-                ))}
+                selectedVocab &&
+                posts
+                    .filter((p) => p.categories.includes(selectedVocab))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
 
             <button
                 className="button is-info pagination-button"

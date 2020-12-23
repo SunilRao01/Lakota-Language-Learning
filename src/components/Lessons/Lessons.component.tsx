@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { FC, Fragment, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import {
@@ -42,8 +42,8 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
 
     // Whenever changing the lesson, reset the page number to 1
     useEffect(() => {
-        setCurrentPage(1)
-    }, [selectedLesson])
+        setCurrentPage(1);
+    }, [selectedLesson]);
 
     // Update posts when paginating or changing the lessons
     useEffect(() => {
@@ -91,17 +91,14 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
                 </progress>
             )}
             {!postsLoading &&
-                lessons.map((lesson, i) => (
-                    <Fragment key={i}>
-                        {posts
-                            .filter((p) => p.categories.includes(lesson.lesson))
-                            .map((p, i) => (
-                                <div key={i}>
-                                    <PostCard post={p} showPreviewOnly />
-                                </div>
-                            ))}
-                    </Fragment>
-                ))}
+                selectedLesson &&
+                posts
+                    .filter((p) => p.categories.includes(selectedLesson))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
 
             <button
                 className="button is-info pagination-button"

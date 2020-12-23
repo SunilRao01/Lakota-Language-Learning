@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { FC, Fragment, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import {
@@ -42,8 +42,8 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
 
     // Whenever changing the grammar, reset the page number to 1
     useEffect(() => {
-        setCurrentPage(1)
-    }, [selectedGrammar])
+        setCurrentPage(1);
+    }, [selectedGrammar]);
 
     // Update posts when paginating or changing the grammar
     useEffect(() => {
@@ -85,23 +85,22 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
             </div>
 
             <hr />
+
             {postsLoading && (
                 <progress className="progress is-small is-info" max="100">
                     50%
                 </progress>
             )}
+
             {!postsLoading &&
-                grammar.map((grammar, i) => (
-                    <Fragment key={i}>
-                        {posts
-                            .filter((p) => p.categories.includes(grammar.grammar))
-                            .map((p, i) => (
-                                <div key={i}>
-                                    <PostCard post={p} showPreviewOnly />
-                                </div>
-                            ))}
-                    </Fragment>
-                ))}
+                selectedGrammar &&
+                posts
+                    .filter((p) => p.categories.includes(selectedGrammar))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
 
             <button
                 className="button is-info pagination-button"
