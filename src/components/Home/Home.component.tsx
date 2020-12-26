@@ -77,7 +77,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                         ))}
                     {!postsLoading && (
                         <button
-                            className={`button is-info ${styles.PaginationButton}`}
+                            className='button is-info pagination-button'
                             disabled={currentPage === 1}
                             onClick={() => {
                                 window.scrollTo(0, 0);
@@ -91,7 +91,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                     )}
                     {!postsLoading && posts && (
                         <button
-                            className={`button is-info ${styles.PaginationButton}`}
+                            className='button is-info pagination-button'
                             disabled={posts.length === 0 || posts.length < 5}
                             onClick={() => {
                                 window.scrollTo(0, 0);
