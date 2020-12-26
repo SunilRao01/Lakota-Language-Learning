@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
-import './AdminHome.css';
+import styles from './AdminHome.module.scss';
 import {
     AdminHomePropsWithActions,
     mapDispatchToProps,
@@ -53,13 +53,13 @@ const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
                 <div key={i}>
                     <PostCard post={p} showTitleOnly={true} />
                     <Link
-                        className="button is-primary admin-button"
+                        className={`button is-primary ${styles.AdminButton}`}
                         to={`/admin/post/${p.id}`}
                     >
                         Edit
                     </Link>
                     <button
-                        className="button is-danger admin-button"
+                        className={`button is-danger ${styles.AdminButton}`}
                         onClick={async () => {
                             await deletePost(p.id, jwt);
                         }}

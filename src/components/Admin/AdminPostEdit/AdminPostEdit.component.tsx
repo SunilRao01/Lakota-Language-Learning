@@ -8,7 +8,6 @@ import React, {
 import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import './AdminPostEdit.css';
 import Editor from 'tui-editor';
 import { QuizCard } from 'components/QuizCard/QuizCard.component';
 import CrossSvg from 'assets/x.svg';
@@ -19,6 +18,7 @@ import {
     mapStateToProps,
     PostUpdatePayload,
 } from './AdminPostEdit.types';
+import styles from '../AdminPostCreate/AdminPostCreate.module.scss'
 
 // TODO: Add typing for api payloads
 
@@ -169,7 +169,7 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
 
                 <div className="field">
                     <h3 className="title">Quizzes</h3>
-                    <div className="created-quizzes-container">
+                    <div className={styles.CreatedQuizzes}>
                         {updatedPost.quizzes &&
                             updatedPost.quizzes.map(
                                 (q: IQuiz, index: number) => {
@@ -242,7 +242,7 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                             quiz.possibleAnswers.map(
                                 (a: string, index: number) => (
                                     <div
-                                        className="possible-answer-row slide-in-left"
+                                        className={`${styles.PossibleAnswerRow} slide-in-left`}
                                         key={index}
                                     >
                                         <button
@@ -260,7 +260,7 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                                                     possibleAnswers: newPossibleAnswers,
                                                 });
                                             }}
-                                            className="button is-danger"
+                                            className={`button is-danger ${styles.PossibleAnswerRow_button}`}
                                         >
                                             <img src={CrossSvg} alt="X" />
                                         </button>
@@ -268,14 +268,14 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                                     </div>
                                 )
                             )}
-                        <div className="possible-answers">
-                            <div className="possible-answer">
+                        <div className={styles.PossibleAnswers}>
+                            <div className={styles.PossibleAnswers_answer}>
                                 <input
                                     onChange={(
                                         e: ChangeEvent<HTMLInputElement>
                                     ) => setPossibleAnswer(e.target.value)}
                                     className="input"
-                                    placeholder="possible-answer"
+                                    placeholder="possible answer"
                                     value={possibleAnswer}
                                 />
                                 <button
@@ -318,24 +318,6 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                             Add Quiz
                         </button>
                     </div>
-
-                    <div className="field">
-                        <h3 className="title is-3">Podcast Embed Link</h3>
-                        <div className="control">
-                            <textarea
-                                onChange={(
-                                    e: ChangeEvent<HTMLTextAreaElement>
-                                ) =>
-                                    setUpdatedPost({
-                                        ...updatedPost,
-                                        podcastLink: e.target.value,
-                                    })
-                                }
-                                className="textarea"
-                                placeholder="Podcast Embed Link"
-                            />
-                        </div>
-                    </div>
                 </div>
 
                 <hr />
@@ -369,7 +351,7 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                 )}
 
                 {!updatePostLoading && showUpdateStatus && (
-                    <div className="notification is-success admin-button">
+                    <div className={`notification is-success ${styles.UpdateBanner}`}>
                         <button className="delete" />
                         Post Updated Successfully!
                     </div>

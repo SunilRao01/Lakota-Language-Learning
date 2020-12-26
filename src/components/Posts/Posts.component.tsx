@@ -5,7 +5,7 @@ import { Tag } from 'components/Tag/Tag.component';
 import Viewer from 'tui-editor/dist/tui-editor-Viewer';
 import { QuizCard } from 'components/QuizCard/QuizCard.component';
 import { Link } from 'react-router-dom';
-import './Posts.css';
+import styles from './Posts.module.scss';
 import {
     mapDispatchToProps,
     mapStateToProps,
@@ -90,13 +90,13 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
                             )}
 
                             <br />
-                            <div className="has-text-weight-bold section-title">
+                            <div className={`has-text-weight-bold ${styles.SectionTitle}`}>
                                 Posted:
                             </div>
                             <p className="is-size-8">
                                 {new Date(post.creationDate).toString()}
                             </p>
-                            <div className="has-text-weight-bold section-title">
+                            <div className={`has-text-weight-bold ${styles.SectionTitle}`}>
                                 Categories:
                             </div>
                             <p>
@@ -114,7 +114,7 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
                                     </Link>
                                 ))}
                             </p>
-                            <div className="has-text-weight-bold section-title">
+                            <div className={`has-text-weight-bold ${styles.SectionTitle}`}>
                                 Tags:
                             </div>
                             <div className="field is-grouped">

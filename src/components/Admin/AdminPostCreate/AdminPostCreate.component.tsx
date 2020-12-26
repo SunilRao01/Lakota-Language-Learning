@@ -8,9 +8,7 @@ import { QuizCard } from 'components/QuizCard/QuizCard.component';
 import Editor from 'tui-editor';
 import 'tui-editor/dist/tui-editor-contents.css';
 import 'tui-editor/dist/tui-editor.css';
-
-import './AdminPostCreate.css';
-import '../AdminPostEdit/AdminPostEdit.css';
+import styles from './AdminPostCreate.module.scss';
 import {
     AdminPostCreateComponentPropsWithActions,
     mapDispatchToProps,
@@ -121,7 +119,7 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
 
             <div className="field">
                 <h3 className="title">Quizzes</h3>
-                <div className="created-quizzes-container">
+                <div className={styles.CreatedQuizzes}>
                     {updatedPost.quizzes &&
                         updatedPost.quizzes.map((q: IQuiz, index: number) => {
                             return (
@@ -190,7 +188,7 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
                     {quiz.possibleAnswers &&
                         quiz.possibleAnswers.map((a: string, index: number) => (
                             <div
-                                className="possible-answer-row slide-in-left"
+                                className={`${styles.PossibleAnswerRow} slide-in-left`}
                                 key={index}
                             >
                                 <button
@@ -206,21 +204,21 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
                                             possibleAnswers: newPossibleAnswers,
                                         });
                                     }}
-                                    className="button is-danger"
+                                    className={`button is-danger ${styles.PossibleAnswerRow_button}`}
                                 >
                                     <img src={CrossSvg} alt="X" />
                                 </button>
                                 {a}
                             </div>
                         ))}
-                    <div className="possible-answers">
-                        <div className="possible-answer">
+                    <div className={styles.PossibleAnswers}>
+                        <div className={styles.PossibleAnswers_answer}>
                             <input
                                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                     setPossibleAnswer(e.target.value)
                                 }
                                 className="input"
-                                placeholder="possible-answer"
+                                placeholder={styles.PossibleAnswers_answerInput}
                                 value={possibleAnswer}
                             />
                             <button
@@ -287,7 +285,7 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
             )}
 
             {!updatePostLoading && showUpdateStatus && (
-                <div className="notification is-success">
+                <div className={`notification is-success ${styles.UpdateBanner}`}>
                     <button className="delete" />
                     Created post Successfully!
                 </div>
