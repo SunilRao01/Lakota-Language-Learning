@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
 import { CrossSVG } from 'assets';
-import './QuizCard.css';
+import styles from './QuizCard.module.scss';
 import { QuizCardProps } from './QuizCard.types';
 
 export const QuizCard: FC<QuizCardProps> = (props) => {
@@ -12,10 +12,10 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
     const getQuizStatus = () => {
         switch (quizState) {
             case 0:
-                return <div className="error-message">{quiz.errorMessage}</div>;
+                return <div className={`error-message ${styles.ErrorMessage}`}>{quiz.errorMessage}</div>;
             case 1:
                 return (
-                    <div className="success-message">{quiz.successMessage}</div>
+                    <div className={`success-message ${styles.SuccessMessage}`}>{quiz.successMessage}</div>
                 );
             default:
                 break;
@@ -25,7 +25,7 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
     return (
         <div
             data-testid="QuizCard"
-            className="column swing-in-top-bck quiz-card"
+            className={`column swing-in-top-bck ${styles.QuizCard}`}
         >
             <form
                 onSubmit={(e: FormEvent) => {
@@ -40,10 +40,10 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
             >
                 <div className="card">
                     <header className="card-header">
-                        <p className="card-header-title">{quiz.question}</p>
+                        <p className={`card-header-title ${styles.CardHeaderTitle}`}>{quiz.question}</p>
                         {onCross && (
                             <button
-                                className="button is-danger"
+                                className={`button is-danger ${styles.QuizCard_cross}`}
                                 onClick={() => {
                                     onCross && onCross();
                                 }}
@@ -62,7 +62,7 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
                                                 <>
                                                     <label
                                                         key={index}
-                                                        className="radio"
+                                                        className={styles.QuizCard_radio}
                                                     >
                                                         <input
                                                             type="radio"
@@ -78,13 +78,14 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
                                                                 );
                                                             }}
                                                             value={pa}
+                                                            className={styles.QuizCard_radioInput}
                                                         />
                                                         {pa}
                                                     </label>
                                                     {index !==
                                                         quiz.possibleAnswers
                                                             .length -
-                                                            1 && <hr />}
+                                                            1 && <hr className={styles.QuizCard_break} />}
                                                 </>
                                             );
                                         }

@@ -25,3 +25,24 @@ $tabs-toggle-link-active-background-color: $info;
 $tabs-toggle-link-active-border-color: $info;
 
 @import '~bulma/bulma.sass';
+
+/*
+  Bulma CSS Class Overrides
+ */
+
+.container {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.link {
+  display: flex;
+}
+
+.navbar {
+  z-index: 1000;
+}
+
+.navbar-title {
+  margin-left: 10px;
+}

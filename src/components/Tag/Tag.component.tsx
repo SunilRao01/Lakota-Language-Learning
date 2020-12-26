@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import {TagProps} from "./Tag.types";
+import styles from './Tag.module.scss'
 
 export const Tag: FC<TagProps> = (props) => {
     const { onClick, text } = props;
@@ -15,7 +16,7 @@ export const Tag: FC<TagProps> = (props) => {
     };
 
     return (
-        <p className="swing-in-top-bck control">
+        <p className={styles.Control}>
             {onClick ? (
                 <button
                     onClick={(e) => clickFunction(e, text)}

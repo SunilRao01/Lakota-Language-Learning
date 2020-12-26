@@ -1,0 +1,11 @@
+.Body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.MainContent {
+    flex: 1;
+    margin-top: 40px;
+    padding: 20px;
+}

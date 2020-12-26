@@ -11,7 +11,7 @@ import Home from 'components/Home';
 import About from 'components/About';
 import Lessons from 'components/Lessons';
 import { FAQ } from 'components/FAQ';
-import './App.css';
+import styles from './App.module.scss';
 import Posts from 'components/Posts';
 import FilteredPostsView from 'components/FilteredPostsView';
 import {
@@ -37,8 +37,8 @@ export const App: FC = () => {
                     <NavBar />
                 </header>
 
-                <div className="body">
-                    <main className="main-content">
+                <div className={styles.body}>
+                    <main className={styles.MainContent}>
                         <Switch>
                             <Route path="/" exact component={Home} />
                             <Route path="/about" exact component={About} />

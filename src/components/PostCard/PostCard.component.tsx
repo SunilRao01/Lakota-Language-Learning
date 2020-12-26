@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './PostCard.css';
+import styles from './PostCard.module.scss';
 import { Tag } from 'components/Tag/Tag.component';
 import Viewer from 'tui-editor/dist/tui-editor-Viewer';
 import 'tui-editor/dist/tui-editor-contents.css';
@@ -41,7 +41,7 @@ export const PostCard: FC<PostCardProps> = (props) => {
     return (
         <div
             data-testid={showTitleOnly ? 'postcard-small' : 'postcard-large'}
-            className="column swing-in-top-bck is-full"
+            className="column is-full"
         >
             <div className="card">
                 <header className="card-header">
@@ -56,7 +56,7 @@ export const PostCard: FC<PostCardProps> = (props) => {
                                 <div
                                     className={`${
                                         showPreviewOnly === true
-                                            ? 'preview-mode'
+                                            ? styles.PreviewMode
                                             : ''
                                     }`}
                                     id={`post-content-${post.id}-${viewHash}`}
@@ -70,10 +70,10 @@ export const PostCard: FC<PostCardProps> = (props) => {
                             <b className="is-size-7">Categories: </b>
                             {post.categories.map((c: string, i: number) => {
                                 return (
-                                    <div className="categories" key={i}>
+                                    <div className={styles.Categories} key={i}>
                                         {onClickCategory ? (
                                             <button
-                                                className="is-size-7 category"
+                                                className={`is-size-7 ${styles.Category}`}
                                                 onClick={(e) =>
                                                     clickFunction(e, c)
                                                 }
@@ -94,7 +94,7 @@ export const PostCard: FC<PostCardProps> = (props) => {
                             })}
                         </div>
 
-                        <div className="tags">
+                        <div className={styles.Tags}>
                             {post.tags.map((p: string, i: number) => (
                                 <Tag key={i} text={p} onClick={onClickTag} />
                             ))}

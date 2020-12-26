@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import './Navbar.css';
 import { Link } from 'react-router-dom';
 import { OpenBookSVG } from 'assets';
 
@@ -8,15 +7,15 @@ export const NavBar: FC = () => {
 
     return (
         <nav
-            className="navbar is-info is-fixed-top"
+            className='navbar is-info is-fixed-top'
             role="navigation"
             aria-label="main navigation"
         >
             <div className="navbar-brand">
-                <Link className="link" to="/">
+                <Link className='link' to="/">
                     <div className="navbar-item">
                         <img src={OpenBookSVG} alt="" />
-                        <h6 className="navbar-title">
+                        <h6 className='navbar-title'>
                             Lakota Language Learning
                         </h6>
                     </div>
@@ -47,7 +46,7 @@ export const NavBar: FC = () => {
 
                     <Link
                         to="/"
-                        className="link navbar-item-hover"
+                        className='link navbar-item-hover'
                         onClick={() => setShowHamburger(false)}
                     >
                         <div className="navbar-item">Home</div>
@@ -55,7 +54,7 @@ export const NavBar: FC = () => {
 
                     <Link
                         to="/lessons"
-                        className="link navbar-item-hover"
+                        className='link navbar-item-hover'
                         onClick={() => setShowHamburger(false)}
                     >
                         <div className="navbar-item">Lessons</div>
@@ -63,7 +62,7 @@ export const NavBar: FC = () => {
 
                     <Link
                         to="/grammar"
-                        className="link navbar-item-hover"
+                        className='link navbar-item-hover'
                         onClick={() => setShowHamburger(false)}
                     >
                         <div className="navbar-item">Grammar</div>
@@ -71,7 +70,7 @@ export const NavBar: FC = () => {
 
                     <Link
                         to="/vocabulary"
-                        className="link navbar-item-hover"
+                        className='link navbar-item-hover'
                         onClick={() => setShowHamburger(false)}
                     >
                         <div className="navbar-item">Vocabulary</div>
@@ -79,7 +78,7 @@ export const NavBar: FC = () => {
 
                     <Link
                         to="/podcasts"
-                        className="link navbar-item-hover"
+                        className='link navbar-item-hover'
                         onClick={() => setShowHamburger(false)}
                     >
                         <div className="navbar-item">Podcasts</div>
@@ -87,7 +86,7 @@ export const NavBar: FC = () => {
 
                     <Link
                         to="/FAQ"
-                        className="link navbar-item-hover"
+                        className='link navbar-item-hover'
                         onClick={() => setShowHamburger(false)}
                     >
                         <div className="navbar-item">FAQ</div>
@@ -95,7 +94,7 @@ export const NavBar: FC = () => {
 
                     <Link
                         to="/about"
-                        className="link navbar-item-hover"
+                        className='link navbar-item-hover'
                         onClick={() => setShowHamburger(false)}
                     >
                         <div className="navbar-item">About</div>

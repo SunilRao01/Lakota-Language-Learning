@@ -1,0 +1,46 @@
+.QuizCard {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    max-width: 240px;
+    min-width: 240px;
+
+    &_radio {
+        margin: 0 0 5px;
+        display: flex;
+        word-break: break-all;
+    }
+
+    &_radioInput {
+        margin-right: 5px;
+    }
+
+    &_cross {
+        min-width: 64px;
+        margin: 10px;
+    }
+
+    &_break {
+        border: 1px solid #f0f0f0;
+        margin: 10px 10px;
+    }
+}
+
+.SuccessMessage {
+    color: darkgreen;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.ErrorMessage {
+    color: darkred;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.CardHeaderTitle {
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    hyphens: auto;
+}
+
