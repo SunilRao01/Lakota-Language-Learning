@@ -1,20 +1,32 @@
-import React, {FC} from 'react';
-import '../styles.scss'
-import {NavBar} from '../Navbar/Navbar.component';
-import {BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-import {Home} from '../Home/Home.component';
-import {About} from '../About/About.component';
-import {Lessons} from '../Lessons/Lessons.component';
-import {FAQ} from '../FAQ/FAQ.component';
-import './App.css'
-import {Posts} from '../Posts/Posts.component'
-import {FilteredPostsView} from '../FilteredPostsView/FilteredPostsView.component'
-import {PostsView} from '../Admin/PostsView.component'
-import {PostEdit} from '../Admin/PostEdit.component'
-import {AdminLogin} from '../Admin/AdminLogin.component'
-import {PostCreate} from '../Admin/PostCreate.component'
-import {AdminLessons} from '../Admin/AdminLessons.component'
-import ScrollToTop from '../ScrollToTop.component'
+import React, { FC } from 'react';
+import '../styles.scss';
+import { NavBar } from 'components/Navbar';
+import {
+    BrowserRouter as Router,
+    Redirect,
+    Route,
+    Switch,
+} from 'react-router-dom';
+import Home from 'components/Home';
+import About from 'components/About';
+import Lessons from 'components/Lessons';
+import { FAQ } from 'components/FAQ';
+import styles from './App.module.scss';
+import Posts from 'components/Posts';
+import FilteredPostsView from 'components/FilteredPostsView';
+import {
+    AdminGrammar,
+    AdminHome,
+    AdminLessons,
+    AdminLogin, AdminPodcasts,
+    AdminPostCreate,
+    AdminPostEdit,
+    AdminVocabulary
+} from 'components/Admin';
+import ScrollToTop from 'components/ScrollToTop';
+import Grammar from '../Grammar';
+import Vocabulary from '../Vocabulary';
+import Podcasts from "../Podcasts";
 
 export const App: FC = () => {
     return (
@@ -22,25 +34,74 @@ export const App: FC = () => {
             <ScrollToTop />
             <div className="App">
                 <header className="App-header">
-                    <NavBar/>
+                    <NavBar />
                 </header>
 
-                <div className="body">
-                    <main className="main-content">
+                <div className={styles.body}>
+                    <main className={styles.MainContent}>
                         <Switch>
-                            <Route path='/' exact component={Home}/>
-                            <Route path='/about' exact component={About}/>
-                            <Route path='/lessons' exact component={Lessons}/>
-                            <Route path='/faq' exact component={FAQ}/>
-                            <Route path='/post/:postId' exact component={Posts}/>
-                            <Route path='/posts' component={FilteredPostsView}/>
+                            <Route path="/" exact component={Home} />
+                            <Route path="/about" exact component={About} />
+                            <Route path="/lessons" exact component={Lessons} />
+                            <Route path="/grammar" exact component={Grammar} />
+                            <Route path="/podcasts" exact component={Podcasts} />
+                            <Route
+                                path="/vocabulary"
+                                exact
+                                component={Vocabulary}
+                            />
+                            <Route path="/faq" exact component={FAQ} />
+                            <Route
+                                path="/post/:postId"
+                                exact
+                                component={Posts}
+                            />
+                            <Route
+                                path="/posts"
+                                component={FilteredPostsView}
+                            />
 
-                            <Route path='/admin/posts' exact component={PostsView}/>
-                            <Route path='/admin/login' exact component={AdminLogin}/>
-                            <Route path='/admin/post/:postId/' exact component={PostEdit}/>
-                            <Route path='/admin/posts/new' exact component={PostCreate}/>
-                            <Route path='/admin/lessons' exact component={AdminLessons}/>
-                            <Redirect from='/admin' to='/admin/login'/>
+                            <Route
+                                path="/admin/posts"
+                                exact
+                                component={AdminHome}
+                            />
+                            <Route
+                                path="/admin/login"
+                                exact
+                                component={AdminLogin}
+                            />
+                            <Route
+                                path="/admin/post/:postId/"
+                                exact
+                                component={AdminPostEdit}
+                            />
+                            <Route
+                                path="/admin/posts/new"
+                                exact
+                                component={AdminPostCreate}
+                            />
+                            <Route
+                                path="/admin/lessons"
+                                exact
+                                component={AdminLessons}
+                            />
+                            <Route
+                                path="/admin/grammar"
+                                exact
+                                component={AdminGrammar}
+                            />
+                            <Route
+                                path="/admin/vocabulary"
+                                exact
+                                component={AdminVocabulary}
+                            />
+                            <Route
+                                path="/admin/podcasts"
+                                exact
+                                component={AdminPodcasts}
+                            />
+                            <Redirect from="/admin" to="/admin/login" />
                         </Switch>
                     </main>
                 </div>

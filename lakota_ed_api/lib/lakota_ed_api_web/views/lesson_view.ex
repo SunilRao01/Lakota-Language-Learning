@@ -3,11 +3,11 @@ defmodule LakotaEdApiWeb.LessonView do
   alias LakotaEdApiWeb.LessonView
 
   def render("index.json", %{lessons: lessons}) do
-    %{data: render_many(lessons, LessonView, "lesson.json")}
+    %{lessons: render_many(lessons, LessonView, "lesson.json")}
   end
 
   def render("show.json", %{lesson: lesson}) do
-    %{data: render_one(lesson, LessonView, "lesson.json")}
+    %{lesson: render_one(lesson, LessonView, "lesson.json")}
   end
 
   def render("lesson.json", %{lesson: lesson}) do

@@ -1,85 +1,129 @@
-import React, {FC, Fragment, useCallback, useEffect} from 'react';
-import {RootState} from '../../store'
-import {backendGetLessons, backendGetPostsByLessons, Post} from '../../redux/Posts/Posts.reducer'
-import {ThunkDispatch} from 'redux-thunk'
-import {connect} from 'react-redux'
-import {RouteComponentProps} from 'react-router'
-import {PostCard} from '../PostCard/PostCard.component'
-import {clearPosts, setPostLoading} from '../../redux/Posts/Posts.action'
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { PostCard } from 'components/PostCard/PostCard.component';
+import {
+    LessonsPropsAndActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './Lessons.types';
 
-export interface LessonsProps {
-    posts: Post[],
-    lessons: { id: number, lesson: string }[],
-    postsLoading: boolean
-}
+const Lessons: FC<LessonsPropsAndActions> = (props) => {
+    const {
+        clearPosts,
+        posts,
+        getLessons,
+        getPostsForLesson,
+        lessons,
+        postsLoading,
+        setPostLoading,
+    } = props;
 
-export interface LessonsActions {
-    getPostsForLessons: (lessons: string[]) => void;
-    clearPosts: () => void;
-    getLessons: () => any;
-    setPostLoading: (loading: boolean) => void
-}
+    const [selectedLesson, setSelectedLesson] = useState<string>();
+    const [currentPage, setCurrentPage] = useState(1);
 
-export type LessonsPropsAndActions = LessonsProps & LessonsActions & RouteComponentProps;
-
-export const mapStateToProps = (state: RootState): LessonsProps => ({
-    posts: state.postState.posts,
-    lessons: state.postState.lessons,
-    postsLoading: state.postState.loadingPosts
-})
-
-export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): LessonsActions => {
-    return {
-        getPostsForLessons: async (lessons: string[]) => {
-            let output = [];
-            for (const l of lessons) {
-                output.push(await dispatch(backendGetPostsByLessons([l])))
-            }
-            return output;
-        },
-        clearPosts: () => dispatch(clearPosts()),
-        getLessons: async () => {
-            return await dispatch(backendGetLessons())
-        },
-        setPostLoading: (loading: boolean) => dispatch(setPostLoading(loading))
-    }
-}
-
-const LessonsComponent: FC<LessonsPropsAndActions> = props => {
-    const { clearPosts, posts, getLessons, getPostsForLessons, lessons, postsLoading, setPostLoading } = props
-
+    // Retrieve all lessons
     const fetchData = useCallback(async () => {
-        setPostLoading(true)
-        const lessons: {id: number, lesson: string}[] = await getLessons()
-        clearPosts()
-        await getPostsForLessons(lessons.map((l: {id: number, lesson: string}) => l.lesson))
-        setPostLoading(false)
-    }, [clearPosts, getLessons, getPostsForLessons, setPostLoading])
+        setPostLoading(true);
+        clearPosts();
 
+        const lessons: { id: number; lesson: string }[] = await getLessons();
+        if (lessons.length > 0) {
+            setSelectedLesson(lessons[0].lesson);
+        }
+
+        setPostLoading(false);
+    }, [clearPosts, getLessons, setPostLoading]);
+
+    // On start, retrieve lessons
     useEffect(() => {
-       fetchData()
-    }, [fetchData])
+        fetchData();
+    }, [fetchData]);
+
+    // Whenever changing the lesson, reset the page number to 1
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedLesson]);
+
+    // Update posts when paginating or changing the lessons
+    useEffect(() => {
+        const getPostForSelectedLesson = async (lesson: string) => {
+            clearPosts();
+            await getPostsForLesson(lesson, currentPage);
+        };
+        selectedLesson && getPostForSelectedLesson(selectedLesson);
+    }, [currentPage, clearPosts, getPostsForLesson, selectedLesson]);
 
     return (
-        <div className='container'>
-            <h1 className='title'>Lessons</h1>
-            <hr/>
-            {postsLoading && <progress className="progress is-small is-info" max="100">50%</progress>}
-            {!postsLoading &&
-                lessons.map((lesson, i) => (
-                    <Fragment key={i}>
-                        <h3 className='title is-4'>{lesson.lesson}</h3>
-                        {posts.filter(p => p.categories.includes(lesson.lesson)).map((p, i) => (
-                            <div key={i}>
-                                <PostCard post={p} showPreviewOnly/>
-                            </div>
+        <div className="container">
+            <h1 className="title">Lessons</h1>
+
+            {/*Toggle Lessons Tabs*/}
+            <div className="tabs is-toggle">
+                <ul>
+                    {!postsLoading &&
+                        lessons.map((lesson, i) => (
+                            <li
+                                className={
+                                    selectedLesson === lesson.lesson
+                                        ? 'is-active'
+                                        : undefined
+                                }
+                                key={i}
+                                onClick={() => {
+                                    setSelectedLesson(lesson.lesson);
+                                }}
+                            >
+                                {/*TODO: Bulma is current not accessible, specifically for usages of <a />*/}
+                                {/* being used just for convenience, breaking the required contract for accessibility*/}
+                                <a>
+                                    <span>{lesson.lesson}</span>
+                                </a>
+                            </li>
                         ))}
-                        {i !== lessons.length-1 && <hr/>}
-                    </Fragment>
-                ))
-            }
+                </ul>
+            </div>
+
+            <hr />
+            {postsLoading && (
+                <progress className="progress is-small is-info" max="100">
+                    50%
+                </progress>
+            )}
+            {!postsLoading &&
+                selectedLesson &&
+                posts
+                    .filter((p) => p.categories.includes(selectedLesson))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
+
+            <button
+                className="button is-info pagination-button"
+                disabled={currentPage === 1}
+                onClick={() => {
+                    if (currentPage > 1) {
+                        setCurrentPage(currentPage - 1);
+                    }
+                }}
+            >
+                Previous Page
+            </button>
+            <button
+                className="button is-info pagination-button"
+                disabled={posts.length === 0 || posts.length < 5}
+                onClick={() => {
+                    if (posts.length !== 0) {
+                        setCurrentPage(currentPage + 1);
+                    }
+                }}
+            >
+                Next Page
+            </button>
         </div>
-    )
+    );
 };
 
-export const Lessons = connect(mapStateToProps, mapDispatchToProps)(LessonsComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(Lessons);
