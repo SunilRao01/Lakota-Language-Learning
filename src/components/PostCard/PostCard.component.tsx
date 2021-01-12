@@ -28,7 +28,7 @@ export const PostCard: FC<PostCardProps> = (props) => {
     };
 
     useEffect(() => {
-        if (!showTitleOnly) {
+        if (!showTitleOnly && post.content) {
             new Viewer({
                 el: document.querySelector(
                     `#post-content-${post.id}-${viewHash}`
