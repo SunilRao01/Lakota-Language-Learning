@@ -76,3 +76,5 @@ ci-cd/keys/worker
 ci-cd/keys/web
 
 .eslintcache
+
+.env.production
