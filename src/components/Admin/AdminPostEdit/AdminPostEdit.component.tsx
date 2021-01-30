@@ -2,13 +2,12 @@ import React, {
     ChangeEvent,
     FC,
     useCallback,
-    useEffect,
+    useEffect, useRef,
     useState,
 } from 'react';
 import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-// import Editor from 'tui-editor';
 import { QuizCard } from 'components/QuizCard/QuizCard.component';
 import CrossSvg from 'assets/x.svg';
 import PlusSvg from 'assets/plus.svg';
@@ -19,6 +18,10 @@ import {
     PostUpdatePayload,
 } from './AdminPostEdit.types';
 import styles from '../AdminPostCreate/AdminPostCreate.module.scss'
+
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/react-editor';
 
 // TODO: Add typing for api payloads
 
@@ -42,6 +45,7 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
         podcastLink: '',
     });
 
+    const editorRef = useRef<any>();
     const [showUpdateStatus, setShowUpdateStatus] = useState(false);
     const [possibleAnswer, setPossibleAnswer] = useState<string>('');
     const [quiz, setQuiz] = useState<IQuiz>({
@@ -51,8 +55,6 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
         question: '',
         successMessage: '',
     });
-
-    const [editorState, setEditorState] = useState<any>();
 
     const fetchData = useCallback(async () => {
         const urlParams = history.location.pathname.split('/');
@@ -80,18 +82,9 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                 podcastLink: currentPost.pod,
             });
 
-            // const editor = new Editor({
-            //     el: document.querySelector('#wysiwyg-editor')!,
-            //     initialEditType: 'wysiwyg',
-            //     previewStyle: 'vertical',
-            //     height: '300px',
-            //     hideModeSwitch: true,
-            //     initialValue: currentPost.content,
-            // });
-            //
-            // editor.on('change', () => {
-            //     setEditorState(editor.getValue());
-            // });
+            if (editorRef.current) {
+                editorRef.current.getInstance().setMarkdown(currentPost.content)
+            }
         }
     }, [currentPost, history.location.pathname]);
 
@@ -123,7 +116,13 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                 <div className="field">
                     <label className="label">Content</label>
                     <div className="control">
-                        {currentPost.content && <div id="wysiwyg-editor" />}
+                        {currentPost.content && <Editor
+                            previewStyle="vertical"
+                            height="600px"
+                            initialEditType="wysiwyg"
+                            useCommandShortcut={true}
+                            ref={editorRef}
+                        />}
                     </div>
                 </div>
 
@@ -330,7 +329,7 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
 
                         const updatePostPayload = {
                             ...updatedPost,
-                            postContent: editorState,
+                            postContent: editorRef.current.getInstance().getMarkdown(),
                         };
 
                         await updatePost(

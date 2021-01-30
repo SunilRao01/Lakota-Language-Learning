@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, {ChangeEvent, createRef, FC, useState} from 'react';
 import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -22,7 +22,8 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
 ) => {
     const { jwt, updatePostLoading, createPost } = props;
 
-    const [editorState, setEditorState] = useState<any>();
+    const editorRef = createRef<any>();
+
     const [updatedPost, setUpdatedPost] = useState<PostCreatePayload>({
         postTitle: '',
         postContent: '',
@@ -40,24 +41,6 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
         question: '',
         successMessage: '',
     });
-
-    const onEditorChange = () => {
-        console.log('editor has changed')
-    }
-
-    useEffect(() => {
-        // const editor = new Editor({
-        //     el: document.querySelector('#wysiwyg-editor')!,
-        //     initialEditType: 'wysiwyg',
-        //     previewStyle: 'vertical',
-        //     height: '300px',
-        //     hideModeSwitch: true,
-        // });
-        //
-        // editor.on('change', () => {
-        //     setEditorState(editor.getValue());
-        // });
-    }, []);
 
     if (!jwt || jwt.length === 0) {
         return <Redirect to={'/admin/login'} />;
@@ -88,9 +71,7 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
                     height="600px"
                     initialEditType="wysiwyg"
                     useCommandShortcut={true}
-                    events={{
-                        change: onEditorChange
-                    }}
+                    ref={editorRef}
                 />
             </div>
 
@@ -281,7 +262,7 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
                     setShowUpdateStatus(false);
 
                     let newPost = updatedPost;
-                    newPost.postContent = editorState;
+                    newPost.postContent = editorRef.current.getInstance().getMarkdown();
 
                     await createPost(newPost, jwt);
                     setShowUpdateStatus(true);

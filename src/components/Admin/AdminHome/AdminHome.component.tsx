@@ -51,7 +51,7 @@ const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
             <hr />
             {posts.map((p: Post, i: number) => (
                 <div key={i}>
-                    <PostCard post={p} showTitleOnly={true} />
+                    <PostCard post={p} showTitleOnly />
                     <Link
                         className={`button is-primary ${styles.AdminButton}`}
                         to={`/admin/post/${p.id}`}

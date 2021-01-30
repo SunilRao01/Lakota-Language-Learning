@@ -139,7 +139,7 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
                 posts.map((p: Post, i: number) => (
                     <div key={i}>
                         <PostCard
-                            showPreviewOnly={true}
+                            showPreviewOnly
                             post={p}
                             onClickCategory={addCategoryFilter}
                             onClickTag={addTagFilter}

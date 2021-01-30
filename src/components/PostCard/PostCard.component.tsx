@@ -1,10 +1,12 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { createRef, FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './PostCard.module.scss';
 import { Tag } from 'components/Tag/Tag.component';
-// import Viewer from 'tui-editor/dist/tui-editor-Viewer';
-// import 'tui-editor/dist/tui-editor-contents.css';
 import { PostCardProps } from './PostCard.types';
+
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import { Viewer } from '@toast-ui/react-editor';
 
 export const PostCard: FC<PostCardProps> = (props) => {
     const {
@@ -15,8 +17,7 @@ export const PostCard: FC<PostCardProps> = (props) => {
         showTitleOnly,
     } = props;
 
-    // generates hash for tui editor render target div (needs to be a unique id)
-    const [viewHash] = useState(Math.random().toString(4).substring(2, 15));
+    const viewerRef = createRef<any>();
 
     const clickFunction = (
         e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -27,16 +28,11 @@ export const PostCard: FC<PostCardProps> = (props) => {
         onClickCategory && onClickCategory(t);
     };
 
-    // useEffect(() => {
-    //     if (!showTitleOnly) {
-    //         new Viewer({
-    //             el: document.querySelector(
-    //                 `#post-content-${post.id}-${viewHash}`
-    //             )!,
-    //             initialValue: post.content,
-    //         });
-    //     }
-    // }, [post.content, post.id, showTitleOnly, viewHash]);
+    useEffect(() => {
+        if (post && post.content && viewerRef.current) {
+            viewerRef.current.getInstance().setMarkdown(post.content);
+        }
+    }, [post, viewerRef]);
 
     return (
         <div
@@ -51,17 +47,16 @@ export const PostCard: FC<PostCardProps> = (props) => {
                 </header>
                 {!showTitleOnly && (
                     <div className="card-content">
-                        <div className="content">
-                            {post.content && (
-                                <div
-                                    className={`${
-                                        showPreviewOnly === true
-                                            ? styles.PreviewMode
-                                            : ''
-                                    }`}
-                                    id={`post-content-${post.id}-${viewHash}`}
-                                />
-                            )}
+                        <div className={`content `}>
+                            <div
+                                className={`${
+                                    showPreviewOnly === true
+                                        ? styles.PreviewMode
+                                        : ''
+                                }`}
+                            >
+                                {post.content && <Viewer ref={viewerRef} />}
+                            </div>
                             <br />
                             <div className="is-size-7">
                                 <b>Posted: </b>

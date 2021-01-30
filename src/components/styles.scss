@@ -19,6 +19,7 @@ $navbar-item-color: white;
 // Cards
 $card-content-padding: 0.75em;
 $card-footer-padding: 1em;
+$card-header-padding: 0.75rem 0.75rem;
 
 // Tabs
 $tabs-toggle-link-active-background-color: $info;
@@ -52,18 +53,30 @@ $tabs-toggle-link-active-border-color: $info;
 }
 
 // TUI Editor View Overrides
-//.tui-editor-contents table th {
-//  background-color: transparent;
-//}
-//
-//.tui-editor-contents table td {
-//  border: 1px solid #aaa;
-//}
-//
-//.tui-editor-contents table {
-//  border: 1px solid #aaa;
-//}
-//
-//.tui-editor-contents table th {
-//  color: black;
-//}
+.tui-editor-contents table th {
+  background-color: transparent !important;
+  font-weight: 700 !important;
+}
+
+.tui-editor-contents table td {
+  border: 1px solid #aaa !important;
+  font-size: 1rem !important;
+}
+
+.tui-editor-contents table {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+  'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+  'Helvetica Neue', sans-serif !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  border: 1px solid #aaa !important;
+}
+
+.tui-editor-contents table th {
+  color: black !important;
+  font-size: 1.25rem !important;
+}
+
+.tui-editor-contents p {
+  font-size: 1rem !important;
+}

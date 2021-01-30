@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { createRef, FC, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { Tag } from 'components/Tag/Tag.component';
@@ -12,6 +12,10 @@ import {
     PostsPropsAndActions,
 } from './Posts.types';
 
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import { Viewer } from '@toast-ui/react-editor';
+
 export const Posts: FC<PostsPropsAndActions> = (props) => {
     const {
         posts,
@@ -22,6 +26,8 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
         setPostLoading,
         postsLoading,
     } = props;
+
+    const viewerRef = createRef<any>();
 
     useEffect(() => {
         const urlParams = history.location.pathname.split('/');
@@ -47,14 +53,11 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
         setPostLoading,
     ]);
 
-    // useEffect(() => {
-    //     if (post && post.content && !postsLoading) {
-    //         new Viewer({
-    //             el: document.querySelector('#post-content')!,
-    //             initialValue: post.content,
-    //         });
-    //     }
-    // }, [post, postsLoading]);
+    useEffect(() => {
+        if (post && post.content && viewerRef.current) {
+            viewerRef.current.getInstance().setMarkdown(post.content)
+        }
+    }, [post, viewerRef]);
 
     return (
         <section className="section">
@@ -68,7 +71,7 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
                     <>
                         <h1 className="title">{post.title}</h1>
                         <div className="content">
-                            {post.content && <div id="post-content" />}
+                            {post.content && <Viewer ref={viewerRef} />}
                             <br />
                             <hr />
                             {post.quizzes && post.quizzes.length > 0 && (
@@ -90,13 +93,17 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
                             )}
 
                             <br />
-                            <div className={`has-text-weight-bold ${styles.SectionTitle}`}>
+                            <div
+                                className={`has-text-weight-bold ${styles.SectionTitle}`}
+                            >
                                 Posted:
                             </div>
                             <p className="is-size-8">
                                 {new Date(post.creationDate).toString()}
                             </p>
-                            <div className={`has-text-weight-bold ${styles.SectionTitle}`}>
+                            <div
+                                className={`has-text-weight-bold ${styles.SectionTitle}`}
+                            >
                                 Categories:
                             </div>
                             <p>
@@ -114,7 +121,9 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
                                     </Link>
                                 ))}
                             </p>
-                            <div className={`has-text-weight-bold ${styles.SectionTitle}`}>
+                            <div
+                                className={`has-text-weight-bold ${styles.SectionTitle}`}
+                            >
                                 Tags:
                             </div>
                             <div className="field is-grouped">
@@ -130,7 +139,4 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
     );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Posts);
+export default connect(mapStateToProps, mapDispatchToProps)(Posts);
