@@ -71,7 +71,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                     {!postsLoading && posts && posts.length > 0 &&
                         posts.slice(0, 5).map((p: Post, i: number) => (
                             <div key={i}>
-                                <PostCard showPreviewOnly={true} post={p} />
+                                <PostCard showPreviewOnly post={p} />
                                 {i < posts.length - 1 ? <hr /> : ``}
                             </div>
                         ))}
@@ -113,7 +113,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                         <h3 className="title is-3">Word of the Day:</h3>
                         {wordOfTheDayPosts.map((p: Post, i: number) => (
                             <div key={i}>
-                                <PostCard post={p} showTitleOnly={true} />
+                                <PostCard post={p} showTitleOnly />
                             </div>
                         ))}
                     </div>

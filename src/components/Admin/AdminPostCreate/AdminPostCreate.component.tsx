@@ -1,13 +1,10 @@
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, {ChangeEvent, createRef, FC, useState} from 'react';
 import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import PlusSvg from 'assets/plus.svg';
 import CrossSvg from 'assets/x.svg';
 import { QuizCard } from 'components/QuizCard/QuizCard.component';
-import Editor from 'tui-editor';
-import 'tui-editor/dist/tui-editor-contents.css';
-import 'tui-editor/dist/tui-editor.css';
 import styles from './AdminPostCreate.module.scss';
 import {
     AdminPostCreateComponentPropsWithActions,
@@ -16,12 +13,17 @@ import {
     PostCreatePayload,
 } from './AdminPostCreate.types';
 
+import 'codemirror/lib/codemirror.css';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/react-editor';
+
 const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
     props
 ) => {
     const { jwt, updatePostLoading, createPost } = props;
 
-    const [editorState, setEditorState] = useState<any>();
+    const editorRef = createRef<any>();
+
     const [updatedPost, setUpdatedPost] = useState<PostCreatePayload>({
         postTitle: '',
         postContent: '',
@@ -39,20 +41,6 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
         question: '',
         successMessage: '',
     });
-
-    useEffect(() => {
-        const editor = new Editor({
-            el: document.querySelector('#wysiwyg-editor')!,
-            initialEditType: 'wysiwyg',
-            previewStyle: 'vertical',
-            height: '300px',
-            hideModeSwitch: true,
-        });
-
-        editor.on('change', () => {
-            setEditorState(editor.getValue());
-        });
-    }, []);
 
     if (!jwt || jwt.length === 0) {
         return <Redirect to={'/admin/login'} />;
@@ -78,7 +66,13 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
 
             <div className="field">
                 <h3 className="title">Content</h3>
-                <div id="wysiwyg-editor" className="control" />
+                <Editor
+                    previewStyle="vertical"
+                    height="600px"
+                    initialEditType="wysiwyg"
+                    useCommandShortcut={true}
+                    ref={editorRef}
+                />
             </div>
 
             <div className="field">
@@ -268,7 +262,7 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
                     setShowUpdateStatus(false);
 
                     let newPost = updatedPost;
-                    newPost.postContent = editorState;
+                    newPost.postContent = editorRef.current.getInstance().getMarkdown();
 
                     await createPost(newPost, jwt);
                     setShowUpdateStatus(true);
@@ -285,7 +279,9 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
             )}
 
             {!updatePostLoading && showUpdateStatus && (
-                <div className={`notification is-success ${styles.UpdateBanner}`}>
+                <div
+                    className={`notification is-success ${styles.UpdateBanner}`}
+                >
                     <button className="delete" />
                     Created post Successfully!
                 </div>
@@ -294,9 +290,4 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
     );
 };
 
-
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AdminPostCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPostCreate);
