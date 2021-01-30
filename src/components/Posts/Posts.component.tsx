@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { Tag } from 'components/Tag/Tag.component';
-import Viewer from 'tui-editor/dist/tui-editor-Viewer';
+// import Viewer from 'tui-editor/dist/tui-editor-Viewer';
 import { QuizCard } from 'components/QuizCard/QuizCard.component';
 import { Link } from 'react-router-dom';
 import styles from './Posts.module.scss';
@@ -47,14 +47,14 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
         setPostLoading,
     ]);
 
-    useEffect(() => {
-        if (post && post.content && !postsLoading) {
-            new Viewer({
-                el: document.querySelector('#post-content')!,
-                initialValue: post.content,
-            });
-        }
-    }, [post, postsLoading]);
+    // useEffect(() => {
+    //     if (post && post.content && !postsLoading) {
+    //         new Viewer({
+    //             el: document.querySelector('#post-content')!,
+    //             initialValue: post.content,
+    //         });
+    //     }
+    // }, [post, postsLoading]);
 
     return (
         <section className="section">

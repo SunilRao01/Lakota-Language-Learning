@@ -8,7 +8,7 @@ import React, {
 import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import Editor from 'tui-editor';
+// import Editor from 'tui-editor';
 import { QuizCard } from 'components/QuizCard/QuizCard.component';
 import CrossSvg from 'assets/x.svg';
 import PlusSvg from 'assets/plus.svg';
@@ -80,18 +80,18 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                 podcastLink: currentPost.pod,
             });
 
-            const editor = new Editor({
-                el: document.querySelector('#wysiwyg-editor')!,
-                initialEditType: 'wysiwyg',
-                previewStyle: 'vertical',
-                height: '300px',
-                hideModeSwitch: true,
-                initialValue: currentPost.content,
-            });
-
-            editor.on('change', () => {
-                setEditorState(editor.getValue());
-            });
+            // const editor = new Editor({
+            //     el: document.querySelector('#wysiwyg-editor')!,
+            //     initialEditType: 'wysiwyg',
+            //     previewStyle: 'vertical',
+            //     height: '300px',
+            //     hideModeSwitch: true,
+            //     initialValue: currentPost.content,
+            // });
+            //
+            // editor.on('change', () => {
+            //     setEditorState(editor.getValue());
+            // });
         }
     }, [currentPost, history.location.pathname]);
 
@@ -325,6 +325,8 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                 <button
                     onClick={async () => {
                         setShowUpdateStatus(false);
+
+                        // TODO: Do basic form validation
 
                         const updatePostPayload = {
                             ...updatedPost,

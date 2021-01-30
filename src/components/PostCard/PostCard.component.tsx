@@ -2,8 +2,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './PostCard.module.scss';
 import { Tag } from 'components/Tag/Tag.component';
-import Viewer from 'tui-editor/dist/tui-editor-Viewer';
-import 'tui-editor/dist/tui-editor-contents.css';
+// import Viewer from 'tui-editor/dist/tui-editor-Viewer';
+// import 'tui-editor/dist/tui-editor-contents.css';
 import { PostCardProps } from './PostCard.types';
 
 export const PostCard: FC<PostCardProps> = (props) => {
@@ -27,16 +27,16 @@ export const PostCard: FC<PostCardProps> = (props) => {
         onClickCategory && onClickCategory(t);
     };
 
-    useEffect(() => {
-        if (!showTitleOnly) {
-            new Viewer({
-                el: document.querySelector(
-                    `#post-content-${post.id}-${viewHash}`
-                )!,
-                initialValue: post.content,
-            });
-        }
-    }, [post.content, post.id, showTitleOnly, viewHash]);
+    // useEffect(() => {
+    //     if (!showTitleOnly) {
+    //         new Viewer({
+    //             el: document.querySelector(
+    //                 `#post-content-${post.id}-${viewHash}`
+    //             )!,
+    //             initialValue: post.content,
+    //         });
+    //     }
+    // }, [post.content, post.id, showTitleOnly, viewHash]);
 
     return (
         <div
