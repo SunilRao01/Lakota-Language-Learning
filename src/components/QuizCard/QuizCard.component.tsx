@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FC, FormEvent, useState, Fragment } from 'react';
 import { CrossSVG } from 'assets';
 import styles from './QuizCard.module.scss';
 import { QuizCardProps } from './QuizCard.types';
@@ -59,9 +59,9 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
                                     {quiz.possibleAnswers?.map(
                                         (pa: string, index: number) => {
                                             return (
-                                                <>
+                                                <Fragment key={index}>
                                                     <label
-                                                        key={index}
+
                                                         className={styles.QuizCard_radio}
                                                     >
                                                         <input
@@ -86,7 +86,7 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
                                                         quiz.possibleAnswers
                                                             .length -
                                                             1 && <hr className={styles.QuizCard_break} />}
-                                                </>
+                                                </Fragment>
                                             );
                                         }
                                     )}
