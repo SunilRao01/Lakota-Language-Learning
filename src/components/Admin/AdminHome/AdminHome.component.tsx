@@ -26,7 +26,6 @@ const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
 
     useEffect(() => {
         const getUpdatedPosts = async () => {
-            console.log('@AdminHome in getPosts effect');
             await getPosts(postUrlPageParam || 1);
         };
 
