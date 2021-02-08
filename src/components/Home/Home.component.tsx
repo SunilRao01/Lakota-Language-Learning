@@ -1,15 +1,16 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import styles from './Home.module.scss';
 import { Post } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import { Tag } from 'components/Tag/Tag.component';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import {
     HomePropsWithActions,
     mapDispatchToProps,
     mapStateToProps,
 } from './Home.types';
+import { compose } from 'redux';
 
 const Home: FC<HomePropsWithActions> = (props) => {
     const {
@@ -23,28 +24,42 @@ const Home: FC<HomePropsWithActions> = (props) => {
         wordOfTheDayPosts,
         setPostLoading,
         postsLoading,
+        history,
     } = props;
-    const [currentPage, setCurrentPage] = useState(1);
+
+    const postUrlPageParam = useMemo(
+        () =>
+            history.location.search
+                ? +history.location.search.substr(
+                      history.location.search.indexOf('=') + 1
+                  )
+                : undefined,
+        [history.location.search]
+    );
 
     const fetchData = useCallback(async () => {
         setPostLoading(true);
-        await getPosts(1);
-        setPostLoading(false);
 
         await getCategories();
         await getTags();
         await getWordOfTheDayPosts();
-    }, [
-        getCategories,
-        getPosts,
-        getTags,
-        getWordOfTheDayPosts,
-        setPostLoading,
-    ]);
+
+        setPostLoading(false);
+    }, [getCategories, getTags, getWordOfTheDayPosts, setPostLoading]);
 
     useEffect(() => {
         fetchData();
     }, [fetchData]);
+
+    useEffect(() => {
+        const getUpdatedPosts = async () => {
+            setPostLoading(true);
+            await getPosts(postUrlPageParam || 1);
+            setPostLoading(false);
+        };
+
+        getUpdatedPosts();
+    }, [postUrlPageParam, getPosts, setPostLoading]);
 
     return (
         <div className="container">
@@ -57,18 +72,23 @@ const Home: FC<HomePropsWithActions> = (props) => {
                 </div>
             </div>
             <div className="columns is-variable is-4">
-                <div className="column is-two-thirds" data-testid='post-container'>
+                <div
+                    className="column is-two-thirds"
+                    data-testid="post-container"
+                >
                     <h3 className="title is-3">Recent Posts:</h3>
                     {postsLoading && (
                         <progress
-                            data-testid='progress-bar'
+                            data-testid="progress-bar"
                             className="progress is-small is-info"
                             max="100"
                         >
                             50%
                         </progress>
                     )}
-                    {!postsLoading && posts && posts.length > 0 &&
+                    {!postsLoading &&
+                        posts &&
+                        posts.length > 0 &&
                         posts.slice(0, 5).map((p: Post, i: number) => (
                             <div key={i}>
                                 <PostCard showPreviewOnly post={p} />
@@ -77,28 +97,39 @@ const Home: FC<HomePropsWithActions> = (props) => {
                         ))}
                     {!postsLoading && (
                         <button
-                            className='button is-info pagination-button'
-                            disabled={currentPage === 1}
+                            className="button is-info pagination-button"
+                            disabled={
+                                postUrlPageParam === undefined ||
+                                postUrlPageParam === 1
+                            }
                             onClick={() => {
                                 window.scrollTo(0, 0);
-                                getPosts(currentPage - 1);
-                                setCurrentPage(currentPage - 1);
+
+                                history.push({
+                                    search: `?page=${
+                                        (postUrlPageParam || 1) - 1
+                                    }`,
+                                });
                             }}
-                            data-testid='previous-page'
+                            data-testid="previous-page"
                         >
                             Previous Page
                         </button>
                     )}
                     {!postsLoading && posts && (
                         <button
-                            className='button is-info pagination-button'
+                            className="button is-info pagination-button"
                             disabled={posts.length === 0 || posts.length < 5}
                             onClick={() => {
                                 window.scrollTo(0, 0);
-                                getPosts(currentPage + 1);
-                                setCurrentPage(currentPage + 1);
+
+                                history.push({
+                                    search: `?page=${
+                                        (postUrlPageParam || 1) + 1
+                                    }`,
+                                });
                             }}
-                            data-testid='next-page'
+                            data-testid="next-page"
                         >
                             Next Page
                         </button>
@@ -164,4 +195,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default compose<React.ComponentType<HomePropsWithActions>>(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(Home);
