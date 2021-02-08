@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo } from 'react';
 import { Post } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
@@ -12,17 +12,26 @@ import {
 } from './AdminHome.types';
 
 const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
-    const { jwt, posts, getPosts, deletePost } = props;
+    const { jwt, posts, getPosts, deletePost, history } = props;
 
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const fetchData = useCallback(async () => {
-        await getPosts(1);
-    }, [getPosts]);
+    const postUrlPageParam = useMemo(
+        () =>
+            history.location.search
+                ? +history.location.search.substr(
+                      history.location.search.indexOf('=') + 1
+                  )
+                : undefined,
+        [history.location.search]
+    );
 
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+        const getUpdatedPosts = async () => {
+            console.log('@AdminHome in getPosts effect');
+            await getPosts(postUrlPageParam || 1);
+        };
+
+        getUpdatedPosts();
+    }, [postUrlPageParam, getPosts]);
 
     if (!jwt || jwt.length === 0) {
         return <Redirect to={'/admin/login'} />;
@@ -71,12 +80,15 @@ const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
             ))}
             <button
                 className="button is-info pagination-button"
-                disabled={currentPage === 1}
+                disabled={
+                    postUrlPageParam === undefined || postUrlPageParam === 1
+                }
                 onClick={() => {
-                    if (currentPage > 1) {
-                        getPosts(currentPage - 1);
-                        setCurrentPage(currentPage - 1);
-                    }
+                    window.scrollTo(0, 0);
+
+                    history.push({
+                        search: `?page=${(postUrlPageParam || 2) - 1}`,
+                    });
                 }}
             >
                 Previous Page
@@ -85,10 +97,11 @@ const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
                 className="button is-info pagination-button"
                 disabled={posts.length === 0 || posts.length < 5}
                 onClick={() => {
-                    if (posts.length !== 0) {
-                        getPosts(currentPage + 1);
-                        setCurrentPage(currentPage + 1);
-                    }
+                    window.scrollTo(0, 0);
+
+                    history.push({
+                        search: `?page=${(postUrlPageParam || 1) + 1}`,
+                    });
                 }}
             >
                 Next Page
@@ -97,7 +110,4 @@ const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
     );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AdminHome);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminHome);

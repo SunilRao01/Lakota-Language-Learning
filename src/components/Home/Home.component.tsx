@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import styles from './Home.module.scss';
 import { Post } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
@@ -36,7 +36,6 @@ const Home: FC<HomePropsWithActions> = (props) => {
                 : undefined,
         [history.location.search]
     );
-    const [currentPage, setCurrentPage] = useState(postUrlPageParam || 1);
 
     const fetchData = useCallback(async () => {
         setPostLoading(true);
@@ -46,12 +45,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
         await getWordOfTheDayPosts();
 
         setPostLoading(false);
-    }, [
-        getCategories,
-        getTags,
-        getWordOfTheDayPosts,
-        setPostLoading,
-    ]);
+    }, [getCategories, getTags, getWordOfTheDayPosts, setPostLoading]);
 
     useEffect(() => {
         fetchData();
@@ -60,7 +54,6 @@ const Home: FC<HomePropsWithActions> = (props) => {
     useEffect(() => {
         const getUpdatedPosts = async () => {
             setPostLoading(true);
-            setCurrentPage(postUrlPageParam || 1);
             await getPosts(postUrlPageParam || 1);
             setPostLoading(false);
         };
@@ -70,9 +63,6 @@ const Home: FC<HomePropsWithActions> = (props) => {
 
     return (
         <div className="container">
-            {/*Pagination routing*/}
-            {currentPage > 0}
-
             <div className="columns is-centered">
                 <div className={`column is-narrow ${styles.TitleAnim}`}>
                     <p className="title is-2">Lakota Language Learning</p>
@@ -108,13 +98,17 @@ const Home: FC<HomePropsWithActions> = (props) => {
                     {!postsLoading && (
                         <button
                             className="button is-info pagination-button"
-                            disabled={currentPage === 1}
+                            disabled={
+                                postUrlPageParam === undefined ||
+                                postUrlPageParam === 1
+                            }
                             onClick={() => {
                                 window.scrollTo(0, 0);
 
-                                setCurrentPage(currentPage - 1);
                                 history.push({
-                                    search: `?page=${currentPage - 1}`,
+                                    search: `?page=${
+                                        (postUrlPageParam || 1) - 1
+                                    }`,
                                 });
                             }}
                             data-testid="previous-page"
@@ -129,9 +123,10 @@ const Home: FC<HomePropsWithActions> = (props) => {
                             onClick={() => {
                                 window.scrollTo(0, 0);
 
-                                setCurrentPage(currentPage + 1);
                                 history.push({
-                                    search: `?page=${currentPage + 1}`,
+                                    search: `?page=${
+                                        (postUrlPageParam || 1) + 1
+                                    }`,
                                 });
                             }}
                             data-testid="next-page"
