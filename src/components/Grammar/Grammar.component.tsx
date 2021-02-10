@@ -7,6 +7,8 @@ import {
     mapDispatchToProps,
     mapStateToProps,
 } from './Grammar.types';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 
 const Grammar: FC<GrammarPropsAndActions> = (props) => {
     const {
@@ -17,6 +19,7 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
         grammar,
         postsLoading,
         setPostLoading,
+        history
     } = props;
 
     const [selectedGrammar, setSelectedGrammar] = useState<string>();
@@ -29,11 +32,18 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
 
         const grammar: { id: number; grammar: string }[] = await getGrammar();
         if (grammar.length > 0) {
-            setSelectedGrammar(grammar[0].grammar);
+            if (history.location.search) {
+                setSelectedGrammar(history.location.search.substr(
+                    history.location.search.indexOf('=') + 1
+                ))
+            } else {
+                setSelectedGrammar(grammar[0].grammar);
+            }
+
         }
 
         setPostLoading(false);
-    }, [clearPosts, getGrammar, setPostLoading]);
+    }, [clearPosts, getGrammar, setPostLoading, history]);
 
     // On start, retrieve grammar
     useEffect(() => {
@@ -41,9 +51,16 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     }, [fetchData]);
 
     // Whenever changing the grammar, reset the page number to 1
+    //  + update the URL
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedGrammar]);
+
+        if (selectedGrammar) {
+            history.push({
+                search: `?category=${selectedGrammar}`
+            })
+        }
+    }, [history, selectedGrammar]);
 
     // Update posts when paginating or changing the grammar
     useEffect(() => {
@@ -128,4 +145,7 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Grammar);
+export default compose<React.ComponentType<GrammarPropsAndActions>>(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(Grammar);

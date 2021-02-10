@@ -7,6 +7,8 @@ import {
     mapDispatchToProps,
     mapStateToProps,
 } from './Podcasts.types';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 
 const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     const {
@@ -17,6 +19,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
         podcasts,
         postsLoading,
         setPostLoading,
+        history
     } = props;
 
     const [selectedPodcast, setSelectedPodcast] = useState<string>();
@@ -29,11 +32,17 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
 
         const podcasts: { id: number; podcast: string }[] = await getPodcasts();
         if (podcasts.length > 0) {
-            setSelectedPodcast(podcasts[0].podcast);
+            if (history.location.search) {
+                setSelectedPodcast(history.location.search.substr(
+                    history.location.search.indexOf('=') + 1
+                ))
+            } else {
+                setSelectedPodcast(podcasts[0].podcast);
+            }
         }
 
         setPostLoading(false);
-    }, [clearPosts, getPodcasts, setPostLoading]);
+    }, [clearPosts, getPodcasts, setPostLoading, history]);
 
     // On start, retrieve podcasts
     useEffect(() => {
@@ -41,9 +50,16 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     }, [fetchData]);
 
     // Whenever changing the podcast, reset the page number to 1
+    //  + update the url
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedPodcast]);
+
+        if (selectedPodcast) {
+            history.push({
+                search: `?category=${selectedPodcast}`
+            })
+        }
+    }, [history, selectedPodcast]);
 
     // Update posts when paginating or changing the podcasts
     useEffect(() => {
@@ -131,4 +147,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Podcasts);
+export default compose<React.ComponentType<PodcastsPropsAndActions>>(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(Podcasts);

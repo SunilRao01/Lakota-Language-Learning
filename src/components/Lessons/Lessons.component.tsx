@@ -7,6 +7,8 @@ import {
     mapDispatchToProps,
     mapStateToProps,
 } from './Lessons.types';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
 
 const Lessons: FC<LessonsPropsAndActions> = (props) => {
     const {
@@ -17,6 +19,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
         lessons,
         postsLoading,
         setPostLoading,
+        history
     } = props;
 
     const [selectedLesson, setSelectedLesson] = useState<string>();
@@ -29,11 +32,17 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
 
         const lessons: { id: number; lesson: string }[] = await getLessons();
         if (lessons.length > 0) {
-            setSelectedLesson(lessons[0].lesson);
+            if (history.location.search) {
+                setSelectedLesson(history.location.search.substr(
+                    history.location.search.indexOf('=') + 1
+                ))
+            } else {
+                setSelectedLesson(lessons[0].lesson);
+            }
         }
 
         setPostLoading(false);
-    }, [clearPosts, getLessons, setPostLoading]);
+    }, [clearPosts, getLessons, setPostLoading, history]);
 
     // On start, retrieve lessons
     useEffect(() => {
@@ -41,9 +50,16 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
     }, [fetchData]);
 
     // Whenever changing the lesson, reset the page number to 1
+    //  + update the URL
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedLesson]);
+
+        if (selectedLesson) {
+            history.push({
+                search: `?category=${selectedLesson}`
+            })
+        }
+    }, [history, selectedLesson]);
 
     // Update posts when paginating or changing the lessons
     useEffect(() => {
@@ -126,4 +142,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Lessons);
+export default compose<React.ComponentType<LessonsPropsAndActions>>(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(Lessons);

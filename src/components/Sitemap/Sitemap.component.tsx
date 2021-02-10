@@ -1,6 +1,7 @@
 import React, {FC, useCallback, useEffect} from 'react';
 import {mapDispatchToProps, mapStateToProps, SitemapPropsAndActions} from "./Sitemap.types";
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
     const {
@@ -46,7 +47,7 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                             <ul>
                                 {lessons.map(l => (
                                     <li>
-                                        <a>{l.lesson}</a>
+                                        <Link to={`/lessons?category=${l.lesson}`}>{l.lesson}</Link>
                                     </li>
                                 ))}
                             </ul>
@@ -59,7 +60,7 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                             <ul>
                                 {grammar.map(g => (
                                     <li>
-                                        <a>{g.grammar}</a>
+                                        <Link to={`/grammar?category=${g.grammar}`}>{g.grammar}</Link>
                                     </li>
                                 ))}
                             </ul>
@@ -72,7 +73,7 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                             <ul>
                                 {vocabulary.map(v => (
                                     <li>
-                                        <a>{v.vocab}</a>
+                                        <Link to={`/vocabulary?category=${v.vocab}`}>{v.vocab}</Link>
                                     </li>
                                 ))}
                             </ul>
@@ -85,7 +86,7 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                             <ul>
                                 {podcasts.map(p => (
                                     <li>
-                                        <a>{p.podcast}</a>
+                                        <Link to={`/podcasts?category=${p.podcast}`}>{p.podcast}</Link>
                                     </li>
                                 ))}
                             </ul>
