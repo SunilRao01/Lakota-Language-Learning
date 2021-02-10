@@ -74,7 +74,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
                                     setSelectedLesson(lesson.lesson);
                                 }}
                             >
-                                {/*TODO: Bulma is current not accessible, specifically for usages of <a />*/}
+                                {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
                                 {/* being used just for convenience, breaking the required contract for accessibility*/}
                                 <a>
                                     <span>{lesson.lesson}</span>
