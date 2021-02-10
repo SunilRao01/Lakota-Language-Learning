@@ -7,6 +7,8 @@ import {
     mapStateToProps,
     VocabularyPropsAndActions,
 } from './Vocabulary.types';
+import { compose } from 'redux';
+import { withRouter } from 'react-router-dom';
 
 const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     const {
@@ -17,6 +19,7 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
         vocabulary,
         postsLoading,
         setPostLoading,
+        history
     } = props;
 
     const [selectedVocab, setSelectedVocab] = useState<string>();
@@ -32,11 +35,17 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
             vocab: string;
         }[] = await getVocabulary();
         if (vocabulary.length > 0) {
-            setSelectedVocab(vocabulary[0].vocab);
+            if (history.location.search) {
+                setSelectedVocab(history.location.search.substr(
+                    history.location.search.indexOf('=') + 1
+                ))
+            } else {
+                setSelectedVocab(vocabulary[0].vocab);
+            }
         }
 
         setPostLoading(false);
-    }, [clearPosts, getVocabulary, setPostLoading]);
+    }, [clearPosts, getVocabulary, setPostLoading, history]);
 
     // On start, retrieve vocabulary
     useEffect(() => {
@@ -44,9 +53,16 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     }, [fetchData]);
 
     // Whenever changing the vocab, reset the page number to 1
+    //  + update the url
     useEffect(() => {
         setCurrentPage(1);
-    }, [selectedVocab]);
+
+        if (selectedVocab) {
+            history.push({
+                search: `?category=${selectedVocab}`
+            })
+        }
+    }, [history, selectedVocab]);
 
     // Update posts when paginating or changing the vocabulary
     useEffect(() => {
@@ -129,4 +145,7 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Vocabulary);
+export default compose<React.ComponentType<VocabularyPropsAndActions>>(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(Vocabulary);
