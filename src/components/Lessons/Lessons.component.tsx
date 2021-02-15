@@ -19,56 +19,77 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
         lessons,
         postsLoading,
         setPostLoading,
-        history
+        history,
     } = props;
 
     const [selectedLesson, setSelectedLesson] = useState<string>();
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Retrieve all lessons
+    // Function that retrieve all lessons
     const fetchData = useCallback(async () => {
         setPostLoading(true);
         clearPosts();
 
         const lessons: { id: number; lesson: string }[] = await getLessons();
+
         if (lessons.length > 0) {
             if (history.location.search) {
-                setSelectedLesson(history.location.search.substr(
+                const lessonFromUrl = history.location.search.substr(
                     history.location.search.indexOf('=') + 1
-                ))
+                );
+                setSelectedLesson(lessonFromUrl);
             } else {
                 setSelectedLesson(lessons[0].lesson);
             }
         }
 
+        if (!history.location.search) {
+            history.replace(`?category=${lessons[0].lesson}`);
+        }
+
         setPostLoading(false);
     }, [clearPosts, getLessons, setPostLoading, history]);
 
-    // On start, retrieve lessons
+    const onLessonSelection = useCallback(
+        (lesson: any) => {
+            setSelectedLesson(lesson.lesson);
+            setCurrentPage(1);
+
+            history.push({
+                search: `?category=${lesson.lesson}`,
+            });
+        },
+        [history]
+    );
+
+    // On mount, retrieve initially selected lesson (first lesson)
     useEffect(() => {
         fetchData();
     }, [fetchData]);
 
-    // Whenever changing the lesson, reset the page number to 1
-    //  + update the URL
+    // Updates selected lesson from URL whenever a change is occurred
     useEffect(() => {
-        setCurrentPage(1);
-
-        if (selectedLesson) {
-            history.push({
-                search: `?category=${selectedLesson}`
-            })
+        const lessonFromUrl = history.location.search?.substr(
+            history.location.search.indexOf('=') + 1
+        );
+        if (lessonFromUrl) {
+            setSelectedLesson(
+                history.location.search.substr(
+                    history.location.search.indexOf('=') + 1
+                )
+            );
         }
-    }, [history, selectedLesson]);
+    }, [history.location]);
 
     // Update posts when paginating or changing the lessons
     useEffect(() => {
         const getPostForSelectedLesson = async (lesson: string) => {
-            clearPosts();
+            setPostLoading(true);
             await getPostsForLesson(lesson, currentPage);
+            setPostLoading(false);
         };
         selectedLesson && getPostForSelectedLesson(selectedLesson);
-    }, [currentPage, clearPosts, getPostsForLesson, selectedLesson]);
+    }, [currentPage, getPostsForLesson, selectedLesson, setPostLoading]);
 
     return (
         <div className="container">
@@ -77,26 +98,25 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
             {/*Toggle Lessons Tabs*/}
             <div className="tabs is-toggle">
                 <ul>
-                    {!postsLoading &&
-                        lessons.map((lesson, i) => (
-                            <li
-                                className={
-                                    selectedLesson === lesson.lesson
-                                        ? 'is-active'
-                                        : undefined
-                                }
-                                key={i}
-                                onClick={() => {
-                                    setSelectedLesson(lesson.lesson);
-                                }}
-                            >
-                                {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
-                                {/* being used just for convenience, breaking the required contract for accessibility*/}
-                                <a>
-                                    <span>{lesson.lesson}</span>
-                                </a>
-                            </li>
-                        ))}
+                    {lessons.map((lesson, i) => (
+                        <li
+                            className={
+                                selectedLesson === lesson.lesson
+                                    ? 'is-active'
+                                    : undefined
+                            }
+                            key={i}
+                            onClick={() => {
+                                onLessonSelection(lesson);
+                            }}
+                        >
+                            {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
+                            {/* being used just for convenience, breaking the required contract for accessibility*/}
+                            <a>
+                                <span>{lesson.lesson}</span>
+                            </a>
+                        </li>
+                    ))}
                 </ul>
             </div>
 
