@@ -8,6 +8,8 @@ import { RootState } from '../../redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 import { setPostLoading } from '../../redux/Posts/Posts.action';
 
+// TODO: Duplicate these updated to Grammar, Vocabulary, and Podcasts
+
 export interface LessonsProps {
     posts: Post[];
     lessons: { id: number; lesson: string }[];
