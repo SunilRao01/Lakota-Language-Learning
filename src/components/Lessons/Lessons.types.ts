@@ -8,7 +8,9 @@ import { RootState } from '../../redux/store';
 import { ThunkDispatch } from 'redux-thunk';
 import { setPostLoading } from '../../redux/Posts/Posts.action';
 
-// TODO: Duplicate these updated to Grammar, Vocabulary, and Podcasts
+// TODO:
+//  Added typings for lesson payload
+//  Duplicate these updated to Grammar, Vocabulary, and Podcasts
 
 export interface LessonsProps {
     posts: Post[];
