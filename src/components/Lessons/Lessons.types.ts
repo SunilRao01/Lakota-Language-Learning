@@ -1,12 +1,16 @@
 import {
     apiGetLessons,
     backendGetPostsByFilters,
-    Post
-} from "../../redux/Posts/Posts.reducer";
-import {RouteComponentProps} from "react-router";
-import {RootState} from "../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
-import {clearPosts, setPostLoading} from "../../redux/Posts/Posts.action";
+    Post,
+} from '../../redux/Posts/Posts.reducer';
+import { RouteComponentProps } from 'react-router';
+import { RootState } from '../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
+import { setPostLoading } from '../../redux/Posts/Posts.action';
+
+// TODO:
+//  Added typings for lesson payload
+//  Duplicate these updated to Grammar, Vocabulary, and Podcasts
 
 export interface LessonsProps {
     posts: Post[];
@@ -16,7 +20,6 @@ export interface LessonsProps {
 
 export interface LessonsActions {
     getPostsForLesson: (lesson: string, pageNumber: number) => any;
-    clearPosts: () => void;
     getLessons: () => any;
     setPostLoading: (loading: boolean) => void;
 }
@@ -41,7 +44,6 @@ export const mapDispatchToProps = (
                 [lesson]
             ));
         },
-        clearPosts: () => dispatch(clearPosts()),
         getLessons: async () => {
             return await dispatch(apiGetLessons());
         },

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { FC, Fragment, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import {
@@ -7,52 +7,134 @@ import {
     mapDispatchToProps,
     mapStateToProps,
 } from './Podcasts.types';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
 
 const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     const {
-        clearPosts,
         posts,
         getPodcasts,
         getPostsForPodcast,
         podcasts,
         postsLoading,
         setPostLoading,
+        history,
     } = props;
 
     const [selectedPodcast, setSelectedPodcast] = useState<string>();
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
-    // Retrieve all podcasts
-    const fetchData = useCallback(async () => {
-        setPostLoading(true);
-        clearPosts();
-
-        const podcasts: { id: number; podcast: string }[] = await getPodcasts();
-        if (podcasts.length > 0) {
-            setSelectedPodcast(podcasts[0].podcast);
+    // Memoized value of podcast parsed from the URL
+    const podcastFromUrl = useMemo<string | undefined>(() => {
+        const categorySearchIndex =
+            history.location.search.indexOf('category') + 9;
+        if (history.location.search && categorySearchIndex) {
+            const endSearchIndex = history.location.search.indexOf('&')
+                ? history.location.search.indexOf('&') -
+                history.location.search.indexOf('=') -
+                1
+                : undefined;
+            return history.location.search.substr(
+                categorySearchIndex,
+                endSearchIndex
+            );
         }
 
+        return undefined;
+    }, [history.location.search]);
+
+    // Memoized value of page parsed from the URL
+    const pageFromUrl = useMemo<number | undefined>(() => {
+        const pageSearchIndex = history.location.search.indexOf('page') + 5;
+        if (pageSearchIndex) {
+            const page = history.location.search.substr(pageSearchIndex);
+            return +page;
+        }
+
+        return undefined;
+    }, [history.location.search]);
+
+    const fetchPodcasts = useCallback(async () => {
+        setPostLoading(true);
+
+        await getPodcasts();
+
         setPostLoading(false);
-    }, [clearPosts, getPodcasts, setPostLoading]);
+    }, [setPostLoading, getPodcasts]);
 
-    // On start, retrieve podcasts
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+    const onPodcastSelection = useCallback(
+        (podcast: any) => {
+            setSelectedPodcast(podcast.podcast);
 
-    // Whenever changing the podcast, reset the page number to 1
+            history.push({
+                search: `?category=${podcast.podcast}&page=1`,
+            });
+        },
+        [history]
+    );
+
+    const onNextPage = useCallback(() => {
+        if (posts.length !== 0) {
+            setCurrentPage(currentPage + 1);
+
+            history.push({
+                search: `?category=${selectedPodcast}&page=${currentPage + 1}`,
+            });
+        }
+    }, [currentPage, history, posts.length, selectedPodcast]);
+    const onPreviousPage = useCallback(() => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+
+            history.push({
+                search: `?category=${selectedPodcast}&page=${currentPage - 1}`,
+            });
+        }
+    }, [currentPage, history, selectedPodcast]);
+
+    const disableNextPage = useMemo(
+        () => posts.length === 0 || posts.length < 5,
+        [posts]
+    );
+    const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
+
+    // On mount, retrieve podcasts
     useEffect(() => {
-        setCurrentPage(1);
-    }, [selectedPodcast]);
+        fetchPodcasts();
+    }, [fetchPodcasts]);
+
+    // Once podcasts are retrieved, auto-select the first podcasts as the selected podcast and update the URL
+    useEffect(() => {
+        if (podcasts.length > 0 && selectedPodcast === undefined) {
+            if (!history.location.search) {
+                history.replace(
+                    `?category=${podcasts[0].podcast}&page=${currentPage}`
+                );
+            }
+        }
+    }, [currentPage, history, podcasts, selectedPodcast]);
+
+    // Updates selected podcast from URL whenever a change is occurred
+    useEffect(() => {
+        setSelectedPodcast(podcastFromUrl);
+    }, [podcastFromUrl]);
+
+    // Updates selected podcast from URL whenever a change is occurred
+    useEffect(() => {
+        setCurrentPage(pageFromUrl || 1);
+    }, [pageFromUrl]);
 
     // Update posts when paginating or changing the podcasts
     useEffect(() => {
-        const getPostForSelectedPodcast = async (podcast: string) => {
-            clearPosts();
+        const getPostsForSelectedPodcast = async (podcast: string) => {
+            setPostLoading(true);
             await getPostsForPodcast(podcast, currentPage);
+            setPostLoading(false);
         };
-        selectedPodcast && getPostForSelectedPodcast(selectedPodcast);
-    }, [currentPage, clearPosts, getPostsForPodcast, selectedPodcast]);
+
+        // history.replace(`?category=${selectedPodcast}&page=${currentPage}`);
+        selectedPodcast && getPostsForSelectedPodcast(selectedPodcast);
+    }, [currentPage, getPostsForPodcast, selectedPodcast, setPostLoading]);
 
     return (
         <div className="container">
@@ -61,69 +143,53 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
             {/*Toggle Podcasts Tabs*/}
             <div className="tabs is-toggle">
                 <ul>
-                    {!postsLoading &&
-                        podcasts.map((podcast, i) => (
-                            <li
-                                className={
-                                    selectedPodcast === podcast.podcast
-                                        ? 'is-active'
-                                        : undefined
-                                }
-                                key={i}
-                                onClick={() => {
-                                    setSelectedPodcast(podcast.podcast);
-                                }}
-                            >
-                                {/*TODO: Bulma is current not accessible, specifically for usages of <a />*/}
-                                {/* being used just for convenience, breaking the required contract for accessibility*/}
-                                <a>
-                                    <span>{podcast.podcast}</span>
-                                </a>
-                            </li>
-                        ))}
+                    {podcasts.map((podcast, i) => (
+                        <li
+                            className={
+                                selectedPodcast === podcast.podcast
+                                    ? 'is-active'
+                                    : undefined
+                            }
+                            key={i}
+                            onClick={() => {
+                                onPodcastSelection(podcast);
+                            }}
+                        >
+                            {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
+                            {/* being used just for convenience, breaking the required contract for accessibility*/}
+                            <a>
+                                <span>{podcast.podcast}</span>
+                            </a>
+                        </li>
+                    ))}
                 </ul>
-            </div>
-
-            <hr />
+            </div>            <hr />
             {postsLoading && (
                 <progress className="progress is-small is-info" max="100">
                     50%
                 </progress>
             )}
             {!postsLoading &&
-                podcasts.map((podcast, i) => (
-                    <Fragment key={i}>
-                        {posts
-                            .filter((p) =>
-                                p.categories.includes(podcast.podcast)
-                            )
-                            .map((p, i) => (
-                                <div key={i}>
-                                    <PostCard post={p} showPreviewOnly />
-                                </div>
-                            ))}
-                    </Fragment>
+            selectedPodcast &&
+            posts
+                .filter((p) => p.categories.includes(selectedPodcast))
+                .map((p, i) => (
+                    <div key={i}>
+                        <PostCard post={p} showPreviewOnly />
+                    </div>
                 ))}
 
             <button
                 className="button is-info pagination-button"
-                disabled={currentPage === 1}
-                onClick={() => {
-                    if (currentPage > 1) {
-                        setCurrentPage(currentPage - 1);
-                    }
-                }}
+                disabled={disablePreviousPage}
+                onClick={onPreviousPage}
             >
                 Previous Page
             </button>
             <button
                 className="button is-info pagination-button"
-                disabled={posts.length === 0 || posts.length < 5}
-                onClick={() => {
-                    if (posts.length !== 0) {
-                        setCurrentPage(currentPage + 1);
-                    }
-                }}
+                disabled={disableNextPage}
+                onClick={onNextPage}
             >
                 Next Page
             </button>
@@ -131,4 +197,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Podcasts);
+export default compose<React.ComponentType<PodcastsPropsAndActions>>(
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
+)(Podcasts);

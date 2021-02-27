@@ -45,11 +45,11 @@ export const NavBar: FC = () => {
                     <div className="is-divider navbar-divider" />
 
                     <Link
-                        to="/"
+                        to="/sitemap"
                         className='link navbar-item-hover'
                         onClick={() => setShowHamburger(false)}
                     >
-                        <div className="navbar-item">Home</div>
+                        <div className="navbar-item">Getting Started</div>
                     </Link>
 
                     <Link

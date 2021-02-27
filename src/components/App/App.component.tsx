@@ -18,15 +18,17 @@ import {
     AdminGrammar,
     AdminHome,
     AdminLessons,
-    AdminLogin, AdminPodcasts,
+    AdminLogin,
+    AdminPodcasts,
     AdminPostCreate,
     AdminPostEdit,
-    AdminVocabulary
+    AdminVocabulary,
 } from 'components/Admin';
 import ScrollToTop from 'components/ScrollToTop';
 import Grammar from '../Grammar';
 import Vocabulary from '../Vocabulary';
-import Podcasts from "../Podcasts";
+import Podcasts from '../Podcasts';
+import Sitemap from '../Sitemap';
 
 export const App: FC = () => {
     return (
@@ -44,7 +46,12 @@ export const App: FC = () => {
                             <Route path="/about" exact component={About} />
                             <Route path="/lessons" exact component={Lessons} />
                             <Route path="/grammar" exact component={Grammar} />
-                            <Route path="/podcasts" exact component={Podcasts} />
+                            <Route
+                                path="/podcasts"
+                                exact
+                                component={Podcasts}
+                            />
+                            <Route path="/sitemap" exact component={Sitemap} />
                             <Route
                                 path="/vocabulary"
                                 exact
