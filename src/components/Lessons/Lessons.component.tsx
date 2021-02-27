@@ -21,7 +21,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
         history,
     } = props;
 
-    const [selectedLesson, setSelectedLesson] = useState<string>();
+    const [selectedLesson, setSelectedLesson] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     // Memoized value of lesson parsed from the URL
@@ -105,10 +105,10 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
 
     // Once lessons are retrieved, auto-select the first lessons as the selected lesson and update the URL
     useEffect(() => {
-        if (lessons.length > 0 && selectedLesson === undefined) {
+        if (lessons.length > 0 && !selectedLesson.length) {
             if (!history.location.search) {
                 history.replace(
-                    `?category=${lessons[0].lesson}&page=${currentPage}`
+                    `?category=${lessons[0].lesson}&page=1`
                 );
             }
         }
@@ -116,7 +116,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
 
     // Updates selected lesson from URL whenever a change is occurred
     useEffect(() => {
-        setSelectedLesson(lessonFromUrl);
+        lessonFromUrl && setSelectedLesson(lessonFromUrl);
     }, [lessonFromUrl]);
 
     // Updates selected lesson from URL whenever a change is occurred
