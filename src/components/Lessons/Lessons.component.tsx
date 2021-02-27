@@ -28,7 +28,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
     const lessonFromUrl = useMemo<string | undefined>(() => {
         const categorySearchIndex =
             history.location.search.indexOf('category') + 9;
-        if (categorySearchIndex) {
+        if (history.location.search && categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
                 ? history.location.search.indexOf('&') -
                   history.location.search.indexOf('=') -
@@ -65,13 +65,12 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
     const onLessonSelection = useCallback(
         (lesson: any) => {
             setSelectedLesson(lesson.lesson);
-            setCurrentPage(1);
 
             history.push({
-                search: `?category=${lesson.lesson}&page=${currentPage}`,
+                search: `?category=${lesson.lesson}&page=1`,
             });
         },
-        [currentPage, history]
+        [history]
     );
 
     const onNextPage = useCallback(() => {
@@ -83,7 +82,6 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
             });
         }
     }, [currentPage, history, posts.length, selectedLesson]);
-
     const onPreviousPage = useCallback(() => {
         if (currentPage > 1) {
             setCurrentPage(currentPage - 1);
@@ -93,6 +91,12 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
             });
         }
     }, [currentPage, history, selectedLesson]);
+
+    const disableNextPage = useMemo(
+        () => posts.length === 0 || posts.length < 5,
+        [posts]
+    );
+    const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
 
     // On mount, retrieve lessons
     useEffect(() => {
@@ -159,9 +163,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
                         </li>
                     ))}
                 </ul>
-            </div>
-
-            <hr />
+            </div>            <hr />
             {postsLoading && (
                 <progress className="progress is-small is-info" max="100">
                     50%
@@ -179,14 +181,14 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
 
             <button
                 className="button is-info pagination-button"
-                disabled={currentPage === 1}
+                disabled={disablePreviousPage}
                 onClick={onPreviousPage}
             >
                 Previous Page
             </button>
             <button
                 className="button is-info pagination-button"
-                disabled={posts.length === 0 || posts.length < 5}
+                disabled={disableNextPage}
                 onClick={onNextPage}
             >
                 Next Page
