@@ -45,8 +45,8 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                     <ul className="menu-list">
                         <li>
                             <ul>
-                                {lessons.map(l => (
-                                    <li>
+                                {lessons.map((l, key) => (
+                                    <li key={key}>
                                         <Link to={`/lessons?category=${l.lesson}`}>{l.lesson}</Link>
                                     </li>
                                 ))}
@@ -58,8 +58,8 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                     <ul className="menu-list">
                         <li>
                             <ul>
-                                {grammar.map(g => (
-                                    <li>
+                                {grammar.map((g, key) => (
+                                    <li key={key}>
                                         <Link to={`/grammar?category=${g.grammar}`}>{g.grammar}</Link>
                                     </li>
                                 ))}
@@ -71,8 +71,8 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                     <ul className="menu-list">
                         <li>
                             <ul>
-                                {vocabulary.map(v => (
-                                    <li>
+                                {vocabulary.map((v, key) => (
+                                    <li key={key}>
                                         <Link to={`/vocabulary?category=${v.vocab}`}>{v.vocab}</Link>
                                     </li>
                                 ))}
@@ -84,8 +84,8 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                     <ul className="menu-list">
                         <li>
                             <ul>
-                                {podcasts.map(p => (
-                                    <li>
+                                {podcasts.map((p, key) => (
+                                    <li key={key}>
                                         <Link to={`/podcasts?category=${p.podcast}`}>{p.podcast}</Link>
                                     </li>
                                 ))}
