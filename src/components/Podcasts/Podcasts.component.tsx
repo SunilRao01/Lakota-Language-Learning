@@ -21,7 +21,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
         history,
     } = props;
 
-    const [selectedPodcast, setSelectedPodcast] = useState<string>();
+    const [selectedPodcast, setSelectedPodcast] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     // Memoized value of podcast parsed from the URL
@@ -105,10 +105,10 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
 
     // Once podcasts are retrieved, auto-select the first podcasts as the selected podcast and update the URL
     useEffect(() => {
-        if (podcasts.length > 0 && selectedPodcast === undefined) {
+        if (podcasts.length > 0 && !selectedPodcast.length) {
             if (!history.location.search) {
                 history.replace(
-                    `?category=${podcasts[0].podcast}&page=${currentPage}`
+                    `?category=${podcasts[0].podcast}&page=1`
                 );
             }
         }
@@ -116,7 +116,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
 
     // Updates selected podcast from URL whenever a change is occurred
     useEffect(() => {
-        setSelectedPodcast(podcastFromUrl);
+        podcastFromUrl && setSelectedPodcast(podcastFromUrl);
     }, [podcastFromUrl]);
 
     // Updates selected podcast from URL whenever a change is occurred

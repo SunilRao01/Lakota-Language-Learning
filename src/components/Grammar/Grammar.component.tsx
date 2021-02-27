@@ -21,7 +21,7 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
         history,
     } = props;
 
-    const [selectedGrammar, setSelectedGrammar] = useState<string>();
+    const [selectedGrammar, setSelectedGrammar] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     // Memoized value of grammar parsed from the URL
@@ -105,10 +105,10 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
 
     // Once grammar are retrieved, auto-select the first grammar as the selected grammar and update the URL
     useEffect(() => {
-        if (grammar.length > 0 && selectedGrammar === undefined) {
-            if (!history.location.search) {
+        if (grammar.length > 0 && !selectedGrammar.length) {
+            if (!history.location.search || !history.location.search.length) {
                 history.replace(
-                    `?category=${grammar[0].grammar}&page=${currentPage}`
+                    `?category=${grammar[0].grammar}&page=1`
                 );
             }
         }
@@ -116,7 +116,7 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
 
     // Updates selected grammar from URL whenever a change is occurred
     useEffect(() => {
-        setSelectedGrammar(grammarFromUrl);
+        grammarFromUrl && setSelectedGrammar(grammarFromUrl);
     }, [grammarFromUrl]);
 
     // Updates selected grammar from URL whenever a change is occurred

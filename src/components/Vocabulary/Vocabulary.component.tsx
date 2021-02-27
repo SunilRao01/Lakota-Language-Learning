@@ -21,7 +21,7 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
         history,
     } = props;
 
-    const [selectedVocab, setSelectedVocab] = useState<string>();
+    const [selectedVocab, setSelectedVocab] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     // Memoized value of vocab parsed from the URL
@@ -105,10 +105,10 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
 
     // Once vocabulary are retrieved, auto-select the first vocabulary as the selected vocab and update the URL
     useEffect(() => {
-        if (vocabulary.length > 0 && selectedVocab === undefined) {
+        if (vocabulary.length > 0 && !selectedVocab.length) {
             if (!history.location.search) {
                 history.replace(
-                    `?category=${vocabulary[0].vocab}&page=${currentPage}`
+                    `?category=${vocabulary[0].vocab}&page=1`
                 );
             }
         }
@@ -116,7 +116,7 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
 
     // Updates selected vocab from URL whenever a change is occurred
     useEffect(() => {
-        setSelectedVocab(vocabFromUrl);
+        vocabFromUrl && setSelectedVocab(vocabFromUrl);
     }, [vocabFromUrl]);
 
     // Updates selected vocab from URL whenever a change is occurred
