@@ -1,77 +1,140 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import {
+    VocabularyPropsAndActions,
     mapDispatchToProps,
     mapStateToProps,
-    VocabularyPropsAndActions,
 } from './Vocabulary.types';
-import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
 
 const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     const {
-        clearPosts,
         posts,
         getVocabulary,
         getPostsForVocab,
         vocabulary,
         postsLoading,
         setPostLoading,
-        history
+        history,
     } = props;
 
     const [selectedVocab, setSelectedVocab] = useState<string>();
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState<number>(1);
 
-    // Retrieve all vocabulary
-    const fetchData = useCallback(async () => {
-        setPostLoading(true);
-        clearPosts();
-
-        const vocabulary: {
-            id: number;
-            vocab: string;
-        }[] = await getVocabulary();
-        if (vocabulary.length > 0) {
-            if (history.location.search) {
-                setSelectedVocab(history.location.search.substr(
-                    history.location.search.indexOf('=') + 1
-                ))
-            } else {
-                setSelectedVocab(vocabulary[0].vocab);
-            }
+    // Memoized value of vocab parsed from the URL
+    const vocabFromUrl = useMemo<string | undefined>(() => {
+        const categorySearchIndex =
+            history.location.search.indexOf('category') + 9;
+        if (history.location.search && categorySearchIndex) {
+            const endSearchIndex = history.location.search.indexOf('&')
+                ? history.location.search.indexOf('&') -
+                history.location.search.indexOf('=') -
+                1
+                : undefined;
+            return history.location.search.substr(
+                categorySearchIndex,
+                endSearchIndex
+            );
         }
+
+        return undefined;
+    }, [history.location.search]);
+
+    // Memoized value of page parsed from the URL
+    const pageFromUrl = useMemo<number | undefined>(() => {
+        const pageSearchIndex = history.location.search.indexOf('page') + 5;
+        if (pageSearchIndex) {
+            const page = history.location.search.substr(pageSearchIndex);
+            return +page;
+        }
+
+        return undefined;
+    }, [history.location.search]);
+
+    const fetchVocabulary = useCallback(async () => {
+        setPostLoading(true);
+
+        await getVocabulary();
 
         setPostLoading(false);
-    }, [clearPosts, getVocabulary, setPostLoading, history]);
+    }, [setPostLoading, getVocabulary]);
 
-    // On start, retrieve vocabulary
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+    const onVocabSelection = useCallback(
+        (vocab: any) => {
+            setSelectedVocab(vocab.vocab);
 
-    // Whenever changing the vocab, reset the page number to 1
-    //  + update the url
-    useEffect(() => {
-        setCurrentPage(1);
-
-        if (selectedVocab) {
             history.push({
-                search: `?category=${selectedVocab}`
-            })
+                search: `?category=${vocab.vocab}&page=1`,
+            });
+        },
+        [history]
+    );
+
+    const onNextPage = useCallback(() => {
+        if (posts.length !== 0) {
+            setCurrentPage(currentPage + 1);
+
+            history.push({
+                search: `?category=${selectedVocab}&page=${currentPage + 1}`,
+            });
         }
-    }, [history, selectedVocab]);
+    }, [currentPage, history, posts.length, selectedVocab]);
+    const onPreviousPage = useCallback(() => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+
+            history.push({
+                search: `?category=${selectedVocab}&page=${currentPage - 1}`,
+            });
+        }
+    }, [currentPage, history, selectedVocab]);
+
+    const disableNextPage = useMemo(
+        () => posts.length === 0 || posts.length < 5,
+        [posts]
+    );
+    const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
+
+    // On mount, retrieve vocabulary
+    useEffect(() => {
+        fetchVocabulary();
+    }, [fetchVocabulary]);
+
+    // Once vocabulary are retrieved, auto-select the first vocabulary as the selected vocab and update the URL
+    useEffect(() => {
+        if (vocabulary.length > 0 && selectedVocab === undefined) {
+            if (!history.location.search) {
+                history.replace(
+                    `?category=${vocabulary[0].vocab}&page=${currentPage}`
+                );
+            }
+        }
+    }, [currentPage, history, vocabulary, selectedVocab]);
+
+    // Updates selected vocab from URL whenever a change is occurred
+    useEffect(() => {
+        setSelectedVocab(vocabFromUrl);
+    }, [vocabFromUrl]);
+
+    // Updates selected vocab from URL whenever a change is occurred
+    useEffect(() => {
+        setCurrentPage(pageFromUrl || 1);
+    }, [pageFromUrl]);
 
     // Update posts when paginating or changing the vocabulary
     useEffect(() => {
-        const getPostForSelectedVocab = async (vocab: string) => {
-            clearPosts();
+        const getPostsForSelectedVocab = async (vocab: string) => {
+            setPostLoading(true);
             await getPostsForVocab(vocab, currentPage);
+            setPostLoading(false);
         };
-        selectedVocab && getPostForSelectedVocab(selectedVocab);
-    }, [currentPage, clearPosts, getPostsForVocab, selectedVocab]);
+
+        // history.replace(`?category=${selectedVocab}&page=${currentPage}`);
+        selectedVocab && getPostsForSelectedVocab(selectedVocab);
+    }, [currentPage, getPostsForVocab, selectedVocab, setPostLoading]);
 
     return (
         <div className="container">
@@ -80,64 +143,53 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
             {/*Toggle Vocabulary Tabs*/}
             <div className="tabs is-toggle">
                 <ul>
-                    {!postsLoading &&
-                        vocabulary.map((vocab, i) => (
-                            <li
-                                className={
-                                    selectedVocab === vocab.vocab
-                                        ? 'is-active'
-                                        : undefined
-                                }
-                                key={i}
-                                onClick={() => {
-                                    setSelectedVocab(vocab.vocab);
-                                }}
-                            >
-                                {/*TODO: Bulma is current not accessible, specifically for usages of <a />*/}
-                                {/* being used just for convenience, breaking the required contract for accessibility*/}
-                                <a>
-                                    <span>{vocab.vocab}</span>
-                                </a>
-                            </li>
-                        ))}
+                    {vocabulary.map((vocab, i) => (
+                        <li
+                            className={
+                                selectedVocab === vocab.vocab
+                                    ? 'is-active'
+                                    : undefined
+                            }
+                            key={i}
+                            onClick={() => {
+                                onVocabSelection(vocab);
+                            }}
+                        >
+                            {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
+                            {/* being used just for convenience, breaking the required contract for accessibility*/}
+                            <a>
+                                <span>{vocab.vocab}</span>
+                            </a>
+                        </li>
+                    ))}
                 </ul>
-            </div>
-
-            <hr />
+            </div>            <hr />
             {postsLoading && (
                 <progress className="progress is-small is-info" max="100">
                     50%
                 </progress>
             )}
             {!postsLoading &&
-                selectedVocab &&
-                posts
-                    .filter((p) => p.categories.includes(selectedVocab))
-                    .map((p, i) => (
-                        <div key={i}>
-                            <PostCard post={p} showPreviewOnly />
-                        </div>
-                    ))}
+            selectedVocab &&
+            posts
+                .filter((p) => p.categories.includes(selectedVocab))
+                .map((p, i) => (
+                    <div key={i}>
+                        <PostCard post={p} showPreviewOnly />
+                    </div>
+                ))}
 
             <button
                 className="button is-info pagination-button"
-                disabled={currentPage === 1}
-                onClick={() => {
-                    if (currentPage > 1) {
-                        setCurrentPage(currentPage - 1);
-                    }
-                }}
+                disabled={disablePreviousPage}
+                onClick={onPreviousPage}
             >
                 Previous Page
             </button>
             <button
                 className="button is-info pagination-button"
-                disabled={posts.length === 0 || posts.length < 5}
-                onClick={() => {
-                    if (posts.length !== 0) {
-                        setCurrentPage(currentPage + 1);
-                    }
-                }}
+                disabled={disableNextPage}
+                onClick={onNextPage}
             >
                 Next Page
             </button>
