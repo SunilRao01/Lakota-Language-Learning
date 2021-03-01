@@ -6,3 +6,4 @@ export { default as AdminPodcasts } from './AdminPodcasts';
 export { default as AdminLogin } from './AdminLogin';
 export { default as AdminPostCreate } from './AdminPostCreate';
 export { default as AdminPostEdit } from './AdminPostEdit';
+export { default as AdminSitemap } from './AdminSitemap';
