@@ -1,1 +1,1 @@
-export {default} from './AdminPostEdit.component'
+export { default } from './AdminPostEdit.component';

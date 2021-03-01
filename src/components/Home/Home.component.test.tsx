@@ -23,7 +23,7 @@ const dummyPost = {
     quizzes: [],
     tags: ['tag91'],
     title: 'Post Number 123',
-}
+};
 
 test('only display a maximum of 5 posts per page', async () => {
     let mockAxios = new MockAdapter(axios);
@@ -39,8 +39,8 @@ test('only display a maximum of 5 posts per page', async () => {
     });
     // NOTE: The rest of the requests will be ignored
     mockAxios.onAny().reply(200, {
-        data: []
-    })
+        data: [],
+    });
 
     render(<Home />, initialRootState);
 
@@ -58,7 +58,7 @@ test('disable "Next Page" button on last page', async () => {
     // NOTE: when the current page consists of less than 5 posts, the app
     //  interprets that as the last page
     for (let i = 0; i < 3; i++) {
-        mockPostsFromBackend.push(dummyPost)
+        mockPostsFromBackend.push(dummyPost);
     }
 
     mockAxios.onGet(`${apiUrl}/posts?page=1`).reply(200, {
@@ -66,13 +66,13 @@ test('disable "Next Page" button on last page', async () => {
     });
     mockAxios.onAny().reply(200, {});
 
-    render(<Home />)
+    render(<Home />);
 
     await waitForElementToBeRemoved(() => {
         return screen.queryByTestId('progress-bar');
     });
 
-    expect(screen.getByTestId('next-page')).toHaveAttribute('disabled')
+    expect(screen.getByTestId('next-page')).toHaveAttribute('disabled');
 });
 
 test('disable "Previous Page" button on first page', async () => {
@@ -81,11 +81,11 @@ test('disable "Previous Page" button on first page', async () => {
         data: [],
     });
 
-    render(<Home />)
+    render(<Home />);
 
     await waitForElementToBeRemoved(() => {
         return screen.queryByTestId('progress-bar');
     });
 
-    expect(screen.getByTestId('previous-page')).toHaveAttribute('disabled')
+    expect(screen.getByTestId('previous-page')).toHaveAttribute('disabled');
 });

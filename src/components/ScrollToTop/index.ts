@@ -1,1 +1,1 @@
-export {ScrollToTop as default} from './ScrollToTop.component'
+export { ScrollToTop as default } from './ScrollToTop.component';

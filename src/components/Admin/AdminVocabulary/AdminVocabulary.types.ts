@@ -1,12 +1,12 @@
-import {RootState} from "../../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
+import { RootState } from '../../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
 import {
     backendAddVocab,
     backendDeleteVocab,
     backendGetCategories,
     backendGetVocabulary,
-} from "../../../redux/Posts/Posts.reducer";
-import {setPostLoading} from "../../../redux/Posts/Posts.action";
+} from '../../../redux/Posts/Posts.reducer';
+import { setPostLoading } from '../../../redux/Posts/Posts.action';
 
 interface AdminVocabularyProps {
     vocabulary: { id: number; vocab: string }[];
@@ -23,7 +23,8 @@ interface AdminVocabularyActions {
     setPostLoading: (loading: boolean) => void;
 }
 
-export type AdminVocabularyPropsAndActions = AdminVocabularyProps & AdminVocabularyActions;
+export type AdminVocabularyPropsAndActions = AdminVocabularyProps &
+    AdminVocabularyActions;
 
 export const mapStateToProps = (state: RootState): AdminVocabularyProps => {
     return {

@@ -1,12 +1,12 @@
 import {
     backendGetPodcasts,
     backendGetPostsByFilters,
-    Post
-} from "../../redux/Posts/Posts.reducer";
-import {RouteComponentProps} from "react-router";
-import {RootState} from "../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
-import {clearPosts, setPostLoading} from "../../redux/Posts/Posts.action";
+    Post,
+} from '../../redux/Posts/Posts.reducer';
+import { RouteComponentProps } from 'react-router';
+import { RootState } from '../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
+import { clearPosts, setPostLoading } from '../../redux/Posts/Posts.action';
 
 export interface PodcastsProps {
     posts: Post[];
@@ -36,10 +36,9 @@ export const mapDispatchToProps = (
 ): PodcastsActions => {
     return {
         getPostsForPodcast: async (podcast: string, pageNumber: number) => {
-            return await dispatch(backendGetPostsByFilters(
-                pageNumber,
-                [podcast]
-            ));
+            return await dispatch(
+                backendGetPostsByFilters(pageNumber, [podcast])
+            );
         },
         clearPosts: () => dispatch(clearPosts()),
         getPodcasts: async () => {

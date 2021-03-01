@@ -1,12 +1,12 @@
-import {RootState} from "../../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
+import { RootState } from '../../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
 import {
     backendAddGrammar,
     backendDeleteGrammar,
     backendGetCategories,
-    backendGetGrammar
-} from "../../../redux/Posts/Posts.reducer";
-import {setPostLoading} from "../../../redux/Posts/Posts.action";
+    backendGetGrammar,
+} from '../../../redux/Posts/Posts.reducer';
+import { setPostLoading } from '../../../redux/Posts/Posts.action';
 
 interface AdminGrammarProps {
     grammar: { id: number; grammar: string }[];
@@ -23,7 +23,8 @@ interface AdminGrammarActions {
     setPostLoading: (loading: boolean) => void;
 }
 
-export type AdminGrammarPropsAndActions = AdminGrammarProps & AdminGrammarActions;
+export type AdminGrammarPropsAndActions = AdminGrammarProps &
+    AdminGrammarActions;
 
 export const mapStateToProps = (state: RootState): AdminGrammarProps => {
     return {

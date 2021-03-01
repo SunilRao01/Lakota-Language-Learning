@@ -31,8 +31,8 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
         if (categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
                 ? history.location.search.indexOf('&') -
-                history.location.search.indexOf('=') -
-                1
+                  history.location.search.indexOf('=') -
+                  1
                 : undefined;
             return history.location.search.substr(
                 categorySearchIndex,
@@ -107,9 +107,7 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     useEffect(() => {
         if (grammar.length > 0 && !selectedGrammar.length) {
             if (!history.location.search || !history.location.search.length) {
-                history.replace(
-                    `?category=${grammar[0].grammar}&page=1`
-                );
+                history.replace(`?category=${grammar[0].grammar}&page=1`);
             }
         }
     }, [currentPage, history, grammar, selectedGrammar]);
@@ -139,7 +137,6 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     return (
         <div className="container">
             <h1 className="title">Grammar</h1>
-
             {/*Toggle Grammar Tabs*/}
             <div className="tabs is-toggle">
                 <ul>
@@ -163,22 +160,22 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
                         </li>
                     ))}
                 </ul>
-            </div>            <hr />
+            </div>{' '}
+            <hr />
             {postsLoading && (
                 <progress className="progress is-small is-info" max="100">
                     50%
                 </progress>
             )}
             {!postsLoading &&
-            selectedGrammar &&
-            posts
-                .filter((p) => p.categories.includes(selectedGrammar))
-                .map((p, i) => (
-                    <div key={i}>
-                        <PostCard post={p} showPreviewOnly />
-                    </div>
-                ))}
-
+                selectedGrammar &&
+                posts
+                    .filter((p) => p.categories.includes(selectedGrammar))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
             <button
                 className="button is-info pagination-button"
                 disabled={disablePreviousPage}

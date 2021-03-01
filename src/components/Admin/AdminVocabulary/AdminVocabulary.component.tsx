@@ -1,6 +1,10 @@
 import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
-import {AdminVocabularyPropsAndActions, mapDispatchToProps, mapStateToProps} from './AdminVocabulary.types';
+import {
+    AdminVocabularyPropsAndActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './AdminVocabulary.types';
 
 const AdminVocabulary: FC<AdminVocabularyPropsAndActions> = (props) => {
     const {
@@ -86,7 +90,4 @@ const AdminVocabulary: FC<AdminVocabularyPropsAndActions> = (props) => {
     );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AdminVocabulary);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminVocabulary);

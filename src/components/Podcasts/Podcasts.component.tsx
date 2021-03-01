@@ -31,8 +31,8 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
         if (history.location.search && categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
                 ? history.location.search.indexOf('&') -
-                history.location.search.indexOf('=') -
-                1
+                  history.location.search.indexOf('=') -
+                  1
                 : undefined;
             return history.location.search.substr(
                 categorySearchIndex,
@@ -107,9 +107,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     useEffect(() => {
         if (podcasts.length > 0 && !selectedPodcast.length) {
             if (!history.location.search) {
-                history.replace(
-                    `?category=${podcasts[0].podcast}&page=1`
-                );
+                history.replace(`?category=${podcasts[0].podcast}&page=1`);
             }
         }
     }, [currentPage, history, podcasts, selectedPodcast]);
@@ -139,7 +137,6 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     return (
         <div className="container">
             <h1 className="title">Podcasts</h1>
-
             {/*Toggle Podcasts Tabs*/}
             <div className="tabs is-toggle">
                 <ul>
@@ -163,22 +160,22 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
                         </li>
                     ))}
                 </ul>
-            </div>            <hr />
+            </div>{' '}
+            <hr />
             {postsLoading && (
                 <progress className="progress is-small is-info" max="100">
                     50%
                 </progress>
             )}
             {!postsLoading &&
-            selectedPodcast &&
-            posts
-                .filter((p) => p.categories.includes(selectedPodcast))
-                .map((p, i) => (
-                    <div key={i}>
-                        <PostCard post={p} showPreviewOnly />
-                    </div>
-                ))}
-
+                selectedPodcast &&
+                posts
+                    .filter((p) => p.categories.includes(selectedPodcast))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
             <button
                 className="button is-info pagination-button"
                 disabled={disablePreviousPage}

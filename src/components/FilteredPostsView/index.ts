@@ -1,1 +1,1 @@
-export {default} from './FilteredPostsView.component'
+export { default } from './FilteredPostsView.component';

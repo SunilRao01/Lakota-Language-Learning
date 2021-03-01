@@ -53,12 +53,12 @@ describe('Asynchronous Actions', () => {
         });
     });
 
-    test('[apiGetLessons] should dispatch setLessons action on success',() => {
+    test('[apiGetLessons] should dispatch setLessons action on success', () => {
         let mockAxios = new MockAdapter(axios);
         let mockLessonsFromBackend = ['geography', 'history'];
         mockAxios.onGet(`${apiUrl}/lessons`).reply(200, {
             lessons: mockLessonsFromBackend,
-        })
+        });
 
         const expectedActions = [
             { type: 'SET_LESSONS', payload: mockLessonsFromBackend },
@@ -67,19 +67,19 @@ describe('Asynchronous Actions', () => {
 
         return store.dispatch(apiGetLessons()).then(() => {
             expect(store.getActions()).toEqual(expectedActions);
-        })
+        });
     });
 
     test('[apiAddLesson] should dispatch addLesson action on success', () => {
         let mockAxios = new MockAdapter(axios);
         let mockNewLesson = {
             id: 4,
-            lesson: 'newLessonTest'
+            lesson: 'newLessonTest',
         };
         mockAxios.onPost(`${apiUrl}/lessons`).reply(200, {
             lesson: {
-                lesson: mockNewLesson
-            }
+                lesson: mockNewLesson,
+            },
         });
 
         const expectedActions = [
@@ -93,12 +93,13 @@ describe('Asynchronous Actions', () => {
                 },
             },
         ];
-        const store  = mockStore(initialRootState)
-        return store.dispatch(apiAddLesson('newLessonTest', 'jwt-token')).then(() => {
-            expect(store.getActions()).toEqual(expectedActions);
-        })
-    })
-
+        const store = mockStore(initialRootState);
+        return store
+            .dispatch(apiAddLesson('newLessonTest', 'jwt-token'))
+            .then(() => {
+                expect(store.getActions()).toEqual(expectedActions);
+            });
+    });
 });
 
 describe('Synchronous Actions', () => {

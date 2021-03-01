@@ -10,12 +10,11 @@
     }
 }
 
-
 .PossibleAnswerRow {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-  word-break: break-all;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    word-break: break-all;
 
     &_button {
         min-width: 64px;
@@ -24,11 +23,11 @@
 }
 
 .CreatedQuizzes {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .UpdateBanner {
-  margin: 10px;
+    margin: 10px;
 }

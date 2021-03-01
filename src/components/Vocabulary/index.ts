@@ -1,1 +1,1 @@
-export {default} from './Vocabulary.component'
+export { default } from './Vocabulary.component';

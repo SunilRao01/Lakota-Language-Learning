@@ -1,5 +1,9 @@
-import React, {FC, useCallback, useEffect} from 'react';
-import {mapDispatchToProps, mapStateToProps, SitemapPropsAndActions} from "./Sitemap.types";
+import React, { FC, useCallback, useEffect } from 'react';
+import {
+    mapDispatchToProps,
+    mapStateToProps,
+    SitemapPropsAndActions,
+} from './Sitemap.types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -14,7 +18,7 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
         lessons,
         podcasts,
         vocabulary,
-        postsLoading
+        postsLoading,
     } = props;
 
     const fetchData = useCallback(async () => {
@@ -26,11 +30,11 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
         await getVocabulary();
 
         setPostLoading(false);
-    }, [getGrammar, getLessons, getPodcasts, getVocabulary, setPostLoading])
+    }, [getGrammar, getLessons, getPodcasts, getVocabulary, setPostLoading]);
 
     useEffect(() => {
-        fetchData()
-    }, [fetchData])
+        fetchData();
+    }, [fetchData]);
 
     return (
         <div className="container">
@@ -47,7 +51,11 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                             <ul>
                                 {lessons.map((l, key) => (
                                     <li key={key}>
-                                        <Link to={`/lessons?category=${l.lesson}&page=1`}>{l.lesson}</Link>
+                                        <Link
+                                            to={`/lessons?category=${l.lesson}&page=1`}
+                                        >
+                                            {l.lesson}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -60,7 +68,11 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                             <ul>
                                 {grammar.map((g, key) => (
                                     <li key={key}>
-                                        <Link to={`/grammar?category=${g.grammar}&page=1`}>{g.grammar}</Link>
+                                        <Link
+                                            to={`/grammar?category=${g.grammar}&page=1`}
+                                        >
+                                            {g.grammar}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -73,7 +85,11 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                             <ul>
                                 {vocabulary.map((v, key) => (
                                     <li key={key}>
-                                        <Link to={`/vocabulary?category=${v.vocab}&page=1`}>{v.vocab}</Link>
+                                        <Link
+                                            to={`/vocabulary?category=${v.vocab}&page=1`}
+                                        >
+                                            {v.vocab}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>
@@ -86,7 +102,11 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
                             <ul>
                                 {podcasts.map((p, key) => (
                                     <li key={key}>
-                                        <Link to={`/podcasts?category=${p.podcast}&page=1`}>{p.podcast}</Link>
+                                        <Link
+                                            to={`/podcasts?category=${p.podcast}&page=1`}
+                                        >
+                                            {p.podcast}
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>

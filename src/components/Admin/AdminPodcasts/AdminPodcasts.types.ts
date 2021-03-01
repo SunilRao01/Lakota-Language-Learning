@@ -1,12 +1,12 @@
-import {RootState} from "../../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
+import { RootState } from '../../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
 import {
     backendAddPodcast,
     backendDeletePodcast,
     backendGetCategories,
-    backendGetPodcasts
-} from "../../../redux/Posts/Posts.reducer";
-import {setPostLoading} from "../../../redux/Posts/Posts.action";
+    backendGetPodcasts,
+} from '../../../redux/Posts/Posts.reducer';
+import { setPostLoading } from '../../../redux/Posts/Posts.action';
 
 interface AdminPodcastProps {
     podcasts: { id: number; podcast: string }[];
@@ -23,7 +23,8 @@ interface AdminPodcastActions {
     setPostLoading: (loading: boolean) => void;
 }
 
-export type AdminPodcastsPropsAndActions = AdminPodcastProps & AdminPodcastActions;
+export type AdminPodcastsPropsAndActions = AdminPodcastProps &
+    AdminPodcastActions;
 
 export const mapStateToProps = (state: RootState): AdminPodcastProps => {
     return {

@@ -32,51 +32,51 @@ $tabs-toggle-link-active-border-color: $info;
  */
 
 .container {
-  margin-top: 60px;
-  margin-bottom: 60px;
+    margin-top: 60px;
+    margin-bottom: 60px;
 }
 
 .link {
-  display: flex;
+    display: flex;
 }
 
 .navbar {
-  z-index: 1000;
+    z-index: 1000;
 }
 
 .navbar-title {
-  margin-left: 10px;
+    margin-left: 10px;
 }
 
 .pagination-button {
-  margin: 10px;
+    margin: 10px;
 }
 
 // TUI Editor View Overrides
 .tui-editor-contents table th {
-  background-color: transparent !important;
-  font-weight: 700 !important;
+    background-color: transparent !important;
+    font-weight: 700 !important;
 }
 
 .tui-editor-contents table td {
-  border: 1px solid #aaa !important;
-  font-size: 1rem !important;
+    border: 1px solid #aaa !important;
+    font-size: 1rem !important;
 }
 
 .tui-editor-contents table {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-  'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-  'Helvetica Neue', sans-serif !important;
-  -webkit-font-smoothing: antialiased !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  border: 1px solid #aaa !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+        'Helvetica Neue', sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    border: 1px solid #aaa !important;
 }
 
 .tui-editor-contents table th {
-  color: black !important;
-  font-size: 1.25rem !important;
+    color: black !important;
+    font-size: 1.25rem !important;
 }
 
 .tui-editor-contents * {
-  font-size: 1rem !important;
+    font-size: 1rem !important;
 }

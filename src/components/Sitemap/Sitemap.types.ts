@@ -1,16 +1,16 @@
-import {RootState} from "../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
+import { RootState } from '../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
 import {
     apiGetLessons,
     backendGetGrammar,
     backendGetPodcasts,
-    backendGetVocabulary
-} from "../../redux/Posts/Posts.reducer";
-import {setPostLoading} from "../../redux/Posts/Posts.action";
+    backendGetVocabulary,
+} from '../../redux/Posts/Posts.reducer';
+import { setPostLoading } from '../../redux/Posts/Posts.action';
 
 export interface SitemapProps {
     lessons: { id: number; lesson: string }[];
-    grammar: { id: number, grammar: string }[];
+    grammar: { id: number; grammar: string }[];
     vocabulary: { id: number; vocab: string }[];
     podcasts: { id: number; podcast: string }[];
     postsLoading: boolean;
@@ -32,22 +32,24 @@ export const mapStateToProps = (state: RootState): SitemapProps => ({
     podcasts: state.postState.podcasts,
     vocabulary: state.postState.vocabulary,
     postsLoading: state.postState.loadingPosts,
-})
+});
 
-export const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>): SitemapActions => {
+export const mapDispatchToProps = (
+    dispatch: ThunkDispatch<{}, {}, any>
+): SitemapActions => {
     return {
         getGrammar: async () => {
-            return await dispatch(backendGetGrammar())
+            return await dispatch(backendGetGrammar());
         },
         getLessons: async () => {
-            return await dispatch(apiGetLessons())
+            return await dispatch(apiGetLessons());
         },
         getPodcasts: async () => {
-            return await dispatch(backendGetPodcasts())
+            return await dispatch(backendGetPodcasts());
         },
         getVocabulary: async () => {
-            return await dispatch(backendGetVocabulary())
+            return await dispatch(backendGetVocabulary());
         },
         setPostLoading: (loading: boolean) => dispatch(setPostLoading(loading)),
-    }
-}
+    };
+};

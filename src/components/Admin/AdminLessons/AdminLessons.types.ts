@@ -1,12 +1,12 @@
-import {RootState} from "../../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
+import { RootState } from '../../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
 import {
     apiAddLesson,
     backendDeleteLesson,
     backendGetCategories,
-    apiGetLessons
-} from "../../../redux/Posts/Posts.reducer";
-import {setPostLoading} from "../../../redux/Posts/Posts.action";
+    apiGetLessons,
+} from '../../../redux/Posts/Posts.reducer';
+import { setPostLoading } from '../../../redux/Posts/Posts.action';
 
 interface AdminLessonProps {
     lessons: { id: number; lesson: string }[];

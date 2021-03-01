@@ -1,6 +1,10 @@
 import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
-import {AdminPodcastsPropsAndActions, mapDispatchToProps, mapStateToProps} from './AdminPodcasts.types';
+import {
+    AdminPodcastsPropsAndActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './AdminPodcasts.types';
 
 const AdminPodcasts: FC<AdminPodcastsPropsAndActions> = (props) => {
     const {
@@ -86,7 +90,4 @@ const AdminPodcasts: FC<AdminPodcastsPropsAndActions> = (props) => {
     );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AdminPodcasts);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPodcasts);

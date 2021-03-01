@@ -1,1 +1,1 @@
-export {default} from './Podcasts.component'
+export { default } from './Podcasts.component';
