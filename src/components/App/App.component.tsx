@@ -22,14 +22,14 @@ import {
     AdminPodcasts,
     AdminPostCreate,
     AdminPostEdit,
-    AdminVocabulary,
     AdminSitemap,
+    AdminVocabulary,
 } from 'components/Admin';
 import ScrollToTop from 'components/ScrollToTop';
 import Grammar from '../Grammar';
 import Vocabulary from '../Vocabulary';
 import Podcasts from '../Podcasts';
-import MiniSitemap from '../MiniSitemap';
+import Sitemap from '../Sitemap';
 
 export const App: FC = () => {
     return (
@@ -52,7 +52,7 @@ export const App: FC = () => {
                                 exact
                                 component={Podcasts}
                             />
-                            <Route path="/sitemap" exact component={MiniSitemap} />
+                            <Route path="/sitemap" exact component={Sitemap} />
                             <Route
                                 path="/vocabulary"
                                 exact
