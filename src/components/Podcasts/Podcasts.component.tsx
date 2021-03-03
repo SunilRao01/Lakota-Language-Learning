@@ -136,7 +136,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
 
     return (
         <div className="container">
-            <h1 className="title">Podcasts</h1>
+            <h1 className="title">Media</h1>
             {/*Toggle Podcasts Tabs*/}
             <div className="tabs is-toggle">
                 <ul>

@@ -28,12 +28,22 @@ defmodule LakotaEdApiWeb.Router do
     get "/posts", PostController, :posts
     get "/categories", PostController, :categories
     get "/tags", PostController, :tags
+    get "/sitemap", SitemapController, :show
+
+    resources "/lessons", LessonController, only: [:show, :index]
+    resources "/grammar", GrammarController, only: [:show, :index]
+    resources "/vocabulary", VocabController, only: [:show, :index]
+    resources "/podcasts", PodcastController, only: [:show, :index]
 
     pipe_through :secure_api
     resources "/post", PostController, only: [:create, :update, :delete]
-    resources "/lessons", LessonController, except: [:new, :edit]
-    resources "/grammar", GrammarController, except: [:new, :edit]
-    resources "/vocabulary", VocabController, except: [:new, :edit]
-    resources "/podcasts", PodcastController, except: [:new, :edit]
+    resources "/lessons", LessonController, only: [:create, :update, :delete]
+    resources "/grammar", GrammarController, only: [:create, :update, :delete]
+    resources "/vocabulary", VocabController, only: [:create, :update, :delete]
+    resources "/podcasts", PodcastController, only: [:create, :update, :delete]
+    resources "/sitemap", SitemapController, only: [:create, :update, :delete]
+
+    # allow updating of sitemap without passing ID in URL
+    resources "/sitemap", SitemapController, only: [:update], singleton: true
   end
 end

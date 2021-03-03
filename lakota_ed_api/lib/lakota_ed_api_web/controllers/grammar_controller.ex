@@ -6,6 +6,10 @@ defmodule LakotaEdApiWeb.GrammarController do
 
   action_fallback LakotaEdApiWeb.FallbackController
 
+  plug Guardian.Plug.EnsureAuthenticated when action in [:create, :delete, :update]
+  plug Guardian.Plug.VerifySession when action in [:create, :delete, :update]
+  plug Guardian.Plug.VerifyHeader when action in [:create, :delete, :update]
+
   def index(conn, _params) do
     grammar = Grammar.list_grammar()
     render(conn, "index.json", grammar: grammar)

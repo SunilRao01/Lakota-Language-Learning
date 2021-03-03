@@ -1,4 +1,4 @@
-import { Post } from './Posts.reducer';
+import { Post, Sitemap } from './Posts.reducer';
 
 export interface GetPosts {
     type: 'GET_POSTS';
@@ -55,6 +55,11 @@ export interface SetCurrentPost {
 
 export interface SetUpdatingPostLoading {
     type: 'SET_UPDATING_POST_LOADING';
+    payload: boolean;
+}
+
+export interface SetUpdatingSitemapLoading {
+    type: 'SET_UPDATING_SITEMAP_LOADING';
     payload: boolean;
 }
 
@@ -123,6 +128,11 @@ export interface DeletePodcast {
     payload: number;
 }
 
+export interface SetSitemap {
+    type: 'SET_SITEMAP';
+    payload: Sitemap;
+}
+
 export type PostActionTypes =
     | GetPosts
     | SetPosts
@@ -134,6 +144,7 @@ export type PostActionTypes =
     | ClearPosts
     | SetCurrentPost
     | SetUpdatingPostLoading
+    | SetUpdatingSitemapLoading
     | SetWordOfTheDayPosts
     | SetLessons
     | AddLesson
@@ -147,7 +158,8 @@ export type PostActionTypes =
     | DeleteVocab
     | SetPodcasts
     | AddPodcast
-    | DeletePodcast;
+    | DeletePodcast
+    | SetSitemap;
 
 export const getPosts = (): PostActionTypes => {
     return {
@@ -328,9 +340,23 @@ export const setUpdatingPostLoading = (status: boolean): PostActionTypes => {
     };
 };
 
+export const setUpdatingSitemapLoading = (status: boolean): PostActionTypes => {
+    return {
+        type: 'SET_UPDATING_SITEMAP_LOADING',
+        payload: status,
+    };
+};
+
 export const setPostLoading = (loading: boolean): PostActionTypes => {
     return {
         type: 'SET_POST_LOADING',
         payload: loading,
+    };
+};
+
+export const setSitemap = (sitemap: Sitemap): PostActionTypes => {
+    return {
+        type: 'SET_SITEMAP',
+        payload: sitemap,
     };
 };

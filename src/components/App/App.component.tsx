@@ -22,6 +22,7 @@ import {
     AdminPodcasts,
     AdminPostCreate,
     AdminPostEdit,
+    AdminSitemap,
     AdminVocabulary,
 } from 'components/Admin';
 import ScrollToTop from 'components/ScrollToTop';
@@ -107,6 +108,11 @@ export const App: FC = () => {
                                 path="/admin/podcasts"
                                 exact
                                 component={AdminPodcasts}
+                            />
+                            <Route
+                                path="/admin/sitemap"
+                                exact
+                                component={AdminSitemap}
                             />
                             <Redirect from="/admin" to="/admin/login" />
                         </Switch>

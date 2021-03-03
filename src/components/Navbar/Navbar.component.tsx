@@ -81,7 +81,7 @@ export const NavBar: FC = () => {
                         className="link navbar-item-hover"
                         onClick={() => setShowHamburger(false)}
                     >
-                        <div className="navbar-item">Podcasts</div>
+                        <div className="navbar-item">Media</div>
                     </Link>
 
                     <Link
