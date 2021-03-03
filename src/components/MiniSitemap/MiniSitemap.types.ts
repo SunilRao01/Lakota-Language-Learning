@@ -8,7 +8,7 @@ import {
 } from '../../redux/Posts/Posts.reducer';
 import { setPostLoading } from '../../redux/Posts/Posts.action';
 
-export interface SitemapProps {
+export interface MiniSitemapProps {
     lessons: { id: number; lesson: string }[];
     grammar: { id: number; grammar: string }[];
     vocabulary: { id: number; vocab: string }[];
@@ -16,7 +16,7 @@ export interface SitemapProps {
     postsLoading: boolean;
 }
 
-export interface SitemapActions {
+export interface MiniSitemapActions {
     getLessons: () => any;
     getGrammar: () => any;
     getVocabulary: () => any;
@@ -24,9 +24,9 @@ export interface SitemapActions {
     setPostLoading: (loading: boolean) => void;
 }
 
-export type SitemapPropsAndActions = SitemapProps & SitemapActions;
+export type MiniSitemapPropsAndActions = MiniSitemapProps & MiniSitemapActions;
 
-export const mapStateToProps = (state: RootState): SitemapProps => ({
+export const mapStateToProps = (state: RootState): MiniSitemapProps => ({
     grammar: state.postState.grammar,
     lessons: state.postState.lessons,
     podcasts: state.postState.podcasts,
@@ -36,7 +36,7 @@ export const mapStateToProps = (state: RootState): SitemapProps => ({
 
 export const mapDispatchToProps = (
     dispatch: ThunkDispatch<{}, {}, any>
-): SitemapActions => {
+): MiniSitemapActions => {
     return {
         getGrammar: async () => {
             return await dispatch(backendGetGrammar());

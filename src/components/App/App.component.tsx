@@ -29,7 +29,7 @@ import ScrollToTop from 'components/ScrollToTop';
 import Grammar from '../Grammar';
 import Vocabulary from '../Vocabulary';
 import Podcasts from '../Podcasts';
-import Sitemap from '../Sitemap';
+import MiniSitemap from '../MiniSitemap';
 
 export const App: FC = () => {
     return (
@@ -52,7 +52,7 @@ export const App: FC = () => {
                                 exact
                                 component={Podcasts}
                             />
-                            <Route path="/sitemap" exact component={Sitemap} />
+                            <Route path="/sitemap" exact component={MiniSitemap} />
                             <Route
                                 path="/vocabulary"
                                 exact

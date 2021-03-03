@@ -1,13 +1,10 @@
 import React, { FC, useCallback, useEffect } from 'react';
-import {
-    mapDispatchToProps,
-    mapStateToProps,
-    SitemapPropsAndActions,
-} from './Sitemap.types';
+import { mapDispatchToProps, mapStateToProps } from './MiniSitemap.types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { MiniSitemapPropsAndActions } from './MiniSitemap.types';
 
-export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
+export const MiniSitemap: FC<MiniSitemapPropsAndActions> = (props) => {
     const {
         getGrammar,
         getLessons,
@@ -118,4 +115,4 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
     );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sitemap);
+export default connect(mapStateToProps, mapDispatchToProps)(MiniSitemap);
