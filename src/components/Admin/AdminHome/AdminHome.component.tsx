@@ -53,7 +53,7 @@ const AdminHome: FC<AdminHomePropsWithActions> = (props) => {
                     Change Vocabulary
                 </Link>
                 <Link to={'/admin/podcasts'} className="button is-primary">
-                    Change Podcasts
+                    Change Media
                 </Link>
                 <Link to={'/admin/sitemap'} className="button is-primary">
                     Change Sitemap
