@@ -3,7 +3,6 @@ import {
     backendGetPost,
     backendGetSitemap,
     backendUpdateSitemap,
-    IQuiz,
     Sitemap,
 } from '../../../redux/Posts/Posts.reducer';
 import { RootState } from '../../../redux/store';
@@ -26,16 +25,6 @@ interface AdminSitemapActions {
 export type AdminSitemapComponentPropsWithActions = AdminSitemapActions &
     AdminSitemapProps &
     RouterProps;
-
-export interface PostUpdatePayload {
-    id: number;
-    postTitle: string;
-    postContent: string;
-    tags: string[];
-    categories: string[];
-    quizzes: IQuiz[];
-    podcastLink: string;
-}
 
 export const mapStateToProps = (state: RootState): AdminSitemapProps => {
     let newProps: AdminSitemapProps = {
