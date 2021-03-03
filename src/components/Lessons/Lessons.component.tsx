@@ -107,9 +107,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
     useEffect(() => {
         if (lessons.length > 0 && !selectedLesson.length) {
             if (!history.location.search) {
-                history.replace(
-                    `?category=${lessons[0].lesson}&page=1`
-                );
+                history.replace(`?category=${lessons[0].lesson}&page=1`);
             }
         }
     }, [currentPage, history, lessons, selectedLesson]);
@@ -139,7 +137,6 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
     return (
         <div className="container">
             <h1 className="title">Lessons</h1>
-
             {/*Toggle Lessons Tabs*/}
             <div className="tabs is-toggle">
                 <ul>
@@ -163,7 +160,8 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
                         </li>
                     ))}
                 </ul>
-            </div>            <hr />
+            </div>{' '}
+            <hr />
             {postsLoading && (
                 <progress className="progress is-small is-info" max="100">
                     50%
@@ -178,7 +176,6 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
                             <PostCard post={p} showPreviewOnly />
                         </div>
                     ))}
-
             <button
                 className="button is-info pagination-button"
                 disabled={disablePreviousPage}

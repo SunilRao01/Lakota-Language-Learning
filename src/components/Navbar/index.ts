@@ -1,1 +1,1 @@
-export {NavBar} from './Navbar.component'
+export { NavBar } from './Navbar.component';

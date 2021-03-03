@@ -1,7 +1,11 @@
-import {RouterProps} from "react-router";
-import {backendCreatePost, IQuiz, Post} from "../../../redux/Posts/Posts.reducer";
-import {RootState} from "../../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
+import { RouterProps } from 'react-router';
+import {
+    backendCreatePost,
+    IQuiz,
+    Post,
+} from '../../../redux/Posts/Posts.reducer';
+import { RootState } from '../../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
 
 interface AdminPostCreateProps {
     jwt: string;

@@ -20,6 +20,8 @@ import {
     setPodcasts,
     addPodcast,
     deletePodcast,
+    setSitemap,
+    setUpdatingSitemapLoading,
 } from './Posts.action';
 import axios, { AxiosResponse } from 'axios';
 import { AnyAction, Dispatch } from 'redux';
@@ -45,10 +47,17 @@ export interface Post {
     podcastLink?: string;
 }
 
+export interface Sitemap {
+    title: string;
+    content: string;
+}
+
 export interface PostState {
     posts: Post[];
     updatingPostLoading: boolean;
+    updatingSitemapLoading: boolean;
     currentPost?: Post;
+    sitemap?: Sitemap;
     lessons: { id: number; lesson: string }[];
     grammar: { id: number; grammar: string }[];
     vocabulary: { id: number; vocab: string }[];
@@ -62,6 +71,7 @@ export interface PostState {
 export const initialPostState: PostState = {
     posts: [],
     updatingPostLoading: false,
+    updatingSitemapLoading: false,
     lessons: [],
     grammar: [],
     vocabulary: [],
@@ -173,6 +183,20 @@ export const backendDeleteLesson = (
                 console.error(err);
                 Promise.reject(err);
             });
+    };
+};
+
+export const backendGetSitemap = (): ThunkAction<
+    Promise<any>,
+    RootState,
+    {},
+    AnyAction
+> => {
+    return async (dispatch: Dispatch) => {
+        return axios.get(`${apiUrl}/sitemap`).then((res: any) => {
+            dispatch(setSitemap(res.data.data));
+            return Promise.resolve(res.data.data);
+        });
     };
 };
 
@@ -550,6 +574,36 @@ export const backendUpdatePost = (
     };
 };
 
+export const backendUpdateSitemap = (
+    updatedSitemap: Sitemap,
+    jwt: string
+): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (dispatch: Dispatch) => {
+        dispatch(setUpdatingSitemapLoading(true));
+
+        axios
+            .patch(
+                `${apiUrl}/sitemap`,
+                {
+                    sitemap: updatedSitemap,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${jwt}`,
+                    },
+                }
+            )
+            .then(() => {
+                dispatch(setUpdatingSitemapLoading(false));
+                Promise.resolve();
+            })
+            .catch((err) => {
+                console.error(err);
+                Promise.reject(err);
+            });
+    };
+};
+
 export const backendGetPost = (
     postId: number
 ): ThunkAction<Promise<any>, {}, {}, AnyAction> => {
@@ -762,10 +816,22 @@ export const postReducer = (
                 updatingPostLoading: action.payload,
             };
         }
+        case 'SET_UPDATING_SITEMAP_LOADING': {
+            return {
+                ...state,
+                updatingSitemapLoading: action.payload,
+            };
+        }
         case 'SET_POST_LOADING': {
             return {
                 ...state,
                 loadingPosts: action.payload,
+            };
+        }
+        case 'SET_SITEMAP': {
+            return {
+                ...state,
+                sitemap: action.payload,
             };
         }
         default:

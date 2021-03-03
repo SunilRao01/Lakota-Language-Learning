@@ -55,7 +55,7 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
 
     useEffect(() => {
         if (post && post.content && viewerRef.current) {
-            viewerRef.current.getInstance().setMarkdown(post.content)
+            viewerRef.current.getInstance().setMarkdown(post.content);
         }
     }, [post, viewerRef]);
 

@@ -1,12 +1,12 @@
 import {
     backendGetGrammar,
     backendGetPostsByFilters,
-    Post
-} from "../../redux/Posts/Posts.reducer";
-import {RouteComponentProps} from "react-router";
-import {RootState} from "../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
-import {clearPosts, setPostLoading} from "../../redux/Posts/Posts.action";
+    Post,
+} from '../../redux/Posts/Posts.reducer';
+import { RouteComponentProps } from 'react-router';
+import { RootState } from '../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
+import { clearPosts, setPostLoading } from '../../redux/Posts/Posts.action';
 
 export interface GrammarProps {
     posts: Post[];
@@ -36,10 +36,9 @@ export const mapDispatchToProps = (
 ): GrammarActions => {
     return {
         getPostsForGrammar: async (grammar: string, pageNumber: number) => {
-            return await dispatch(backendGetPostsByFilters(
-                pageNumber,
-                [grammar]
-            ));
+            return await dispatch(
+                backendGetPostsByFilters(pageNumber, [grammar])
+            );
         },
         clearPosts: () => dispatch(clearPosts()),
         getGrammar: async () => {

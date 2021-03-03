@@ -1,6 +1,10 @@
 import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
-import {AdminLessonsPropsAndActions, mapDispatchToProps, mapStateToProps} from './AdminLessons.types';
+import {
+    AdminLessonsPropsAndActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './AdminLessons.types';
 
 const AdminLessons: FC<AdminLessonsPropsAndActions> = (props) => {
     const {
@@ -86,7 +90,4 @@ const AdminLessons: FC<AdminLessonsPropsAndActions> = (props) => {
     );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AdminLessons);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminLessons);

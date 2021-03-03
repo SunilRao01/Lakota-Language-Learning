@@ -2,7 +2,8 @@ import React, {
     ChangeEvent,
     FC,
     useCallback,
-    useEffect, useRef,
+    useEffect,
+    useRef,
     useState,
 } from 'react';
 import { IQuiz } from 'redux/Posts/Posts.reducer';
@@ -17,7 +18,7 @@ import {
     mapStateToProps,
     PostUpdatePayload,
 } from './AdminPostEdit.types';
-import styles from '../AdminPostCreate/AdminPostCreate.module.scss'
+import styles from '../AdminPostCreate/AdminPostCreate.module.scss';
 
 import 'codemirror/lib/codemirror.css';
 import '@toast-ui/editor/dist/toastui-editor.css';
@@ -83,7 +84,9 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
             });
 
             if (editorRef.current) {
-                editorRef.current.getInstance().setMarkdown(currentPost.content)
+                editorRef.current
+                    .getInstance()
+                    .setMarkdown(currentPost.content);
             }
         }
     }, [currentPost, history.location.pathname]);
@@ -116,13 +119,15 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                 <div className="field">
                     <label className="label">Content</label>
                     <div className="control">
-                        {currentPost.content && <Editor
-                            previewStyle="vertical"
-                            height="600px"
-                            initialEditType="wysiwyg"
-                            useCommandShortcut={true}
-                            ref={editorRef}
-                        />}
+                        {currentPost.content && (
+                            <Editor
+                                previewStyle="vertical"
+                                height="600px"
+                                initialEditType="wysiwyg"
+                                useCommandShortcut={true}
+                                ref={editorRef}
+                            />
+                        )}
                     </div>
                 </div>
 
@@ -329,7 +334,9 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
 
                         const updatePostPayload = {
                             ...updatedPost,
-                            postContent: editorRef.current.getInstance().getMarkdown(),
+                            postContent: editorRef.current
+                                .getInstance()
+                                .getMarkdown(),
                         };
 
                         await updatePost(
@@ -352,7 +359,9 @@ const AdminPostEdit: FC<AdminPostEditComponentPropsWithActions> = (props) => {
                 )}
 
                 {!updatePostLoading && showUpdateStatus && (
-                    <div className={`notification is-success ${styles.UpdateBanner}`}>
+                    <div
+                        className={`notification is-success ${styles.UpdateBanner}`}
+                    >
                         <button className="delete" />
                         Post Updated Successfully!
                     </div>

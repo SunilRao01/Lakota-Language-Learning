@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import {TagProps} from "./Tag.types";
-import styles from './Tag.module.scss'
+import { TagProps } from './Tag.types';
+import styles from './Tag.module.scss';
 
 export const Tag: FC<TagProps> = (props) => {
     const { onClick, text } = props;

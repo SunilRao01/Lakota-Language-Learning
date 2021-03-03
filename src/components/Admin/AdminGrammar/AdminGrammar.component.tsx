@@ -1,6 +1,10 @@
 import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
-import {AdminGrammarPropsAndActions, mapDispatchToProps, mapStateToProps} from './AdminGrammar.types';
+import {
+    AdminGrammarPropsAndActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './AdminGrammar.types';
 
 const AdminGrammar: FC<AdminGrammarPropsAndActions> = (props) => {
     const {
@@ -86,7 +90,4 @@ const AdminGrammar: FC<AdminGrammarPropsAndActions> = (props) => {
     );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AdminGrammar);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminGrammar);

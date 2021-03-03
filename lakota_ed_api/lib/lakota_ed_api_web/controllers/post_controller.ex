@@ -152,6 +152,7 @@ defmodule LakotaEdApiWeb.PostController do
     end
   end
 
+  # TODO: parse from post, not direct body_params
   def update(conn, %{"id" => id}, _) do
     bodyParams = conn.body_params
     newPost = Repo.get(Post, id)

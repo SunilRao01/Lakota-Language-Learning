@@ -6,6 +6,10 @@ defmodule LakotaEdApiWeb.VocabController do
 
   action_fallback LakotaEdApiWeb.FallbackController
 
+  plug Guardian.Plug.EnsureAuthenticated when action in [:create, :delete, :update]
+  plug Guardian.Plug.VerifySession when action in [:create, :delete, :update]
+  plug Guardian.Plug.VerifyHeader when action in [:create, :delete, :update]
+
   def index(conn, _params) do
     vocabulary = Vocabulary.list_vocabulary()
     render(conn, "index.json", vocabulary: vocabulary)

@@ -1,4 +1,4 @@
-import {Post} from "../../redux/Posts/Posts.reducer";
+import { Post } from '../../redux/Posts/Posts.reducer';
 
 export interface PostCardProps {
     post: Post;

@@ -1,1 +1,1 @@
-export {default} from './Lessons.component'
+export { default } from './Lessons.component';

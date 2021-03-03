@@ -74,9 +74,4 @@ export const AdminLogin: FC<AdminLoginPropsAndActions> = (props) => {
     );
 };
 
-
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AdminLogin);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminLogin);

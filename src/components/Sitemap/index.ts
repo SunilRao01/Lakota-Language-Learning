@@ -1,1 +1,1 @@
-export {default} from './Sitemap.component'
+export { default } from './Sitemap.component';

@@ -1,7 +1,10 @@
-import {RootState} from "../../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
-import {backendLogin, backendVerifySession} from "../../../redux/Admin/Admin.reducer";
-import {setJwt} from "../../../redux/Admin/Admin.action";
+import { RootState } from '../../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
+import {
+    backendLogin,
+    backendVerifySession,
+} from '../../../redux/Admin/Admin.reducer';
+import { setJwt } from '../../../redux/Admin/Admin.action';
 
 interface AdminLoginProps {
     jwt: string;

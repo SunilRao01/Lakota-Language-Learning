@@ -39,10 +39,9 @@ export const mapDispatchToProps = (
 ): LessonsActions => {
     return {
         getPostsForLesson: async (lesson: string, pageNumber: number) => {
-            return await dispatch(backendGetPostsByFilters(
-                pageNumber,
-                [lesson]
-            ));
+            return await dispatch(
+                backendGetPostsByFilters(pageNumber, [lesson])
+            );
         },
         getLessons: async () => {
             return await dispatch(apiGetLessons());

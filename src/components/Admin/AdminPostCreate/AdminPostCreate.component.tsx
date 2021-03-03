@@ -1,4 +1,4 @@
-import React, {ChangeEvent, createRef, FC, useState} from 'react';
+import React, { ChangeEvent, createRef, FC, useState } from 'react';
 import { IQuiz } from 'redux/Posts/Posts.reducer';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -262,7 +262,9 @@ const AdminPostCreate: FC<AdminPostCreateComponentPropsWithActions> = (
                     setShowUpdateStatus(false);
 
                     let newPost = updatedPost;
-                    newPost.postContent = editorRef.current.getInstance().getMarkdown();
+                    newPost.postContent = editorRef.current
+                        .getInstance()
+                        .getMarkdown();
 
                     await createPost(newPost, jwt);
                     setShowUpdateStatus(true);

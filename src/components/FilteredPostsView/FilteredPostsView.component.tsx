@@ -5,7 +5,11 @@ import qs from 'query-string';
 import { Tag } from 'components/Tag/Tag.component';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import { Link } from 'react-router-dom';
-import {FilteredPostsViewPropsAndActions, mapDispatchToProps, mapStateToProps} from "./FilteredPostsView.types";
+import {
+    FilteredPostsViewPropsAndActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './FilteredPostsView.types';
 
 export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
     props
@@ -189,7 +193,4 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
     );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(FilteredPostsView);
+export default connect(mapStateToProps, mapDispatchToProps)(FilteredPostsView);

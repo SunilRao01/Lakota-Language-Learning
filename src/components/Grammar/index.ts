@@ -1,1 +1,1 @@
-export {default} from './Grammar.component'
+export { default } from './Grammar.component';

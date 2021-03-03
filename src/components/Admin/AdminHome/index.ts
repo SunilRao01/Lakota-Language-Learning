@@ -1,1 +1,1 @@
-export { default } from './AdminHome.component'
+export { default } from './AdminHome.component';

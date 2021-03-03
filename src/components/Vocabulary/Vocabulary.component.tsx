@@ -31,8 +31,8 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
         if (history.location.search && categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
                 ? history.location.search.indexOf('&') -
-                history.location.search.indexOf('=') -
-                1
+                  history.location.search.indexOf('=') -
+                  1
                 : undefined;
             return history.location.search.substr(
                 categorySearchIndex,
@@ -107,9 +107,7 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     useEffect(() => {
         if (vocabulary.length > 0 && !selectedVocab.length) {
             if (!history.location.search) {
-                history.replace(
-                    `?category=${vocabulary[0].vocab}&page=1`
-                );
+                history.replace(`?category=${vocabulary[0].vocab}&page=1`);
             }
         }
     }, [currentPage, history, vocabulary, selectedVocab]);
@@ -139,7 +137,6 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     return (
         <div className="container">
             <h1 className="title">Vocabulary</h1>
-
             {/*Toggle Vocabulary Tabs*/}
             <div className="tabs is-toggle">
                 <ul>
@@ -163,22 +160,22 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
                         </li>
                     ))}
                 </ul>
-            </div>            <hr />
+            </div>{' '}
+            <hr />
             {postsLoading && (
                 <progress className="progress is-small is-info" max="100">
                     50%
                 </progress>
             )}
             {!postsLoading &&
-            selectedVocab &&
-            posts
-                .filter((p) => p.categories.includes(selectedVocab))
-                .map((p, i) => (
-                    <div key={i}>
-                        <PostCard post={p} showPreviewOnly />
-                    </div>
-                ))}
-
+                selectedVocab &&
+                posts
+                    .filter((p) => p.categories.includes(selectedVocab))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
             <button
                 className="button is-info pagination-button"
                 disabled={disablePreviousPage}

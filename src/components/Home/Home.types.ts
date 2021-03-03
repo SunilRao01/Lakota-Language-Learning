@@ -3,12 +3,12 @@ import {
     apiGetPosts,
     backendGetTags,
     backendGetWordOfTheDayPosts,
-    Post
-} from "../../redux/Posts/Posts.reducer";
-import {RootState} from "../../redux/store";
-import {ThunkDispatch} from "redux-thunk";
-import {setPostLoading} from "../../redux/Posts/Posts.action";
-import {RouteComponentProps} from "react-router";
+    Post,
+} from '../../redux/Posts/Posts.reducer';
+import { RootState } from '../../redux/store';
+import { ThunkDispatch } from 'redux-thunk';
+import { setPostLoading } from '../../redux/Posts/Posts.action';
+import { RouteComponentProps } from 'react-router';
 
 interface HomeActions {
     getPosts: (pageNumber: number) => Promise<any>;
@@ -26,7 +26,9 @@ interface HomeProps {
     postsLoading: boolean;
 }
 
-export type HomePropsWithActions = HomeProps & HomeActions & RouteComponentProps;
+export type HomePropsWithActions = HomeProps &
+    HomeActions &
+    RouteComponentProps;
 
 export const mapStateToProps = (state: RootState): HomeProps => ({
     posts: state.postState.posts,

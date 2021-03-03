@@ -1,6 +1,10 @@
 import React, { ChangeEvent, FC, useCallback, useEffect } from 'react';
 import { connect } from 'react-redux';
-import {AdminPodcastsPropsAndActions, mapDispatchToProps, mapStateToProps} from './AdminPodcasts.types';
+import {
+    AdminPodcastsPropsAndActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './AdminPodcasts.types';
 
 const AdminPodcasts: FC<AdminPodcastsPropsAndActions> = (props) => {
     const {
@@ -29,7 +33,7 @@ const AdminPodcasts: FC<AdminPodcastsPropsAndActions> = (props) => {
 
     return (
         <div>
-            <h3 className="title is-3">Podcasts:</h3>
+            <h3 className="title is-3">Media:</h3>
             <div className="tags">
                 {postsLoading && (
                     <progress className="progress is-small is-info" max="100">
@@ -74,7 +78,7 @@ const AdminPodcasts: FC<AdminPodcastsPropsAndActions> = (props) => {
                                 }
                             }}
                         >
-                            <option>Add a Podcast</option>
+                            <option>Add a Media</option>
                             {categories.map((c, index) => (
                                 <option key={index}>{c}</option>
                             ))}
@@ -86,7 +90,4 @@ const AdminPodcasts: FC<AdminPodcastsPropsAndActions> = (props) => {
     );
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AdminPodcasts);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPodcasts);

@@ -12,10 +12,16 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
     const getQuizStatus = () => {
         switch (quizState) {
             case 0:
-                return <div className={`error-message ${styles.ErrorMessage}`}>{quiz.errorMessage}</div>;
+                return (
+                    <div className={`error-message ${styles.ErrorMessage}`}>
+                        {quiz.errorMessage}
+                    </div>
+                );
             case 1:
                 return (
-                    <div className={`success-message ${styles.SuccessMessage}`}>{quiz.successMessage}</div>
+                    <div className={`success-message ${styles.SuccessMessage}`}>
+                        {quiz.successMessage}
+                    </div>
                 );
             default:
                 break;
@@ -40,7 +46,11 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
             >
                 <div className="card">
                     <header className="card-header">
-                        <p className={`card-header-title ${styles.CardHeaderTitle}`}>{quiz.question}</p>
+                        <p
+                            className={`card-header-title ${styles.CardHeaderTitle}`}
+                        >
+                            {quiz.question}
+                        </p>
                         {onCross && (
                             <button
                                 className={`button is-danger ${styles.QuizCard_cross}`}
@@ -61,16 +71,15 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
                                             return (
                                                 <Fragment key={index}>
                                                     <label
-
-                                                        className={styles.QuizCard_radio}
+                                                        className={
+                                                            styles.QuizCard_radio
+                                                        }
                                                     >
                                                         <input
                                                             type="radio"
                                                             name="quiz-answer"
                                                             onChange={(
-                                                                e: ChangeEvent<
-                                                                    HTMLInputElement
-                                                                >
+                                                                e: ChangeEvent<HTMLInputElement>
                                                             ) => {
                                                                 setSelectedAnswer(
                                                                     e.target
@@ -78,14 +87,22 @@ export const QuizCard: FC<QuizCardProps> = (props) => {
                                                                 );
                                                             }}
                                                             value={pa}
-                                                            className={styles.QuizCard_radioInput}
+                                                            className={
+                                                                styles.QuizCard_radioInput
+                                                            }
                                                         />
                                                         {pa}
                                                     </label>
                                                     {index !==
                                                         quiz.possibleAnswers
                                                             .length -
-                                                            1 && <hr className={styles.QuizCard_break} />}
+                                                            1 && (
+                                                        <hr
+                                                            className={
+                                                                styles.QuizCard_break
+                                                            }
+                                                        />
+                                                    )}
                                                 </Fragment>
                                             );
                                         }

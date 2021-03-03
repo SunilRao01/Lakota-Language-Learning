@@ -5,7 +5,7 @@ import {
 } from '../../../redux/Posts/Posts.reducer';
 import { RootState } from '../../../redux/store';
 import { ThunkDispatch } from 'redux-thunk';
-import {RouteComponentProps} from "react-router";
+import { RouteComponentProps } from 'react-router';
 
 interface AdminHomeActions {
     getPosts: (pageNum: number) => void;
@@ -17,7 +17,9 @@ interface AdminHomeProps {
     jwt: string;
 }
 
-export type AdminHomePropsWithActions = AdminHomeProps & AdminHomeActions & RouteComponentProps;
+export type AdminHomePropsWithActions = AdminHomeProps &
+    AdminHomeActions &
+    RouteComponentProps;
 
 export const mapStateToProps = (state: RootState): AdminHomeProps => ({
     posts: state.postState.posts,
