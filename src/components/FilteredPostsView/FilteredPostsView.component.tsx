@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { connect } from 'react-redux';
 import { Post } from 'redux/Posts/Posts.reducer';
 import qs from 'query-string';
@@ -24,56 +24,77 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
         setPostLoading,
     } = props;
 
+    const [selectedCategoryFilters, setSelectedCategoryFilters] = useState<string[]>([])
+    const [selectedTagFilters, setSelectedTagFilters] = useState<string[]>([])
     const [currentPage, setCurrentPage] = useState(1);
-    const [categoryFilters, setCategoryFilters] = useState<string[]>([]);
-    const [tagFilters, setTagFilters] = useState<string[]>([]);
 
     const fetchData = useCallback(async () => {
         setPostLoading(true);
         clearPosts();
-        await getPostsByFilter(currentPage, categoryFilters, tagFilters);
+        await getPostsByFilter(currentPage, selectedCategoryFilters, selectedTagFilters);
         setPostLoading(false);
     }, [
-        categoryFilters,
+        selectedCategoryFilters,
         clearPosts,
         currentPage,
         getPostsByFilter,
         setPostLoading,
-        tagFilters,
+        selectedTagFilters,
     ]);
 
+    // Memoized value of tags parsed from the URL
+    // const tagsFromurl = useMemo<string[] | undefined>(() => {
+    //     const queryStrings = qs.parse(history.location.search);
+    //
+    //     let tags: any = queryStrings['tag'];
+    //     if (tags) {
+    //         if (typeof tags === 'string' && tags.length > 0) {
+    //             return [tags]
+    //         } else if (Array.isArray(tags)) {
+    //             return tags;
+    //         }
+    //     }
+    //
+    //     return undefined;
+    // }, [history.location.search])
+    //
+    // // Memoized value of categories parsed from the URL
+    // const categoriesFromUrl = useMemo<string[] | undefined>(() => {
+    //     const queryStrings = qs.parse(history.location.search);
+    //
+    //     let tags: any = queryStrings['tag'];
+    //     if (tags) {
+    //         if (typeof tags === 'string' && tags.length > 0) {
+    //             return [tags]
+    //         } else if (Array.isArray(tags)) {
+    //             return tags;
+    //         }
+    //     }
+    //
+    //     return undefined;
+    // }, [history.location.search])
+    //
+    // // Memoized value of page parsed from the URL
+    // const pageFromUrl = useMemo<number | undefined>(() => {
+    //     const pageSearchIndex = history.location.search.indexOf('page') + 5;
+    //     if (pageSearchIndex) {
+    //         const page = history.location.search.substr(pageSearchIndex);
+    //         return +page;
+    //     }
+    //
+    //     return undefined;
+    // }, [history.location.search]);
+
     useEffect(() => {
-        const queryStrings = qs.parse(location.search);
-
-        let tags: any = queryStrings['tag'];
-        if (tags) {
-            if (typeof tags === 'string' && tags.length > 0) {
-                setTagFilters([tags]);
-            } else if (Array.isArray(tags)) {
-                setTagFilters(tags);
-            }
-        }
-
-        let categories: any = queryStrings['category'];
-        if (categories) {
-            if (typeof categories === 'string' && categories.length > 0) {
-                setCategoryFilters([categories]);
-            } else if (Array.isArray(categories)) {
-                setCategoryFilters(categories);
-            }
-        }
-    }, [location.search]); // Call hook when any filter url query params change
-
-    useEffect(() => {
-        if (categoryFilters.length > 0 || tagFilters.length > 0) {
+        if (selectedTagFilters.length > 0 || selectedTagFilters.length > 0) {
             fetchData();
         }
-    }, [categoryFilters.length, fetchData, tagFilters.length]);
+    }, [selectedCategoryFilters.length, fetchData, selectedTagFilters.length]);
 
     const addTagFilter = (tag: string) => {
-        if (!tagFilters.includes(tag)) {
-            const newTagFilters = [...tagFilters, tag];
-            setTagFilters(newTagFilters);
+        if (!selectedTagFilters.includes(tag)) {
+            const newTagFilters = [...selectedTagFilters, tag];
+            setSelectedTagFilters(newTagFilters);
 
             const newUrl = `${location.pathname}${location.search}&tag=${tag}`;
 
@@ -82,9 +103,9 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
     };
 
     const addCategoryFilter = (category: string) => {
-        if (!categoryFilters.includes(category)) {
-            const newCategoryFilters = [...categoryFilters, category];
-            setCategoryFilters(newCategoryFilters);
+        if (!selectedCategoryFilters.includes(category)) {
+            const newCategoryFilters = [...selectedCategoryFilters, category];
+            setSelectedCategoryFilters(newCategoryFilters);
 
             const newUrl = `${location.pathname}${location.search}&category=${category}`;
 
@@ -92,17 +113,43 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
         }
     };
 
+    // TODO:
+    const onNextPage = useCallback(() => {
+        if (posts.length !== 0) {
+            setCurrentPage(currentPage + 1);
+
+            history.push({
+                search: `?category=${selectedCategoryFilters.length ? : ''}&page=${currentPage + 1}`,
+            });
+        }
+    }, [currentPage, history, posts.length, selectedGrammar]);
+    const onPreviousPage = useCallback(() => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+
+            history.push({
+                search: `?category=${selectedGrammar}&page=${currentPage - 1}`,
+            });
+        }
+    }, [currentPage, history, selectedGrammar]);
+
+    const disableNextPage = useMemo(
+      () => posts.length === 0 || posts.length < 5,
+      [posts]
+    );
+    const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
+
     return (
         <div className="container">
             <div>
                 <div className="is-size-3 title">Tags:</div>
                 {
                     <div className="tags are-large">
-                        {!tagFilters || tagFilters.length === 0 ? (
+                        {!selectedTagFilters || selectedTagFilters.length === 0 ? (
                             <div>No Tag Filters</div>
                         ) : (
-                            tagFilters.map((_, i: number) => (
-                                <Tag key={i} text={tagFilters[i]} />
+                            selectedTagFilters.map((_, i: number) => (
+                                <Tag key={i} text={selectedTagFilters[i]} />
                             ))
                         )}
                     </div>
@@ -111,16 +158,16 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
                 <div className="is-size-3 title">Categories:</div>
                 {
                     <div className="tags are-large">
-                        {!categoryFilters || categoryFilters.length === 0 ? (
+                        {!selectedCategoryFilters || selectedCategoryFilters.length === 0 ? (
                             <div>No Category Filters</div>
                         ) : (
-                            categoryFilters.map((c: string, i: number) => (
+                            selectedCategoryFilters.map((c: string, i: number) => (
                                 <div key={i}>
                                     <Link
                                         to={`/posts?categories=${c}`}
                                     >{`${c}`}</Link>
                                     {`${
-                                        i < categoryFilters.length - 1
+                                        i < selectedCategoryFilters.length - 1
                                             ? `, `
                                             : ``
                                     }`}
@@ -161,8 +208,8 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
 
                             getPostsByFilter(
                                 currentPage - 1,
-                                categoryFilters,
-                                tagFilters
+                                selectedCategoryFilters,
+                                selectedTagFilters
                             );
                         }
                     }}
@@ -180,8 +227,8 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
 
                             getPostsByFilter(
                                 currentPage + 1,
-                                categoryFilters,
-                                tagFilters
+                                selectedCategoryFilters,
+                                selectedTagFilters
                             );
                         }
                     }}
