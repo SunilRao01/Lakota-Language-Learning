@@ -90,6 +90,8 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
 
     useEffect(() => {}, [currentPage]);
 
+    // TODO: Figure out why this function is being called twice, when navigating to it
+    //  from somewhere (e.g. clicking on a category on the home page)
     useEffect(() => {
         const getPostsForCategoriesAndTags = async (
             categories: string[],
