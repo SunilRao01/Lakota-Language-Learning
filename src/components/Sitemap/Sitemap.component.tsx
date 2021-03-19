@@ -6,7 +6,7 @@ import {
 } from './Sitemap.types';
 import { connect } from 'react-redux';
 import { Viewer } from '@toast-ui/react-editor';
-import styles from './Sitemap.module.scss'
+import styles from './Sitemap.module.scss';
 
 export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
     const { getSitemap, sitemap } = props;
@@ -42,7 +42,11 @@ export const Sitemap: FC<SitemapPropsAndActions> = (props) => {
             )}
 
             <>
-                {sitemap && sitemap.title && <h1 className={`title ${styles.SitemapTitle}`}>{sitemap.title}</h1>}
+                {sitemap && sitemap.title && (
+                    <h1 className={`title ${styles.SitemapTitle}`}>
+                        {sitemap.title}
+                    </h1>
+                )}
                 {!sitemapLoading && sitemap && <Viewer ref={viewerRef} />}
             </>
         </div>

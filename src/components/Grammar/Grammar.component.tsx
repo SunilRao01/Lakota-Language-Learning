@@ -130,7 +130,6 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
             setPostLoading(false);
         };
 
-        // history.replace(`?category=${selectedGrammar}&page=${currentPage}`);
         selectedGrammar && getPostsForSelectedGrammar(selectedGrammar);
     }, [currentPage, getPostsForGrammar, selectedGrammar, setPostLoading]);
 
