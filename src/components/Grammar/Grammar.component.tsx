@@ -114,7 +114,7 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
 
     // Updates selected grammar from URL whenever a change is occurred
     useEffect(() => {
-        grammarFromUrl && setSelectedGrammar(grammarFromUrl);
+        grammarFromUrl && setSelectedGrammar(decodeURI(grammarFromUrl));
     }, [grammarFromUrl]);
 
     // Updates selected grammar from URL whenever a change is occurred

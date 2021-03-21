@@ -114,7 +114,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
 
     // Updates selected lesson from URL whenever a change is occurred
     useEffect(() => {
-        lessonFromUrl && setSelectedLesson(lessonFromUrl);
+        lessonFromUrl && setSelectedLesson(decodeURI(lessonFromUrl));
     }, [lessonFromUrl]);
 
     // Updates selected lesson from URL whenever a change is occurred
