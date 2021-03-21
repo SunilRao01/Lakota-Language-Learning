@@ -114,7 +114,7 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
 
     // Updates selected vocab from URL whenever a change is occurred
     useEffect(() => {
-        vocabFromUrl && setSelectedVocab(vocabFromUrl);
+        vocabFromUrl && setSelectedVocab(decodeURI(vocabFromUrl));
     }, [vocabFromUrl]);
 
     // Updates selected vocab from URL whenever a change is occurred

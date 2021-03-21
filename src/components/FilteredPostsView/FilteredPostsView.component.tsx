@@ -164,8 +164,8 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
             }
         }
 
-        return searchQuery
-    }, [selectedTagFilters, selectedCategoryFilters])
+        return searchQuery;
+    }, [selectedTagFilters, selectedCategoryFilters]);
 
     const onNextPage = useCallback(() => {
         if (posts.length !== 0) {
