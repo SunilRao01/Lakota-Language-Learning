@@ -9,7 +9,6 @@ import {
 } from './Podcasts.types';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
-import { ChevronDownSvg, ChevronUpSvg } from '../../assets';
 
 const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     const {
@@ -24,21 +23,20 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
 
     const [selectedPodcast, setSelectedPodcast] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [checkboxOpen, setCheckboxOpen] = useState(false);
 
     // Memoized value of podcast parsed from the URL
     const podcastFromUrl = useMemo<string | undefined>(() => {
         const categorySearchIndex =
-            history.location.search.indexOf('category') + 9;
+          history.location.search.indexOf('category') + 9;
         if (history.location.search && categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
-                ? history.location.search.indexOf('&') -
-                  history.location.search.indexOf('=') -
-                  1
-                : undefined;
+              ? history.location.search.indexOf('&') -
+              history.location.search.indexOf('=') -
+              1
+              : undefined;
             return history.location.search.substr(
-                categorySearchIndex,
-                endSearchIndex
+              categorySearchIndex,
+              endSearchIndex
             );
         }
 
@@ -65,14 +63,14 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     }, [setPostLoading, getPodcasts]);
 
     const onPodcastSelection = useCallback(
-        (podcast: any) => {
-            setSelectedPodcast(podcast.podcast);
+      (podcast: any) => {
+          setSelectedPodcast(podcast.podcast);
 
-            history.push({
-                search: `?category=${podcast.podcast}&page=1`,
-            });
-        },
-        [history]
+          history.push({
+              search: `?category=${podcast.podcast}&page=1`,
+          });
+      },
+      [history]
     );
 
     const onNextPage = useCallback(() => {
@@ -95,8 +93,8 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     }, [currentPage, history, selectedPodcast]);
 
     const disableNextPage = useMemo(
-        () => posts.length === 0 || posts.length < 5,
-        [posts]
+      () => posts.length === 0 || posts.length < 5,
+      [posts]
     );
     const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
 
@@ -116,7 +114,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
 
     // Updates selected podcast from URL whenever a change is occurred
     useEffect(() => {
-        podcastFromUrl && setSelectedPodcast(decodeURI(podcastFromUrl));
+        podcastFromUrl && setSelectedPodcast(podcastFromUrl);
     }, [podcastFromUrl]);
 
     // Updates selected podcast from URL whenever a change is occurred
@@ -137,93 +135,66 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     }, [currentPage, getPostsForPodcast, selectedPodcast, setPostLoading]);
 
     return (
-        <div className="container">
-            <h1 className="title">Media</h1>
-            <div>
-                <div
-                    className={`dropdown ${checkboxOpen ? 'is-active' : ''}`}
-                    onClick={() => {
-                        setCheckboxOpen(!checkboxOpen);
-                    }}
-                >
-                    <div className="dropdown-trigger">
-                        <button
-                            className="button"
-                            aria-haspopup="true"
-                            aria-controls="dropdown-menu"
-                        >
-                            <span>{selectedPodcast}</span>
-                            <span className="icon is-small">
-                                {checkboxOpen ? (
-                                    <img src={ChevronUpSvg} alt="up arrow" />
-                                ) : (
-                                    <img
-                                        src={ChevronDownSvg}
-                                        alt="down arrow"
-                                    />
-                                )}
-                            </span>
-                        </button>
-                    </div>
-                    <div
-                        className="dropdown-menu"
-                        id="dropdown-menu"
-                        role="menu"
+      <div className="container">
+          <h1 className="title">Media</h1>
+          {/*Toggle Podcasts Tabs*/}
+          <div className="tabs is-toggle">
+              <ul>
+                  {podcasts.map((podcast, i) => (
+                    <li
+                      className={
+                          selectedPodcast === podcast.podcast
+                            ? 'is-active'
+                            : undefined
+                      }
+                      key={i}
+                      onClick={() => {
+                          onPodcastSelection(podcast);
+                      }}
                     >
-                        <div className="dropdown-content">
-                            {podcasts
-                                .sort((a, b) =>
-                                    a.podcast.localeCompare(b.podcast)
-                                )
-                                .map((podcast, i) => (
-                                    <a
-                                        key={i}
-                                        className="dropdown-item"
-                                        onClick={() => {
-                                            onPodcastSelection(podcast);
-                                        }}
-                                    >
-                                        {podcast.podcast}
-                                    </a>
-                                ))}
-                        </div>
-                    </div>
-                </div>
-            </div>{' '}
-            <hr />
-            {postsLoading && (
-                <progress className="progress is-small is-info" max="100">
-                    50%
-                </progress>
-            )}
-            {!postsLoading &&
-                selectedPodcast &&
-                posts
-                    .filter((p) => p.categories.includes(selectedPodcast))
-                    .map((p, i) => (
-                        <div key={i}>
-                            <PostCard post={p} showPreviewOnly />
-                        </div>
-                    ))}
-            <button
-                className="button is-info pagination-button"
-                disabled={disablePreviousPage}
-                onClick={onPreviousPage}
-            >
-                Previous Page
-            </button>
-            <button
-                className="button is-info pagination-button"
-                disabled={disableNextPage}
-                onClick={onNextPage}
-            >
-                Next Page
-            </button>
-        </div>
+                        {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
+                        {/* being used just for convenience, breaking the required contract for accessibility*/}
+                        <a>
+                            <span>{podcast.podcast}</span>
+                        </a>
+                    </li>
+                  ))}
+              </ul>
+          </div>{' '}
+          <hr />
+          {postsLoading && (
+            <progress className="progress is-small is-info" max="100">
+                50%
+            </progress>
+          )}
+          {!postsLoading &&
+          selectedPodcast &&
+          posts
+            .filter((p) => p.categories.includes(selectedPodcast))
+            .map((p, i) => (
+              <div key={i}>
+                  <PostCard post={p} showPreviewOnly />
+              </div>
+            ))}
+          <button
+            className="button is-info pagination-button"
+            disabled={disablePreviousPage}
+            onClick={onPreviousPage}
+          >
+              Previous Page
+          </button>
+          <button
+            className="button is-info pagination-button"
+            disabled={disableNextPage}
+            onClick={onNextPage}
+          >
+              Next Page
+          </button>
+      </div>
     );
 };
 
 export default compose<React.ComponentType<PodcastsPropsAndActions>>(
-    withRouter,
-    connect(mapStateToProps, mapDispatchToProps)
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
 )(Podcasts);

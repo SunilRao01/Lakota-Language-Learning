@@ -9,7 +9,6 @@ import {
 } from './Lessons.types';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
-import { ChevronDownSvg, ChevronUpSvg } from '../../assets';
 
 const Lessons: FC<LessonsPropsAndActions> = (props) => {
     const {
@@ -24,21 +23,20 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
 
     const [selectedLesson, setSelectedLesson] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [checkboxOpen, setCheckboxOpen] = useState(false);
 
     // Memoized value of lesson parsed from the URL
     const lessonFromUrl = useMemo<string | undefined>(() => {
         const categorySearchIndex =
-            history.location.search.indexOf('category') + 9;
+          history.location.search.indexOf('category') + 9;
         if (history.location.search && categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
-                ? history.location.search.indexOf('&') -
-                  history.location.search.indexOf('=') -
-                  1
-                : undefined;
+              ? history.location.search.indexOf('&') -
+              history.location.search.indexOf('=') -
+              1
+              : undefined;
             return history.location.search.substr(
-                categorySearchIndex,
-                endSearchIndex
+              categorySearchIndex,
+              endSearchIndex
             );
         }
 
@@ -65,14 +63,14 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
     }, [setPostLoading, getLessons]);
 
     const onLessonSelection = useCallback(
-        (lesson: any) => {
-            setSelectedLesson(lesson.lesson);
+      (lesson: any) => {
+          setSelectedLesson(lesson.lesson);
 
-            history.push({
-                search: `?category=${lesson.lesson}&page=1`,
-            });
-        },
-        [history]
+          history.push({
+              search: `?category=${lesson.lesson}&page=1`,
+          });
+      },
+      [history]
     );
 
     const onNextPage = useCallback(() => {
@@ -95,8 +93,8 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
     }, [currentPage, history, selectedLesson]);
 
     const disableNextPage = useMemo(
-        () => posts.length === 0 || posts.length < 5,
-        [posts]
+      () => posts.length === 0 || posts.length < 5,
+      [posts]
     );
     const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
 
@@ -116,7 +114,7 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
 
     // Updates selected lesson from URL whenever a change is occurred
     useEffect(() => {
-        lessonFromUrl && setSelectedLesson(decodeURI(lessonFromUrl));
+        lessonFromUrl && setSelectedLesson(lessonFromUrl);
     }, [lessonFromUrl]);
 
     // Updates selected lesson from URL whenever a change is occurred
@@ -137,93 +135,66 @@ const Lessons: FC<LessonsPropsAndActions> = (props) => {
     }, [currentPage, getPostsForLesson, selectedLesson, setPostLoading]);
 
     return (
-        <div className="container">
-            <h1 className="title">Lessons</h1>
-            <div>
-                <div
-                    className={`dropdown ${checkboxOpen ? 'is-active' : ''}`}
-                    onClick={() => {
-                        setCheckboxOpen(!checkboxOpen);
-                    }}
-                >
-                    <div className="dropdown-trigger">
-                        <button
-                            className="button"
-                            aria-haspopup="true"
-                            aria-controls="dropdown-menu"
-                        >
-                            <span>{selectedLesson}</span>
-                            <span className="icon is-small">
-                                {checkboxOpen ? (
-                                    <img src={ChevronUpSvg} alt="up arrow" />
-                                ) : (
-                                    <img
-                                        src={ChevronDownSvg}
-                                        alt="down arrow"
-                                    />
-                                )}
-                            </span>
-                        </button>
-                    </div>
-                    <div
-                        className="dropdown-menu"
-                        id="dropdown-menu"
-                        role="menu"
+      <div className="container">
+          <h1 className="title">Lessons</h1>
+          {/*Toggle Lessons Tabs*/}
+          <div className="tabs is-toggle">
+              <ul>
+                  {lessons.map((lesson, i) => (
+                    <li
+                      className={
+                          selectedLesson === lesson.lesson
+                            ? 'is-active'
+                            : undefined
+                      }
+                      key={i}
+                      onClick={() => {
+                          onLessonSelection(lesson);
+                      }}
                     >
-                        <div className="dropdown-content">
-                            {lessons
-                                .sort((a, b) =>
-                                    a.lesson.localeCompare(b.lesson)
-                                )
-                                .map((lesson, i) => (
-                                    <a
-                                        key={i}
-                                        className="dropdown-item"
-                                        onClick={() => {
-                                            onLessonSelection(lesson);
-                                        }}
-                                    >
-                                        {lesson.lesson}
-                                    </a>
-                                ))}
-                        </div>
-                    </div>
-                </div>
-            </div>{' '}
-            <hr />
-            {postsLoading && (
-                <progress className="progress is-small is-info" max="100">
-                    50%
-                </progress>
-            )}
-            {!postsLoading &&
-                selectedLesson &&
-                posts
-                    .filter((p) => p.categories.includes(selectedLesson))
-                    .map((p, i) => (
-                        <div key={i}>
-                            <PostCard post={p} showPreviewOnly />
-                        </div>
-                    ))}
-            <button
-                className="button is-info pagination-button"
-                disabled={disablePreviousPage}
-                onClick={onPreviousPage}
-            >
-                Previous Page
-            </button>
-            <button
-                className="button is-info pagination-button"
-                disabled={disableNextPage}
-                onClick={onNextPage}
-            >
-                Next Page
-            </button>
-        </div>
+                        {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
+                        {/* being used just for convenience, breaking the required contract for accessibility*/}
+                        <a>
+                            <span>{lesson.lesson}</span>
+                        </a>
+                    </li>
+                  ))}
+              </ul>
+          </div>{' '}
+          <hr />
+          {postsLoading && (
+            <progress className="progress is-small is-info" max="100">
+                50%
+            </progress>
+          )}
+          {!postsLoading &&
+          selectedLesson &&
+          posts
+            .filter((p) => p.categories.includes(selectedLesson))
+            .map((p, i) => (
+              <div key={i}>
+                  <PostCard post={p} showPreviewOnly />
+              </div>
+            ))}
+          <button
+            className="button is-info pagination-button"
+            disabled={disablePreviousPage}
+            onClick={onPreviousPage}
+          >
+              Previous Page
+          </button>
+          <button
+            className="button is-info pagination-button"
+            disabled={disableNextPage}
+            onClick={onNextPage}
+          >
+              Next Page
+          </button>
+      </div>
     );
 };
 
 export default compose<React.ComponentType<LessonsPropsAndActions>>(
-    withRouter,
-    connect(mapStateToProps, mapDispatchToProps)
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
 )(Lessons);
