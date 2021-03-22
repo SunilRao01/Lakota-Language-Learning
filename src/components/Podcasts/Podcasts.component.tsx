@@ -114,7 +114,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
 
     // Updates selected podcast from URL whenever a change is occurred
     useEffect(() => {
-        podcastFromUrl && setSelectedPodcast(podcastFromUrl);
+        podcastFromUrl && setSelectedPodcast(decodeURI(podcastFromUrl));
     }, [podcastFromUrl]);
 
     // Updates selected podcast from URL whenever a change is occurred
