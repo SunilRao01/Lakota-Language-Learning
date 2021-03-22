@@ -87,7 +87,7 @@ export const PostCard: FC<PostCardProps> = (props) => {
                                                     ) : (
                                                         <Link
                                                             className="is-size-7"
-                                                            to={`/posts?category=${c}`}
+                                                            to={`/posts?category=${c}&page=1`}
                                                         >{`${c}`}</Link>
                                                     )}
                                                     {`${

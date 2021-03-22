@@ -27,7 +27,7 @@ export const Tag: FC<TagProps> = (props) => {
             ) : (
                 <Link
                     className="button is-info is-small"
-                    to={`/posts?tag=${text}`}
+                    to={`/posts?tag=${text}&page=1`}
                 >
                     {text}
                 </Link>

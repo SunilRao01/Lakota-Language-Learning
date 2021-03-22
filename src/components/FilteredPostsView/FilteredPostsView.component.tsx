@@ -169,8 +169,6 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
 
     const onNextPage = useCallback(() => {
         if (posts.length !== 0) {
-            // setCurrentPage(currentPage + 1);
-
             history.push({
                 search: `${parsedUrlFromFilters}&page=${currentPage + 1}`,
             });
@@ -179,8 +177,6 @@ export const FilteredPostsView: FC<FilteredPostsViewPropsAndActions> = (
 
     const onPreviousPage = useCallback(() => {
         if (currentPage > 1) {
-            // setCurrentPage(currentPage - 1);
-
             history.push({
                 search: `${parsedUrlFromFilters}&page=${currentPage - 1}`,
             });
