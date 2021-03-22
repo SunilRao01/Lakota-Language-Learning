@@ -25,6 +25,8 @@ $card-header-padding: 0.75rem 0.75rem;
 $tabs-toggle-link-active-background-color: $info;
 $tabs-toggle-link-active-border-color: $info;
 
+$dropdown-menu-min-width: 1rem;
+
 @import '~bulma/bulma.sass';
 
 /*
@@ -50,6 +52,11 @@ $tabs-toggle-link-active-border-color: $info;
 
 .pagination-button {
     margin: 10px;
+}
+
+.dropdown-content {
+    max-height: 16em;
+    overflow: auto;
 }
 
 // TUI Editor View Overrides

@@ -9,6 +9,7 @@ import {
 } from './Vocabulary.types';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
+import { ChevronDownSvg, ChevronUpSvg } from '../../assets';
 
 const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     const {
@@ -23,6 +24,7 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
 
     const [selectedVocab, setSelectedVocab] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [checkboxOpen, setCheckboxOpen] = useState(false);
 
     // Memoized value of vocab parsed from the URL
     const vocabFromUrl = useMemo<string | undefined>(() => {
@@ -137,29 +139,54 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     return (
         <div className="container">
             <h1 className="title">Vocabulary</h1>
-            {/*Toggle Vocabulary Tabs*/}
-            <div className="tabs is-toggle">
-                <ul>
-                    {vocabulary.map((vocab, i) => (
-                        <li
-                            className={
-                                selectedVocab === vocab.vocab
-                                    ? 'is-active'
-                                    : undefined
-                            }
-                            key={i}
-                            onClick={() => {
-                                onVocabSelection(vocab);
-                            }}
+            <div>
+                <div
+                    className={`dropdown ${checkboxOpen ? 'is-active' : ''}`}
+                    onClick={() => {
+                        setCheckboxOpen(!checkboxOpen);
+                    }}
+                >
+                    <div className="dropdown-trigger">
+                        <button
+                            className="button"
+                            aria-haspopup="true"
+                            aria-controls="dropdown-menu"
                         >
-                            {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
-                            {/* being used just for convenience, breaking the required contract for accessibility*/}
-                            <a>
-                                <span>{vocab.vocab}</span>
-                            </a>
-                        </li>
-                    ))}
-                </ul>
+                            <span>{selectedVocab}</span>
+                            <span className="icon is-small">
+                                {checkboxOpen ? (
+                                    <img src={ChevronUpSvg} alt="up arrow" />
+                                ) : (
+                                    <img
+                                        src={ChevronDownSvg}
+                                        alt="down arrow"
+                                    />
+                                )}
+                            </span>
+                        </button>
+                    </div>
+                    <div
+                        className="dropdown-menu"
+                        id="dropdown-menu"
+                        role="menu"
+                    >
+                        <div className="dropdown-content">
+                            {vocabulary
+                                .sort((a, b) => a.vocab.localeCompare(b.vocab))
+                                .map((vocab, i) => (
+                                    <a
+                                        key={i}
+                                        className="dropdown-item"
+                                        onClick={() => {
+                                            onVocabSelection(vocab);
+                                        }}
+                                    >
+                                        {vocab.vocab}
+                                    </a>
+                                ))}
+                        </div>
+                    </div>
+                </div>
             </div>{' '}
             <hr />
             {postsLoading && (

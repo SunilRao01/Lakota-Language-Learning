@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { FC, useCallback, useEffect, useState, useMemo } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { PostCard } from 'components/PostCard/PostCard.component';
 import {
@@ -9,6 +9,7 @@ import {
 } from './Grammar.types';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
+import { ChevronDownSvg, ChevronUpSvg } from '../../assets';
 
 const Grammar: FC<GrammarPropsAndActions> = (props) => {
     const {
@@ -23,6 +24,7 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
 
     const [selectedGrammar, setSelectedGrammar] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [checkboxOpen, setCheckboxOpen] = useState(false);
 
     // Memoized value of grammar parsed from the URL
     const grammarFromUrl = useMemo<string | undefined>(() => {
@@ -136,29 +138,56 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     return (
         <div className="container">
             <h1 className="title">Grammar</h1>
-            {/*Toggle Grammar Tabs*/}
-            <div className="tabs is-toggle">
-                <ul>
-                    {grammar.map((grammar, i) => (
-                        <li
-                            className={
-                                selectedGrammar === grammar.grammar
-                                    ? 'is-active'
-                                    : undefined
-                            }
-                            key={i}
-                            onClick={() => {
-                                onGrammarSelection(grammar);
-                            }}
+            <div>
+                <div
+                    className={`dropdown ${checkboxOpen ? 'is-active' : ''}`}
+                    onClick={() => {
+                        setCheckboxOpen(!checkboxOpen);
+                    }}
+                >
+                    <div className="dropdown-trigger">
+                        <button
+                            className="button"
+                            aria-haspopup="true"
+                            aria-controls="dropdown-menu"
                         >
-                            {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
-                            {/* being used just for convenience, breaking the required contract for accessibility*/}
-                            <a>
-                                <span>{grammar.grammar}</span>
-                            </a>
-                        </li>
-                    ))}
-                </ul>
+                            <span>{selectedGrammar}</span>
+                            <span className="icon is-small">
+                                {checkboxOpen ? (
+                                    <img src={ChevronUpSvg} alt="up arrow" />
+                                ) : (
+                                    <img
+                                        src={ChevronDownSvg}
+                                        alt="down arrow"
+                                    />
+                                )}
+                            </span>
+                        </button>
+                    </div>
+                    <div
+                        className="dropdown-menu"
+                        id="dropdown-menu"
+                        role="menu"
+                    >
+                        <div className="dropdown-content">
+                            {grammar
+                                .sort((a, b) =>
+                                    a.grammar.localeCompare(b.grammar)
+                                )
+                                .map((grammar, i) => (
+                                    <a
+                                        key={i}
+                                        className="dropdown-item"
+                                        onClick={() => {
+                                            onGrammarSelection(grammar);
+                                        }}
+                                    >
+                                        {grammar.grammar}
+                                    </a>
+                                ))}
+                        </div>
+                    </div>
+                </div>
             </div>{' '}
             <hr />
             {postsLoading && (
