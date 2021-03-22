@@ -161,7 +161,7 @@ const Home: FC<HomePropsWithActions> = (props) => {
                                                 key={i}
                                             >
                                                 <Link
-                                                    to={`/posts?category=${c}`}
+                                                    to={`/posts?category=${c}&page=1`}
                                                 >{`${c}`}</Link>
                                                 {`${
                                                     i < categories.length - 1
