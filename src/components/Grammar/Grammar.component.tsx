@@ -27,16 +27,16 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     // Memoized value of grammar parsed from the URL
     const grammarFromUrl = useMemo<string | undefined>(() => {
         const categorySearchIndex =
-          history.location.search.indexOf('category') + 9;
+            history.location.search.indexOf('category') + 9;
         if (categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
-              ? history.location.search.indexOf('&') -
-              history.location.search.indexOf('=') -
-              1
-              : undefined;
+                ? history.location.search.indexOf('&') -
+                  history.location.search.indexOf('=') -
+                  1
+                : undefined;
             return history.location.search.substr(
-              categorySearchIndex,
-              endSearchIndex
+                categorySearchIndex,
+                endSearchIndex
             );
         }
 
@@ -63,14 +63,14 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     }, [setPostLoading, getGrammar]);
 
     const onGrammarSelection = useCallback(
-      (grammar: any) => {
-          setSelectedGrammar(grammar.grammar);
+        (grammar: any) => {
+            setSelectedGrammar(grammar.grammar);
 
-          history.push({
-              search: `?category=${grammar.grammar}&page=1`,
-          });
-      },
-      [history]
+            history.push({
+                search: `?category=${grammar.grammar}&page=1`,
+            });
+        },
+        [history]
     );
 
     const onNextPage = useCallback(() => {
@@ -93,8 +93,8 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     }, [currentPage, history, selectedGrammar]);
 
     const disableNextPage = useMemo(
-      () => posts.length === 0 || posts.length < 5,
-      [posts]
+        () => posts.length === 0 || posts.length < 5,
+        [posts]
     );
     const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
 
@@ -134,66 +134,66 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     }, [currentPage, getPostsForGrammar, selectedGrammar, setPostLoading]);
 
     return (
-      <div className="container">
-          <h1 className="title">Grammar</h1>
-          {/*Toggle Grammar Tabs*/}
-          <div className="tabs is-toggle">
-              <ul>
-                  {grammar.map((grammar, i) => (
-                    <li
-                      className={
-                          selectedGrammar === grammar.grammar
-                            ? 'is-active'
-                            : undefined
-                      }
-                      key={i}
-                      onClick={() => {
-                          onGrammarSelection(grammar);
-                      }}
-                    >
-                        {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
-                        {/* being used just for convenience, breaking the required contract for accessibility*/}
-                        <a>
-                            <span>{grammar.grammar}</span>
-                        </a>
-                    </li>
-                  ))}
-              </ul>
-          </div>{' '}
-          <hr />
-          {postsLoading && (
-            <progress className="progress is-small is-info" max="100">
-                50%
-            </progress>
-          )}
-          {!postsLoading &&
-          selectedGrammar &&
-          posts
-            .filter((p) => p.categories.includes(selectedGrammar))
-            .map((p, i) => (
-              <div key={i}>
-                  <PostCard post={p} showPreviewOnly />
-              </div>
-            ))}
-          <button
-            className="button is-info pagination-button"
-            disabled={disablePreviousPage}
-            onClick={onPreviousPage}
-          >
-              Previous Page
-          </button>
-          <button
-            className="button is-info pagination-button"
-            disabled={disableNextPage}
-            onClick={onNextPage}
-          >
-              Next Page
-          </button>
-      </div>
+        <div className="container">
+            <h1 className="title">Grammar</h1>
+            {/*Toggle Grammar Tabs*/}
+            <div className="tabs is-toggle">
+                <ul>
+                    {grammar.map((grammar, i) => (
+                        <li
+                            className={
+                                selectedGrammar === grammar.grammar
+                                    ? 'is-active'
+                                    : undefined
+                            }
+                            key={i}
+                            onClick={() => {
+                                onGrammarSelection(grammar);
+                            }}
+                        >
+                            {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
+                            {/* being used just for convenience, breaking the required contract for accessibility*/}
+                            <a>
+                                <span>{grammar.grammar}</span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>{' '}
+            <hr />
+            {postsLoading && (
+                <progress className="progress is-small is-info" max="100">
+                    50%
+                </progress>
+            )}
+            {!postsLoading &&
+                selectedGrammar &&
+                posts
+                    .filter((p) => p.categories.includes(selectedGrammar))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
+            <button
+                className="button is-info pagination-button"
+                disabled={disablePreviousPage}
+                onClick={onPreviousPage}
+            >
+                Previous Page
+            </button>
+            <button
+                className="button is-info pagination-button"
+                disabled={disableNextPage}
+                onClick={onNextPage}
+            >
+                Next Page
+            </button>
+        </div>
     );
 };
 
 export default compose<React.ComponentType<GrammarPropsAndActions>>(
-  withRouter,
-  connect(mapStateToProps, mapDispatchToProps)
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
 )(Grammar);

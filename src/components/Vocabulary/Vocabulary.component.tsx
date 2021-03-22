@@ -27,16 +27,16 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     // Memoized value of vocab parsed from the URL
     const vocabFromUrl = useMemo<string | undefined>(() => {
         const categorySearchIndex =
-          history.location.search.indexOf('category') + 9;
+            history.location.search.indexOf('category') + 9;
         if (history.location.search && categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
-              ? history.location.search.indexOf('&') -
-              history.location.search.indexOf('=') -
-              1
-              : undefined;
+                ? history.location.search.indexOf('&') -
+                  history.location.search.indexOf('=') -
+                  1
+                : undefined;
             return history.location.search.substr(
-              categorySearchIndex,
-              endSearchIndex
+                categorySearchIndex,
+                endSearchIndex
             );
         }
 
@@ -63,14 +63,14 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     }, [setPostLoading, getVocabulary]);
 
     const onVocabSelection = useCallback(
-      (vocab: any) => {
-          setSelectedVocab(vocab.vocab);
+        (vocab: any) => {
+            setSelectedVocab(vocab.vocab);
 
-          history.push({
-              search: `?category=${vocab.vocab}&page=1`,
-          });
-      },
-      [history]
+            history.push({
+                search: `?category=${vocab.vocab}&page=1`,
+            });
+        },
+        [history]
     );
 
     const onNextPage = useCallback(() => {
@@ -93,8 +93,8 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     }, [currentPage, history, selectedVocab]);
 
     const disableNextPage = useMemo(
-      () => posts.length === 0 || posts.length < 5,
-      [posts]
+        () => posts.length === 0 || posts.length < 5,
+        [posts]
     );
     const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
 
@@ -135,66 +135,66 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     }, [currentPage, getPostsForVocab, selectedVocab, setPostLoading]);
 
     return (
-      <div className="container">
-          <h1 className="title">Vocabulary</h1>
-          {/*Toggle Vocabulary Tabs*/}
-          <div className="tabs is-toggle">
-              <ul>
-                  {vocabulary.map((vocab, i) => (
-                    <li
-                      className={
-                          selectedVocab === vocab.vocab
-                            ? 'is-active'
-                            : undefined
-                      }
-                      key={i}
-                      onClick={() => {
-                          onVocabSelection(vocab);
-                      }}
-                    >
-                        {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
-                        {/* being used just for convenience, breaking the required contract for accessibility*/}
-                        <a>
-                            <span>{vocab.vocab}</span>
-                        </a>
-                    </li>
-                  ))}
-              </ul>
-          </div>{' '}
-          <hr />
-          {postsLoading && (
-            <progress className="progress is-small is-info" max="100">
-                50%
-            </progress>
-          )}
-          {!postsLoading &&
-          selectedVocab &&
-          posts
-            .filter((p) => p.categories.includes(selectedVocab))
-            .map((p, i) => (
-              <div key={i}>
-                  <PostCard post={p} showPreviewOnly />
-              </div>
-            ))}
-          <button
-            className="button is-info pagination-button"
-            disabled={disablePreviousPage}
-            onClick={onPreviousPage}
-          >
-              Previous Page
-          </button>
-          <button
-            className="button is-info pagination-button"
-            disabled={disableNextPage}
-            onClick={onNextPage}
-          >
-              Next Page
-          </button>
-      </div>
+        <div className="container">
+            <h1 className="title">Vocabulary</h1>
+            {/*Toggle Vocabulary Tabs*/}
+            <div className="tabs is-toggle">
+                <ul>
+                    {vocabulary.map((vocab, i) => (
+                        <li
+                            className={
+                                selectedVocab === vocab.vocab
+                                    ? 'is-active'
+                                    : undefined
+                            }
+                            key={i}
+                            onClick={() => {
+                                onVocabSelection(vocab);
+                            }}
+                        >
+                            {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
+                            {/* being used just for convenience, breaking the required contract for accessibility*/}
+                            <a>
+                                <span>{vocab.vocab}</span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>{' '}
+            <hr />
+            {postsLoading && (
+                <progress className="progress is-small is-info" max="100">
+                    50%
+                </progress>
+            )}
+            {!postsLoading &&
+                selectedVocab &&
+                posts
+                    .filter((p) => p.categories.includes(selectedVocab))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
+            <button
+                className="button is-info pagination-button"
+                disabled={disablePreviousPage}
+                onClick={onPreviousPage}
+            >
+                Previous Page
+            </button>
+            <button
+                className="button is-info pagination-button"
+                disabled={disableNextPage}
+                onClick={onNextPage}
+            >
+                Next Page
+            </button>
+        </div>
     );
 };
 
 export default compose<React.ComponentType<VocabularyPropsAndActions>>(
-  withRouter,
-  connect(mapStateToProps, mapDispatchToProps)
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
 )(Vocabulary);

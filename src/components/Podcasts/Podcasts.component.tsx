@@ -27,16 +27,16 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     // Memoized value of podcast parsed from the URL
     const podcastFromUrl = useMemo<string | undefined>(() => {
         const categorySearchIndex =
-          history.location.search.indexOf('category') + 9;
+            history.location.search.indexOf('category') + 9;
         if (history.location.search && categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
-              ? history.location.search.indexOf('&') -
-              history.location.search.indexOf('=') -
-              1
-              : undefined;
+                ? history.location.search.indexOf('&') -
+                  history.location.search.indexOf('=') -
+                  1
+                : undefined;
             return history.location.search.substr(
-              categorySearchIndex,
-              endSearchIndex
+                categorySearchIndex,
+                endSearchIndex
             );
         }
 
@@ -63,14 +63,14 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     }, [setPostLoading, getPodcasts]);
 
     const onPodcastSelection = useCallback(
-      (podcast: any) => {
-          setSelectedPodcast(podcast.podcast);
+        (podcast: any) => {
+            setSelectedPodcast(podcast.podcast);
 
-          history.push({
-              search: `?category=${podcast.podcast}&page=1`,
-          });
-      },
-      [history]
+            history.push({
+                search: `?category=${podcast.podcast}&page=1`,
+            });
+        },
+        [history]
     );
 
     const onNextPage = useCallback(() => {
@@ -93,8 +93,8 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     }, [currentPage, history, selectedPodcast]);
 
     const disableNextPage = useMemo(
-      () => posts.length === 0 || posts.length < 5,
-      [posts]
+        () => posts.length === 0 || posts.length < 5,
+        [posts]
     );
     const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
 
@@ -135,66 +135,66 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     }, [currentPage, getPostsForPodcast, selectedPodcast, setPostLoading]);
 
     return (
-      <div className="container">
-          <h1 className="title">Media</h1>
-          {/*Toggle Podcasts Tabs*/}
-          <div className="tabs is-toggle">
-              <ul>
-                  {podcasts.map((podcast, i) => (
-                    <li
-                      className={
-                          selectedPodcast === podcast.podcast
-                            ? 'is-active'
-                            : undefined
-                      }
-                      key={i}
-                      onClick={() => {
-                          onPodcastSelection(podcast);
-                      }}
-                    >
-                        {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
-                        {/* being used just for convenience, breaking the required contract for accessibility*/}
-                        <a>
-                            <span>{podcast.podcast}</span>
-                        </a>
-                    </li>
-                  ))}
-              </ul>
-          </div>{' '}
-          <hr />
-          {postsLoading && (
-            <progress className="progress is-small is-info" max="100">
-                50%
-            </progress>
-          )}
-          {!postsLoading &&
-          selectedPodcast &&
-          posts
-            .filter((p) => p.categories.includes(selectedPodcast))
-            .map((p, i) => (
-              <div key={i}>
-                  <PostCard post={p} showPreviewOnly />
-              </div>
-            ))}
-          <button
-            className="button is-info pagination-button"
-            disabled={disablePreviousPage}
-            onClick={onPreviousPage}
-          >
-              Previous Page
-          </button>
-          <button
-            className="button is-info pagination-button"
-            disabled={disableNextPage}
-            onClick={onNextPage}
-          >
-              Next Page
-          </button>
-      </div>
+        <div className="container">
+            <h1 className="title">Media</h1>
+            {/*Toggle Podcasts Tabs*/}
+            <div className="tabs is-toggle">
+                <ul>
+                    {podcasts.map((podcast, i) => (
+                        <li
+                            className={
+                                selectedPodcast === podcast.podcast
+                                    ? 'is-active'
+                                    : undefined
+                            }
+                            key={i}
+                            onClick={() => {
+                                onPodcastSelection(podcast);
+                            }}
+                        >
+                            {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
+                            {/* being used just for convenience, breaking the required contract for accessibility*/}
+                            <a>
+                                <span>{podcast.podcast}</span>
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>{' '}
+            <hr />
+            {postsLoading && (
+                <progress className="progress is-small is-info" max="100">
+                    50%
+                </progress>
+            )}
+            {!postsLoading &&
+                selectedPodcast &&
+                posts
+                    .filter((p) => p.categories.includes(selectedPodcast))
+                    .map((p, i) => (
+                        <div key={i}>
+                            <PostCard post={p} showPreviewOnly />
+                        </div>
+                    ))}
+            <button
+                className="button is-info pagination-button"
+                disabled={disablePreviousPage}
+                onClick={onPreviousPage}
+            >
+                Previous Page
+            </button>
+            <button
+                className="button is-info pagination-button"
+                disabled={disableNextPage}
+                onClick={onNextPage}
+            >
+                Next Page
+            </button>
+        </div>
     );
 };
 
 export default compose<React.ComponentType<PodcastsPropsAndActions>>(
-  withRouter,
-  connect(mapStateToProps, mapDispatchToProps)
+    withRouter,
+    connect(mapStateToProps, mapDispatchToProps)
 )(Podcasts);
