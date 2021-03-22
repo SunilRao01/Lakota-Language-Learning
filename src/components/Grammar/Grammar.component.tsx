@@ -1,11 +1,15 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { connect } from "react-redux";
-import { PostCard } from "components/PostCard/PostCard.component";
-import { GrammarPropsAndActions, mapDispatchToProps, mapStateToProps } from "./Grammar.types";
-import { withRouter } from "react-router-dom";
-import { compose } from "redux";
-import { ChevronDownSvg, ChevronUpSvg } from "../../assets";
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { connect } from 'react-redux';
+import { PostCard } from 'components/PostCard/PostCard.component';
+import {
+    GrammarPropsAndActions,
+    mapDispatchToProps,
+    mapStateToProps,
+} from './Grammar.types';
+import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
+import { ChevronDownSvg, ChevronUpSvg } from '../../assets';
 
 const Grammar: FC<GrammarPropsAndActions> = (props) => {
     const {
@@ -134,8 +138,7 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
     return (
         <div className="container">
             <h1 className="title">Grammar</h1>
-            {/*Toggle Grammar Tabs*/}
-            <div className="">
+            <div>
                 <div
                     className={`dropdown ${checkboxOpen ? 'is-active' : ''}`}
                     onClick={() => {
@@ -152,7 +155,12 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
                             <span className="icon is-small">
                                 {checkboxOpen ? (
                                     <img src={ChevronUpSvg} alt="up arrow" />
-                                ) : <img src={ChevronDownSvg} alt="down arrow" />}
+                                ) : (
+                                    <img
+                                        src={ChevronDownSvg}
+                                        alt="down arrow"
+                                    />
+                                )}
                             </span>
                         </button>
                     </div>
@@ -163,14 +171,20 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
                     >
                         <div className="dropdown-content">
                             {grammar
-                              .sort((a, b) => a.grammar.localeCompare(b.grammar))
-                              .map((grammar, i) => (
-                              <a key={i} className='dropdown-item' onClick={() => {
-                                  onGrammarSelection(grammar)
-                              }}>
-                                  {grammar.grammar}
-                              </a>
-                            ))}
+                                .sort((a, b) =>
+                                    a.grammar.localeCompare(b.grammar)
+                                )
+                                .map((grammar, i) => (
+                                    <a
+                                        key={i}
+                                        className="dropdown-item"
+                                        onClick={() => {
+                                            onGrammarSelection(grammar);
+                                        }}
+                                    >
+                                        {grammar.grammar}
+                                    </a>
+                                ))}
                         </div>
                     </div>
                 </div>

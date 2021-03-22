@@ -9,6 +9,7 @@ import {
 } from './Podcasts.types';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
+import { ChevronDownSvg, ChevronUpSvg } from '../../assets';
 
 const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     const {
@@ -23,6 +24,7 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
 
     const [selectedPodcast, setSelectedPodcast] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
+    const [checkboxOpen, setCheckboxOpen] = useState(false);
 
     // Memoized value of podcast parsed from the URL
     const podcastFromUrl = useMemo<string | undefined>(() => {
@@ -137,29 +139,56 @@ const Podcasts: FC<PodcastsPropsAndActions> = (props) => {
     return (
         <div className="container">
             <h1 className="title">Media</h1>
-            {/*Toggle Podcasts Tabs*/}
-            <div className="tabs is-toggle">
-                <ul>
-                    {podcasts.map((podcast, i) => (
-                        <li
-                            className={
-                                selectedPodcast === podcast.podcast
-                                    ? 'is-active'
-                                    : undefined
-                            }
-                            key={i}
-                            onClick={() => {
-                                onPodcastSelection(podcast);
-                            }}
+            <div>
+                <div
+                    className={`dropdown ${checkboxOpen ? 'is-active' : ''}`}
+                    onClick={() => {
+                        setCheckboxOpen(!checkboxOpen);
+                    }}
+                >
+                    <div className="dropdown-trigger">
+                        <button
+                            className="button"
+                            aria-haspopup="true"
+                            aria-controls="dropdown-menu"
                         >
-                            {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
-                            {/* being used just for convenience, breaking the required contract for accessibility*/}
-                            <a>
-                                <span>{podcast.podcast}</span>
-                            </a>
-                        </li>
-                    ))}
-                </ul>
+                            <span>{selectedPodcast}</span>
+                            <span className="icon is-small">
+                                {checkboxOpen ? (
+                                    <img src={ChevronUpSvg} alt="up arrow" />
+                                ) : (
+                                    <img
+                                        src={ChevronDownSvg}
+                                        alt="down arrow"
+                                    />
+                                )}
+                            </span>
+                        </button>
+                    </div>
+                    <div
+                        className="dropdown-menu"
+                        id="dropdown-menu"
+                        role="menu"
+                    >
+                        <div className="dropdown-content">
+                            {podcasts
+                                .sort((a, b) =>
+                                    a.podcast.localeCompare(b.podcast)
+                                )
+                                .map((podcast, i) => (
+                                    <a
+                                        key={i}
+                                        className="dropdown-item"
+                                        onClick={() => {
+                                            onPodcastSelection(podcast);
+                                        }}
+                                    >
+                                        {podcast.podcast}
+                                    </a>
+                                ))}
+                        </div>
+                    </div>
+                </div>
             </div>{' '}
             <hr />
             {postsLoading && (
