@@ -59,22 +59,10 @@ $dropdown-menu-min-width: 1rem;
     overflow: auto;
 }
 
-@media screen and (max-width: 768px)  {
-    .tabs.is-toggle ul {
-        flex-direction: column;
-        li {
-            width: 100%;
-            &:not(:last-child) a {
-                border-bottom-color: transparent;
-            }
-            &:first-child a {
-                border-radius: 4px 4px 0 0;
-            }
-            &:last-child a {
-                border-radius: 0 0 4px 4px;
-            }
-        }
-    }
+.tabs ul {
+    flex-shrink: 1;
+    flex-wrap: wrap;
+    border-bottom-color: transparent;
 }
 
 // TUI Editor View Overrides
