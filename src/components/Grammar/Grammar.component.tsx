@@ -162,7 +162,9 @@ const Grammar: FC<GrammarPropsAndActions> = (props) => {
                         role="menu"
                     >
                         <div className="dropdown-content">
-                            {grammar.map((grammar, i) => (
+                            {grammar
+                              .sort((a, b) => a.grammar.localeCompare(b.grammar))
+                              .map((grammar, i) => (
                               <a key={i} className='dropdown-item' onClick={() => {
                                   onGrammarSelection(grammar)
                               }}>
