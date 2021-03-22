@@ -9,7 +9,6 @@ import {
 } from './Vocabulary.types';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
-import { ChevronDownSvg, ChevronUpSvg } from '../../assets';
 
 const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     const {
@@ -24,21 +23,20 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
 
     const [selectedVocab, setSelectedVocab] = useState<string>('');
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [checkboxOpen, setCheckboxOpen] = useState(false);
 
     // Memoized value of vocab parsed from the URL
     const vocabFromUrl = useMemo<string | undefined>(() => {
         const categorySearchIndex =
-            history.location.search.indexOf('category') + 9;
+          history.location.search.indexOf('category') + 9;
         if (history.location.search && categorySearchIndex) {
             const endSearchIndex = history.location.search.indexOf('&')
-                ? history.location.search.indexOf('&') -
-                  history.location.search.indexOf('=') -
-                  1
-                : undefined;
+              ? history.location.search.indexOf('&') -
+              history.location.search.indexOf('=') -
+              1
+              : undefined;
             return history.location.search.substr(
-                categorySearchIndex,
-                endSearchIndex
+              categorySearchIndex,
+              endSearchIndex
             );
         }
 
@@ -65,14 +63,14 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     }, [setPostLoading, getVocabulary]);
 
     const onVocabSelection = useCallback(
-        (vocab: any) => {
-            setSelectedVocab(vocab.vocab);
+      (vocab: any) => {
+          setSelectedVocab(vocab.vocab);
 
-            history.push({
-                search: `?category=${vocab.vocab}&page=1`,
-            });
-        },
-        [history]
+          history.push({
+              search: `?category=${vocab.vocab}&page=1`,
+          });
+      },
+      [history]
     );
 
     const onNextPage = useCallback(() => {
@@ -95,8 +93,8 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     }, [currentPage, history, selectedVocab]);
 
     const disableNextPage = useMemo(
-        () => posts.length === 0 || posts.length < 5,
-        [posts]
+      () => posts.length === 0 || posts.length < 5,
+      [posts]
     );
     const disablePreviousPage = useMemo(() => currentPage === 1, [currentPage]);
 
@@ -116,7 +114,7 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
 
     // Updates selected vocab from URL whenever a change is occurred
     useEffect(() => {
-        vocabFromUrl && setSelectedVocab(decodeURI(vocabFromUrl));
+        vocabFromUrl && setSelectedVocab(vocabFromUrl);
     }, [vocabFromUrl]);
 
     // Updates selected vocab from URL whenever a change is occurred
@@ -137,91 +135,66 @@ const Vocabulary: FC<VocabularyPropsAndActions> = (props) => {
     }, [currentPage, getPostsForVocab, selectedVocab, setPostLoading]);
 
     return (
-        <div className="container">
-            <h1 className="title">Vocabulary</h1>
-            <div>
-                <div
-                    className={`dropdown ${checkboxOpen ? 'is-active' : ''}`}
-                    onClick={() => {
-                        setCheckboxOpen(!checkboxOpen);
-                    }}
-                >
-                    <div className="dropdown-trigger">
-                        <button
-                            className="button"
-                            aria-haspopup="true"
-                            aria-controls="dropdown-menu"
-                        >
-                            <span>{selectedVocab}</span>
-                            <span className="icon is-small">
-                                {checkboxOpen ? (
-                                    <img src={ChevronUpSvg} alt="up arrow" />
-                                ) : (
-                                    <img
-                                        src={ChevronDownSvg}
-                                        alt="down arrow"
-                                    />
-                                )}
-                            </span>
-                        </button>
-                    </div>
-                    <div
-                        className="dropdown-menu"
-                        id="dropdown-menu"
-                        role="menu"
+      <div className="container">
+          <h1 className="title">Vocabulary</h1>
+          {/*Toggle Vocabulary Tabs*/}
+          <div className="tabs is-toggle">
+              <ul>
+                  {vocabulary.map((vocab, i) => (
+                    <li
+                      className={
+                          selectedVocab === vocab.vocab
+                            ? 'is-active'
+                            : undefined
+                      }
+                      key={i}
+                      onClick={() => {
+                          onVocabSelection(vocab);
+                      }}
                     >
-                        <div className="dropdown-content">
-                            {vocabulary
-                                .sort((a, b) => a.vocab.localeCompare(b.vocab))
-                                .map((vocab, i) => (
-                                    <a
-                                        key={i}
-                                        className="dropdown-item"
-                                        onClick={() => {
-                                            onVocabSelection(vocab);
-                                        }}
-                                    >
-                                        {vocab.vocab}
-                                    </a>
-                                ))}
-                        </div>
-                    </div>
-                </div>
-            </div>{' '}
-            <hr />
-            {postsLoading && (
-                <progress className="progress is-small is-info" max="100">
-                    50%
-                </progress>
-            )}
-            {!postsLoading &&
-                selectedVocab &&
-                posts
-                    .filter((p) => p.categories.includes(selectedVocab))
-                    .map((p, i) => (
-                        <div key={i}>
-                            <PostCard post={p} showPreviewOnly />
-                        </div>
-                    ))}
-            <button
-                className="button is-info pagination-button"
-                disabled={disablePreviousPage}
-                onClick={onPreviousPage}
-            >
-                Previous Page
-            </button>
-            <button
-                className="button is-info pagination-button"
-                disabled={disableNextPage}
-                onClick={onNextPage}
-            >
-                Next Page
-            </button>
-        </div>
+                        {/*TODO: Bulma is currently not accessible, specifically for usages of <a />*/}
+                        {/* being used just for convenience, breaking the required contract for accessibility*/}
+                        <a>
+                            <span>{vocab.vocab}</span>
+                        </a>
+                    </li>
+                  ))}
+              </ul>
+          </div>{' '}
+          <hr />
+          {postsLoading && (
+            <progress className="progress is-small is-info" max="100">
+                50%
+            </progress>
+          )}
+          {!postsLoading &&
+          selectedVocab &&
+          posts
+            .filter((p) => p.categories.includes(selectedVocab))
+            .map((p, i) => (
+              <div key={i}>
+                  <PostCard post={p} showPreviewOnly />
+              </div>
+            ))}
+          <button
+            className="button is-info pagination-button"
+            disabled={disablePreviousPage}
+            onClick={onPreviousPage}
+          >
+              Previous Page
+          </button>
+          <button
+            className="button is-info pagination-button"
+            disabled={disableNextPage}
+            onClick={onNextPage}
+          >
+              Next Page
+          </button>
+      </div>
     );
 };
 
 export default compose<React.ComponentType<VocabularyPropsAndActions>>(
-    withRouter,
-    connect(mapStateToProps, mapDispatchToProps)
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
 )(Vocabulary);
