@@ -62,31 +62,47 @@ export const PostCard: FC<PostCardProps> = (props) => {
                                 <b>Posted: </b>
                                 {new Date(post.creationDate).toString()}
                             </div>
-                            <b className="is-size-7">Categories: </b>
-                            {post.categories.map((c: string, i: number) => {
-                                return (
-                                    <div className={styles.Categories} key={i}>
-                                        {onClickCategory ? (
-                                            <button
-                                                className={`is-size-7 ${styles.Category}`}
-                                                onClick={(e) =>
-                                                    clickFunction(e, c)
-                                                }
-                                            >{`${c}`}</button>
-                                        ) : (
-                                            <Link
-                                                className="is-size-7"
-                                                to={`/posts?category=${c}`}
-                                            >{`${c}`}</Link>
-                                        )}
-                                        {`${
-                                            i < post.categories.length - 1
-                                                ? `, `
-                                                : ``
-                                        }`}
-                                    </div>
-                                );
-                            })}
+                            {post.categories && post.categories.length > 0 && (
+                                <>
+                                    <b className="is-size-7">Categories: </b>
+                                    {post.categories.map(
+                                        (c: string, i: number) => {
+                                            return (
+                                                <div
+                                                    className={
+                                                        styles.Categories
+                                                    }
+                                                    key={i}
+                                                >
+                                                    {onClickCategory ? (
+                                                        <button
+                                                            className={`is-size-7 ${styles.Category}`}
+                                                            onClick={(e) =>
+                                                                clickFunction(
+                                                                    e,
+                                                                    c
+                                                                )
+                                                            }
+                                                        >{`${c}`}</button>
+                                                    ) : (
+                                                        <Link
+                                                            className="is-size-7"
+                                                            to={`/posts?category=${c}`}
+                                                        >{`${c}`}</Link>
+                                                    )}
+                                                    {`${
+                                                        i <
+                                                        post.categories.length -
+                                                            1
+                                                            ? `, `
+                                                            : ``
+                                                    }`}
+                                                </div>
+                                            );
+                                        }
+                                    )}
+                                </>
+                            )}
                         </div>
 
                         <div className={styles.Tags}>

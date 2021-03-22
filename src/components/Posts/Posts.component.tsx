@@ -101,36 +101,49 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
                             <p className="is-size-8">
                                 {new Date(post.creationDate).toString()}
                             </p>
-                            <div
-                                className={`has-text-weight-bold ${styles.SectionTitle}`}
-                            >
-                                Categories:
-                            </div>
-                            <p>
-                                {post.categories.map((c: string, i: number) => (
-                                    <Link
-                                        key={i}
-                                        className="is-size-6"
-                                        to={`/posts?category=${c}`}
+                            {post.categories && post.categories.length > 0 && (
+                                <>
+                                    <div
+                                        className={`has-text-weight-bold ${styles.SectionTitle}`}
                                     >
-                                        {`${c}${
-                                            i < post!.categories.length - 1
-                                                ? ', '
-                                                : ''
-                                        }`}
-                                    </Link>
-                                ))}
-                            </p>
-                            <div
-                                className={`has-text-weight-bold ${styles.SectionTitle}`}
-                            >
-                                Tags:
-                            </div>
-                            <div className="field is-grouped">
-                                {post.tags.map((p: any, i: any) => (
-                                    <Tag key={i} text={p} />
-                                ))}
-                            </div>
+                                        Categories:
+                                    </div>
+                                    <p>
+                                        {post.categories.map(
+                                            (c: string, i: number) => (
+                                                <Link
+                                                    key={i}
+                                                    className="is-size-6"
+                                                    to={`/posts?category=${c}`}
+                                                >
+                                                    {`${c}${
+                                                        i <
+                                                        post!.categories
+                                                            .length -
+                                                            1
+                                                            ? ', '
+                                                            : ''
+                                                    }`}
+                                                </Link>
+                                            )
+                                        )}
+                                    </p>
+                                </>
+                            )}
+                            {post.tags && post.tags.length > 0 && (
+                                <>
+                                    <div
+                                        className={`has-text-weight-bold ${styles.SectionTitle}`}
+                                    >
+                                        Tags:
+                                    </div>
+                                    <div className="field is-grouped">
+                                        {post.tags.map((p: any, i: any) => (
+                                            <Tag key={i} text={p} />
+                                        ))}
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </>
                 )}
