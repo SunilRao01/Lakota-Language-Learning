@@ -70,7 +70,7 @@ export const Posts: FC<PostsPropsAndActions> = (props) => {
                 {!postsLoading && post && (
                     <>
                         <h1 className="title">{post.title}</h1>
-                        <div className="content">
+                        <div className={`content ${styles.PostContent}`}>
                             {post.content && <Viewer ref={viewerRef} />}
                             <br />
                             <hr />
