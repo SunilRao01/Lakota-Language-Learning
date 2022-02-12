@@ -16,7 +16,7 @@ defmodule LakotaEdApiWeb.Router do
     plug(Guardian.Plug.VerifyHeader)
     plug(Guardian.Plug.VerifyCookie)
     plug(Guardian.Plug.LoadResource, allow_blank: true)
-    plug CORSPlug, origin: ["https://lakotalanguagelearning.com"]
+    plug CORSPlug, origin: ["https://lakotalanguagelearning.com", "https://www.lakotalanguagelearning.com"]
   end
 
   scope "/", LakotaEdApiWeb do
