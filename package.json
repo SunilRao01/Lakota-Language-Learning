@@ -3,29 +3,27 @@
     "version": "1.0.4",
     "private": true,
     "dependencies": {
-        "@toast-ui/react-editor": "^2.5.1",
+        "@toast-ui/react-editor": "^2.5.4",
         "env-cmd": "^10.1.0",
-        "husky": "^4.2.5",
-        "lint-staged": "^10.2.11",
-        "prettier": "^2.0.5",
+        "prettier": "^2.5.1",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-redux": "^7.2.0",
         "react-router": "^5.2.0",
         "react-router-dom": "^5.2.0",
-        "react-scripts": "^4.0.3",
-        "redux": "^4.0.5",
-        "typescript": "^3.9.5"
+        "react-scripts": "^5.0.0",
+        "redux": "^4.1.2",
+        "typescript": "^4.5.5",
+        "axios": "^0.26.0",
+        "bulma": "^0.9.3",
+        "query-string": "^6.13.1",
+        "redux-thunk": "^2.3.0"
     },
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build CI=true",
         "build:staging": "env-cmd -f .env.staging npm run build",
-        "test": "CI=true react-scripts test",
         "eject": "react-scripts eject",
-        "integration-test:local": "CYPRESS_BASE_URL=http://localhost:3000/ cypress run",
-        "integration-test:qa": "CYPRESS_BASE_URL=http://lakota.skeletonpraxis.net/ cypress run",
-        "integration-test:prod": "CYPRESS_BASE_URL=https://lakotalanguagelearning.com/ cypress run",
         "lint-fix": "node_modules/.bin/prettier --write ./src"
     },
     "eslintConfig": {
@@ -38,30 +36,13 @@
         "not op_mini all"
     ],
     "devDependencies": {
-        "@testing-library/jest-dom": "^5.11.0",
-        "@testing-library/react": "^11.2.2",
-        "@types/enzyme": "^3.10.5",
-        "@types/enzyme-adapter-react-16": "^1.0.6",
-        "@types/jest": "^26.0.3",
         "@types/node": "^14.0.14",
         "@types/react": "^16.9.41",
         "@types/react-dom": "^16.9.8",
         "@types/react-redux": "^7.1.9",
         "@types/react-router": "^5.1.8",
         "@types/react-router-dom": "^5.1.5",
-        "@types/redux-mock-store": "^1.0.2",
-        "axios": ">=0.21.1",
-        "axios-mock-adapter": "^1.19.0",
-        "bulma": "^0.9.0",
-        "cypress": "^4.9.0",
-        "enzyme": "^3.11.0",
-        "enzyme-adapter-react-16": "^1.15.2",
-        "fetch-mock": "^9.11.0",
-        "node-fetch": "^2.6.1",
-        "node-sass": "4.14.1",
-        "query-string": "^6.13.1",
-        "react-test-renderer": "^16.13.1",
-        "redux-mock-store": "^1.5.4",
-        "redux-thunk": "^2.3.0"
+        "node-fetch": "^3.2.0",
+        "node-sass": "^7.0.1"
     }
 }
