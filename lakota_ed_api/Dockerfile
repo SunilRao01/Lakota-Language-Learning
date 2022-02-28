@@ -1,5 +1,5 @@
 # Use an official Elixir runtime as a parent image
-FROM elixir:1.9.1
+FROM elixir:1.13.3
 
 RUN apt-get update && \
   apt-get install -y postgresql-client

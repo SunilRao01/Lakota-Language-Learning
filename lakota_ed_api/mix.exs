@@ -4,8 +4,8 @@ defmodule LakotaEdApi.MixProject do
   def project do
     [
       app: :lakota_ed_api,
-      version: "1.0.0",
-      elixir: "~> 1.9.1",
+      version: "1.0.1",
+      elixir: "~> 1.13.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
