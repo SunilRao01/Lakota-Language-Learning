@@ -4,8 +4,8 @@ defmodule LakotaEdApi.MixProject do
   def project do
     [
       app: :lakota_ed_api,
-      version: "1.0.0",
-      elixir: "~> 1.9.1",
+      version: "1.0.1",
+      elixir: "~> 1.13.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -33,16 +33,16 @@ defmodule LakotaEdApi.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.3"},
+      {:phoenix, "~> 1.5.13"},
       {:phoenix_pubsub, "~> 2.0"},
-      {:phoenix_ecto, "~> 4.0"},
-      {:ecto_sql, "~> 3.0"},
-      {:postgrex, ">= 0.0.0"},
-      {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
-      {:guardian, "~> 2.1"},
-      {:bcrypt_elixir, "~> 2.2"},
+      {:phoenix_ecto, "~> 4.4.0"},
+      {:ecto_sql, "~> 3.7"},
+      {:postgrex, "~> 0.1"},
+      {:gettext, "~> 0.1"},
+      {:jason, "~> 1.3"},
+      {:plug_cowboy, "~> 2.5"},
+      {:guardian, "~> 2.2"},
+      {:bcrypt_elixir, "~> 2.3"},
       {:cors_plug, "~> 2.0"}
     ]
   end

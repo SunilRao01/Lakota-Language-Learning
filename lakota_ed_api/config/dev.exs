@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # Configure your database
 config :lakota_ed_api,
