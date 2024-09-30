@@ -10,22 +10,6 @@ A custom CMS that will host educational material about the Native American langu
 
 ---
 
-### Application Status:
-[Concourse CI/CD](https://ci.skeletonpraxis.net/teams/main/pipelines/Lakota_Language_Learning)
-#### QA
-Job | Status
------------- | -------------
-Unit Tests | [![ci.skeletonpraxis.net](https://ci.skeletonpraxis.net/api/v1/teams/main/pipelines/Lakota_Language_Learning/jobs/Unit%20Tests%20(development)/badge)](https://ci.skeletonpraxis.net/teams/main/pipelines/Lakota_Language_Learning/jobs/Unit%20Tests%20(development))
-Integration Tests | [![ci.skeletonpraxis.net](https://ci.skeletonpraxis.net/api/v1/teams/main/pipelines/Lakota_Language_Learning/jobs/Integration%20Tests%20QA/badge)](https://ci.skeletonpraxis.net/teams/main/pipelines/Lakota_Language_Learning/jobs/Integration%20Tests%20QA)
-
-#### Production
-Job | Status
------------- | -------------
-Unit Tests | [![ci.skeletonpraxis.net](https://ci.skeletonpraxis.net/api/v1/teams/main/pipelines/Lakota_Language_Learning/jobs/Unit%20Tests%20(master)/badge)](https://ci.skeletonpraxis.net/teams/main/pipelines/Lakota_Language_Learning/jobs/Unit%20Tests%20(master))
-Integration Tests | [![ci.skeletonpraxis.net](https://ci.skeletonpraxis.net/api/v1/teams/main/pipelines/Lakota_Language_Learning/jobs/Integration%20Tests%20Production/badge)](https://ci.skeletonpraxis.net/teams/main/pipelines/Lakota_Language_Learning/jobs/Integration%20Tests%20Production)
-
----
-
 ### Created with:
 #### Frontend:
 - React
